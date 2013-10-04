@@ -1,0 +1,98 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".LoginActivity"
+    android:layout_width="match_parent">
+
+    <!-- Login progress -->
+
+
+    <RelativeLayout
+        android:id="@+id/login_status"
+        android:visibility="gone"
+        android:background="@color/actionbar_blue"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleLargeInverse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_centerInParent="true"
+            android:id="@+id/login_pb" />
+
+    </RelativeLayout>
+
+    <!-- Login form -->
+
+    <RelativeLayout
+        android:id="@+id/login_form"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/actionbar_blue">
+
+        <LinearLayout
+            style="@style/LoginFormContainer"
+            android:orientation="vertical"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_centerInParent="true">
+
+            <ImageView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:src="@drawable/loginlogo"
+                android:contentDescription="logo"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/login_logo_margin_bottom"
+
+                />
+
+            <EditText
+                android:id="@+id/email"
+                android:singleLine="true"
+                android:maxLines="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                android:hint="@string/prompt_email"
+                android:textColorHint="@android:color/secondary_text_dark" />
+
+            <EditText
+                android:id="@+id/password"
+                android:singleLine="true"
+                android:maxLines="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/prompt_password"
+                android:inputType="textPassword"
+                android:imeActionLabel="@string/action_sign_in_short"
+                android:imeActionId="@+id/login"
+                android:imeOptions="actionUnspecified"
+                android:textColorHint="@android:color/secondary_text_dark" />
+
+            <Button
+                android:id="@+id/sign_in_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/action_sign_in_register" />
+
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
+                android:text="@string/create_a_board"
+                android:gravity="center"
+                android:layout_marginTop="16dp"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:textColor="#fff" />
+
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</merge>

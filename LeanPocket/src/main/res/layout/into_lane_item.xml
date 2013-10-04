@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:minHeight="?android:listPreferredItemHeightSmall"
+    android:layout_height="wrap_content"
+    android:paddingRight="?android:listPreferredItemPaddingRight"
+    android:paddingLeft="?android:listPreferredItemPaddingLeft">
+
+    <TextView
+        android:id="@+id/tv_lane_item_name"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Widget.TextView.SpinnerItem"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:textColor="@android:color/primary_text_light"
+        android:layout_gravity="center_vertical" />
+
+
+</LinearLayout>

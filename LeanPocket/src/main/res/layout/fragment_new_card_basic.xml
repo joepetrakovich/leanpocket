@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:background="@color/leankit_lane_blue">
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/new_card_activity_horiz_margin"
+        android:layout_marginRight="@dimen/new_card_activity_horiz_margin"
+        android:background="@android:color/background_light">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <FrameLayout
+                android:id="@+id/new_card_title_frame"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:minHeight="48dp"
+                android:padding="@dimen/frame_padding">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine|textCapSentences"
+                    android:ems="10"
+                    android:id="@+id/et_title"
+                    android:hint="@string/add_card_title_hint">
+
+                </EditText>
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_after_title_wrapper"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/frame_padding"
+                android:paddingRight="@dimen/frame_padding"
+                android:paddingBottom="@dimen/frame_padding">
+
+                <TextView
+                    android:id="@+id/new_card_desc_section_header"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:text="@string/section_header_description"
+                    style="@style/sectionHeader" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="48dp"
+                    android:inputType="textMultiLine|textCapSentences"
+                    android:ems="10"
+                    android:id="@+id/et_desc"
+                    android:hint="@string/add_card_desc_hint"
+                    android:layout_marginBottom="@dimen/element_spacing" />
+
+                <TextView
+                    android:id="@+id/new_card_priority_due_date_section_header"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:text="@string/section_header_priority_and_due_date"
+                    style="@style/sectionHeader" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:orientation="horizontal"
+                    android:paddingBottom="@dimen/element_spacing">
+
+                    <Spinner
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:id="@+id/spinner_priority"
+                        android:layout_weight="1"
+                        android:layout_marginRight="4dp" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_marginLeft="4dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:id="@+id/tv_due_date"
+                            android:layout_weight="1"
+                            android:hint="@string/hint_set_date"
+                            style="@android:style/Widget.DeviceDefault.Light.Spinner"
+                            android:paddingLeft="@dimen/element_spacing"
+                            android:ellipsize="end"
+                            android:singleLine="true" />
+
+                        <ImageButton
+                            android:id="@+id/ib_clear_due_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_action_clear"
+                            android:background="@drawable/send_button_selector" />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/new_card_type_section_header"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:text="@string/section_header_card_type_and_size"
+                    style="@style/sectionHeader" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:id="@+id/linearLayout"
+                    android:paddingBottom="@dimen/element_spacing">
+
+                    <Spinner
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:id="@+id/spinner_card_type"
+                        android:layout_weight="2"
+                        android:layout_marginRight="4dp" />
+
+                    <EditText
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:inputType="number"
+                        android:ems="10"
+                        android:id="@+id/et_size"
+                        android:layout_weight="1"
+                        android:hint="@string/add_card_size_hint"
+                        android:singleLine="true"
+                        android:digits="0123456798"
+                        android:layout_marginLeft="4dp" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/new_card_tags_section_header"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:text="@string/section_header_tags"
+                    style="@style/sectionHeader" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="48dp"
+                    android:inputType="textMultiLine"
+                    android:ems="10"
+                    android:id="@+id/et_new_card_tags"
+                    android:hint="@string/new_card_tags_hint"
+                    android:layout_marginBottom="@dimen/element_spacing" />
+
+                <TextView
+                    android:id="@+id/new_card_lane_section_header"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:text="@string/section_header_lane"
+                    style="@style/sectionHeader" />
+
+                <Spinner
+                    android:id="@+id/spinner_new_card_lane"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginBottom="@dimen/element_spacing" />
+
+
+                <TextView
+                    android:id="@+id/new_card_assigned_users_section_header"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:text="@string/section_header_assigned_users"
+                    style="@style/sectionHeader" />
+
+                <LinearLayout
+                    android:id="@+id/layout_new_card_assigned_users_holder"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:animateLayoutChanges="true">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:id="@+id/tv_assign_users"
+                        android:hint="@string/hint_assign_users_with_space"
+                        style="@android:style/Widget.DeviceDefault.Light.Spinner"
+                        android:layout_marginBottom="@dimen/element_spacing"
+                        android:paddingLeft="@dimen/element_spacing" />
+
+                    <ToggleButton
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:id="@+id/toggle_blocked"
+                        android:background="@drawable/btn_toggle_holo_light"
+                        android:paddingBottom="@dimen/element_spacing"
+                        android:textOn="@string/blocked_toggle_on"
+                        android:textOff="@string/blocked_toggle_off" />
+
+
+                    <EditText
+                        android:id="@+id/tv_new_card_block_reason"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="48dp"
+                        android:inputType="textMultiLine|textCapSentences"
+                        android:ems="10"
+                        android:hint="@string/block_reason"
+                        android:paddingBottom="@dimen/frame_padding"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

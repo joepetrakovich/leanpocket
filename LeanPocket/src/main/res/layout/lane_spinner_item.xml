@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="48dp">
+
+    <TextView
+        android:id="@+id/tv_lane_title"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:textSize="@dimen/lane_spinner_text_size"
+        android:ellipsize="middle"
+        android:maxLines="2"
+        android:scrollHorizontally="true"
+        android:textColor="@android:color/primary_text_light"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+
+        android:gravity="center_vertical" />
+
+
+</LinearLayout>

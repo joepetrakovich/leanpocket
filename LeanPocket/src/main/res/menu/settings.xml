@@ -1,0 +1,22 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item
+        android:id="@+id/action_add_account"
+        android:title="@string/action_add_account"
+        android:orderInCategory="101"
+        android:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_send_feedback"
+        android:title="@string/send_feedback"
+        android:orderInCategory="102"
+        android:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_help"
+        android:title="@string/action_help"
+        android:orderInCategory="103"
+        android:showAsAction="never" />
+
+</menu>

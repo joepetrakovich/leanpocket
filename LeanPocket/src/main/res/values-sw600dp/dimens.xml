@@ -1,0 +1,29 @@
+<resources>
+    <!-- Customize dimensions originally defined in res/values/dimens.xml (such as
+         screen margins) for sw600dp devices (e.g. 7" tablets) here. -->
+
+    <!-- Card sizes -->
+    <dimen name="card_boundary_height">200dp</dimen>
+    <dimen name="card_horizontal_margin">8dp</dimen>
+
+    <dimen name="card_title_padding_top">2dp</dimen>
+    <dimen name="card_title_padding_left">8dp</dimen>
+    <dimen name="card_title_padding_right">44dp</dimen>
+
+    <dimen name="card_title_font_size">18sp</dimen>
+    <dimen name="card_external_id_font_size">17sp</dimen>
+    <dimen name="card_size_font_size">15sp</dimen>
+
+    <dimen name="gravatar_on_card_height">50dp</dimen>
+    <dimen name="gravatar_on_card_width">50dp</dimen>
+    <dimen name="lane_spinner_frame_height">48dp</dimen>
+    <dimen name="lane_spinner_text_size">17sp</dimen>
+    <dimen name="card_size_box_size">32dp</dimen>
+
+    <dimen name="drawer_width">300dp</dimen>
+    <dimen name="card_grid_horiz_margin">16dp</dimen>
+    <dimen name="new_card_activity_horiz_margin">0dp</dimen>
+    <dimen name="account_spinner_gravatar_side_length">40dp</dimen>
+
+
+</resources>

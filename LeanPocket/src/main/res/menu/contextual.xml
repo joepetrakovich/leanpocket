@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/contextual_menu_edit"
+        android:title="@string/action_edit"
+        android:orderInCategory="98"
+        android:icon="@drawable/ic_action_edit"
+        android:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/contextual_menu_move"
+        android:title="@string/action_move"
+        android:orderInCategory="99"
+        android:icon="@drawable/ic_action_export"
+        android:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/contextual_menu_delete"
+        android:title="@string/action_delete"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_action_trash"
+        android:showAsAction="ifRoom" />
+
+
+</menu>

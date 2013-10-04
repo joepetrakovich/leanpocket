@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/frame_padding">
+
+
+    <ImageView
+        android:id="@+id/iv_comment_gravatar"
+        android:layout_height="@dimen/gravatar_assigned_user_list_size"
+        android:layout_width="@dimen/gravatar_assigned_user_list_size"
+        android:contentDescription="@string/content_desc_gravatar_account" />
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/frame_padding">
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="@dimen/element_spacing">
+
+            <TextView
+                android:id="@+id/tv_comment_user_name"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:textStyle="bold"
+                android:textAppearance="?android:textAppearanceSmall"
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:id="@+id/tv_comment_date_time"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="@dimen/frame_padding"
+                android:textSize="@dimen/comment_date_time_text_size"
+                android:textColor="@color/actionbar_blue" />
+
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/tv_comment_text"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textAppearance="?android:textAppearanceSmall"
+            android:textColor="@android:color/black" />
+
+
+    </LinearLayout>
+
+</LinearLayout>

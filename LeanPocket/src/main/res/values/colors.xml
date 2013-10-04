@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <color name="leankit_lane_blue">#bdd8e2</color>
+    <color name="leankit_lane_gap_blue">#8abcce</color>
+    <color name="leankit_lane_title_blue">#012a4c</color>
+    <color name="leankit_lane_title_backround">#ffffff</color>
+    <color name="leankit_dropdown_text">#05698c</color>
+    <color name="actionbar_bottom_half">#05698c</color>
+    <color name="actionbar_top_half">#2d94bb</color>
+    <color name="leankit_yellow">#f9ce33</color>
+
+    <color name="actionbar_blue">#046D92</color>
+    <color name="actionmode_highlight">#33b5e5</color>
+    <color name="tranparent_gray">#80ffffff</color>
+    <color name="transparent_blue">#808abcce</color>
+    <color name="leanlogo_blue">#336699</color>
+    <drawable name="off_white">#fff3f3f3</drawable>
+
+
+</resources>

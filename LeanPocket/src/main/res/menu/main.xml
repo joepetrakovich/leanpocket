@@ -1,0 +1,56 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/action_new_card"
+        android:title="@string/action_new_card"
+        android:icon="@drawable/ic_action_add"
+        android:orderInCategory="98"
+        android:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_single_column_view"
+        android:title="@string/action_single_column_view"
+        android:icon="@drawable/ic_action_list"
+        android:orderInCategory="99"
+        android:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_multi_column_view"
+        android:title="@string/action_multi_column_view"
+        android:icon="@drawable/ic_action_tiles_large"
+        android:orderInCategory="99"
+        android:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_refresh"
+        android:title="@string/action_refresh"
+        android:orderInCategory="100"
+        android:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_upgrade"
+        android:title="@string/action_upgrade"
+        android:orderInCategory="101"
+        android:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_settings"
+        android:title="@string/action_settings"
+        android:orderInCategory="102"
+        android:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_send_feedback"
+        android:title="@string/send_feedback"
+        android:orderInCategory="103"
+        android:showAsAction="never" />
+
+
+    <item
+        android:id="@+id/action_help"
+        android:title="@string/action_help"
+        android:orderInCategory="104"
+        android:showAsAction="never" />
+
+
+</menu>

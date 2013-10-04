@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/card_boundary_height">
+
+    <LinearLayout
+        android:id="@+id/card_frame"
+        android:background="@drawable/card_item_selector"
+        android:orientation="vertical"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_marginRight="@dimen/card_horizontal_margin"
+        android:layout_marginBottom="@dimen/card_horizontal_margin">
+
+
+        <FrameLayout
+            android:id="@+id/card_id_frame"
+            android:layout_width="match_parent"
+            android:background="@drawable/card_external_id_top"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_ext_card_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/card_title_padding_left"
+                android:paddingBottom="2dp"
+                android:textColor="@color/card_id_color_states"
+                android:textSize="@dimen/card_external_id_font_size" />
+
+        </FrameLayout>
+
+
+        <TextView
+            android:id="@+id/tv_card_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/card_title_padding_top"
+            android:paddingRight="@dimen/card_title_padding_right"
+            android:paddingLeft="@dimen/card_title_padding_left"
+            android:maxLines="@integer/card_title_max_lines"
+            android:textSize="@dimen/card_title_font_size"
+            android:textColor="@android:color/primary_text_light"
+            android:ellipsize="end"
+
+
+            />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/assigned_user_gravatar"
+        android:layout_width="@dimen/gravatar_on_card_width"
+        android:layout_height="@dimen/gravatar_on_card_height"
+        android:layout_marginTop="4dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@id/card_frame"
+
+        />
+
+    <ImageView
+        android:id="@+id/assigned_user_gravatar2"
+        android:layout_width="@dimen/gravatar_on_card_width"
+        android:layout_height="@dimen/gravatar_on_card_height"
+        android:layout_marginTop="4dp"
+        android:layout_alignRight="@id/assigned_user_gravatar"
+        android:layout_below="@id/assigned_user_gravatar"
+
+        />
+
+    <ImageView
+        android:id="@+id/bottom_right_icon"
+        android:layout_width="@dimen/gravatar_on_card_width"
+        android:layout_height="@dimen/gravatar_on_card_height"
+        android:layout_marginTop="4dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+
+        />
+
+    <ImageView
+        android:id="@+id/bottom_right_icon2"
+        android:layout_width="@dimen/gravatar_on_card_width"
+        android:layout_height="@dimen/gravatar_on_card_height"
+        android:layout_marginTop="4dp"
+        android:layout_toLeftOf="@id/bottom_right_icon"
+        android:layout_alignParentBottom="true"
+
+        />
+
+
+    <TextView
+        android:id="@+id/tv_card_size"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:background="@drawable/card_size_box"
+        android:layout_marginLeft="2dp"
+        android:layout_alignParentBottom="true"
+        android:minWidth="@dimen/card_size_box_size"
+        android:padding="4dp"
+        android:gravity="center"
+        android:textSize="@dimen/card_size_font_size"
+        android:textColor="@color/card_id_color_states"
+        android:textStyle="bold" />
+
+
+</RelativeLayout>

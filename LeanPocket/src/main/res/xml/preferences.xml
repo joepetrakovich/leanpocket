@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <ListPreference
+        android:title="@string/move_card_position_setting_title"
+        android:dialogTitle="@string/move_card_position_dialog_title"
+        android:entries="@array/card_position_options"
+        android:entryValues="@array/card_position_values"
+        android:key="card_position_key"
+        android:defaultValue="top" />
+
+
+    <CheckBoxPreference
+        android:title="@string/auto_load_board_setting_title"
+        android:key="auto_load_key"
+        android:defaultValue="true" />
+
+    <CheckBoxPreference
+        android:title="@string/retain_format_html_setting_title"
+        android:summary="@string/retain_format_summary"
+        android:key="keep_format_key"
+        android:defaultValue="false" />
+
+
+    <CheckBoxPreference
+        android:title="@string/animate_cards_setting_title"
+        android:key="animate_cards_key"
+        android:defaultValue="true" />
+
+    <Preference android:title="@string/about_settings_title">
+        <intent android:action="com.appshroom.leanpocket.about" />
+    </Preference>
+
+
+</PreferenceScreen>

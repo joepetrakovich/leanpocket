@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.appshroom.leanpocket.adapters.CheckableLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="?android:listPreferredItemPaddingLeft">
+
+    <ImageView
+        android:id="@+id/iv_assigned_user_gravatar"
+        android:layout_width="@dimen/gravatar_assigned_user_list_size"
+        android:layout_height="@dimen/gravatar_assigned_user_list_size"
+        android:contentDescription="@string/content_desc_gravatar_account" />
+
+
+    <CheckedTextView
+        android:id="@+id/tv_assigned_user_name"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/element_spacing"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:gravity="center_vertical"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:checkMark="?android:attr/listChoiceIndicatorMultiple" />
+
+
+</com.appshroom.leanpocket.adapters.CheckableLinearLayout>

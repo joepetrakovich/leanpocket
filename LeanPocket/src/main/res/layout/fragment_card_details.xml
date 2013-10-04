@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:background="@color/leankit_lane_blue"
+    android:layout_width="match_parent">
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_height="match_parent"
+        android:background="@android:color/background_light"
+        android:layout_marginLeft="@dimen/new_card_activity_horiz_margin"
+        android:layout_marginRight="@dimen/new_card_activity_horiz_margin"
+        android:layout_width="match_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
+
+            <LinearLayout
+                android:id="@+id/layout_title_wrapper"
+                android:orientation="vertical"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:padding="@dimen/frame_padding">
+
+                <TextView
+                    android:id="@+id/tv_card_detail_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:paddingLeft="@dimen/text_padding"
+                    android:paddingRight="@dimen/text_padding"
+                    android:textIsSelectable="true" />
+
+                <TextView
+                    android:id="@+id/tv_card_detail_due_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/frame_detail_top_padding"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:paddingLeft="@dimen/text_padding"
+                    android:paddingRight="@dimen/text_padding"
+                    android:textIsSelectable="true" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_detail_blocked"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/holo_red_light"
+                android:paddingLeft="@dimen/frame_padding"
+                android:paddingRight="@dimen/frame_padding"
+                android:paddingTop="@dimen/frame_detail_top_padding"
+                android:paddingBottom="@dimen/frame_detail_top_padding"
+                android:minHeight="48dp"
+
+                >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/text_padding"
+                    android:paddingRight="@dimen/text_padding"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/blocked_with_colon"
+                    android:textStyle="bold"
+                    android:textAllCaps="true"
+                    android:textColor="#fff" />
+
+                <TextView
+                    android:id="@+id/tv_card_detail_blocked_reason"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/text_padding"
+                    android:paddingRight="@dimen/text_padding"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="#fff"
+                    android:textIsSelectable="true" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/frame_padding">
+
+                <TextView
+                    android:id="@+id/detail_desc_section_header"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:text="@string/section_header_description"
+                    style="@style/sectionHeader" />
+
+                <TextView
+                    android:id="@+id/tv_card_detail_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:paddingLeft="@dimen/text_padding"
+                    android:paddingRight="@dimen/text_padding"
+                    android:textIsSelectable="true" />
+
+
+                <LinearLayout
+                    android:id="@+id/layout_priority_and_size_horiz"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin">
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:id="@+id/detail_priority_section_header"
+                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:text="@string/section_header_priority"
+                            style="@style/sectionHeader" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:paddingLeft="@dimen/text_padding"
+                            android:paddingRight="@dimen/text_padding"
+                            android:id="@+id/tv_card_detail_priority" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/detail_layout_size_section"
+                        android:orientation="vertical"
+                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="@dimen/element_spacing">
+
+                        <TextView
+                            android:id="@+id/detail_size_section_header"
+                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:text="@string/section_header_size"
+                            style="@style/sectionHeader" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:paddingLeft="@dimen/text_padding"
+                            android:paddingRight="@dimen/text_padding"
+                            android:textAllCaps="true"
+                            android:id="@+id/tv_card_detail_size" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/detail_card_type_section_header"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:text="@string/section_header_card_type"
+                    style="@style/sectionHeader" />
+
+                <TextView
+                    android:id="@+id/tv_card_detail_card_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:paddingLeft="@dimen/text_padding"
+                    android:paddingRight="@dimen/text_padding"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin" />
+
+                <LinearLayout
+                    android:id="@+id/layout_tags"
+                    android:orientation="vertical"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin">
+
+                    <TextView
+                        android:id="@+id/detail_tags_section_header"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:text="@string/section_header_tags"
+                        style="@style/sectionHeader" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="@dimen/text_padding"
+                        android:paddingRight="@dimen/text_padding"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:id="@+id/tv_card_detail_tags"
+                        android:textIsSelectable="true" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_assigned_users"
+                    android:orientation="vertical"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin">
+
+                    <TextView
+                        android:id="@+id/detail_assigned_users_section_header"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:text="@string/section_header_assigned_users"
+                        style="@style/sectionHeader" />
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </ScrollView>
+</LinearLayout>

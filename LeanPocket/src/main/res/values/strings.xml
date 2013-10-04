@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">LeanPocket</string>
+    <string name="title_activity_main">LeanPocket</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close the navigation drawer</string>
+    <string name="in_flight_lanes">In Flight</string>
+    <string name="backlog_lanes">Backlog</string>
+    <string name="archive_lanes">Archive</string>
+    <string name="title_activity_lane_picker">Lanes</string>
+    <string name="action_sign_out">Sign out</string>
+    <string name="all_cards">All in-flight cards</string>
+    <string name="title_activity_card">Some Card</string>
+    <string name="hint_title">Title</string>
+    <string name="hint_description">Description</string>
+    <string name="action_move">Move to</string>
+    <string name="action_delete">Delete</string>
+    <string name="wip_not_supported">WIP overrides are not yet supported in this version.</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="dialog_delete_title">Delete?</string>
+    <string name="card_will_be_deleted">One card will be deleted.</string>
+    <string name="cards_will_be_deleted">cards will be deleted</string>
+    <string name="dialog_move_to_title">Move to</string>
+    <string name="add_card_title_hint">Title</string>
+    <string name="add_card_desc_hint">Description</string>
+    <string name="add_card_size_hint">Size</string>
+    <string name="blocked_toggle">Unblocked</string>
+    <string name="blocked_with_colon">Blocked:</string>
+    <string name="blocked_toggle_on">Blocked</string>
+    <string name="blocked_toggle_off">Unblocked</string>
+
+    <string-array name="card_menu_items">
+        <item>Basic Settings</item>
+        <item>Advanced Settings</item>
+        <item>Assigned Users</item>
+        <item>Comments</item>
+        <item>History</item>
+    </string-array>
+    <string-array name="card_position_options">
+        <item>Top</item>
+        <item>Bottom</item>
+    </string-array>
+    <string-array name="card_position_values">
+        <item>top</item>
+        <item>bottom</item>
+    </string-array>
+    <string-array name="priorities">
+        <item>Low</item>
+        <item>Normal</item>
+        <item>High</item>
+        <item>Critical</item>
+    </string-array>
+
+    <string-array name="credits_titles">
+        <item>Many thanks to:</item>
+    </string-array>
+
+    <string-array name="credits_contents">
+        <item>Peter Mileno \u2014 Launcher icon\n\nRobbie and his team at Obelysk Ltd. \u2014 App
+            logo and marketing materials\n\nWendell Bickford and Mary Holbrook \u2014 Testing
+        </item>
+    </string-array>
+
+    <string-array name="open_source_license_titles">
+        <item>License for AppRater</item>
+        <item>License for Crouton</item>
+        <item>License for google-gson</item>
+        <item>License for ListViewAnimations</item>
+        <item>License for Picasso</item>
+        <item>License for Retrofit</item>
+        <item>License for StickyListHeaders</item>
+        <item>License for Volley</item>
+    </string-array>
+
+    <string-array name="open_source_licenses">
+
+
+        <item>
+            Copyright 2013 Andrew Jackson
+
+            Licensed under the Apache License, Version 2.0 (the "License");
+            you may not use this file except in compliance with the License.
+            You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+            Unless required by applicable law or agreed to in writing, software
+            distributed under the License is distributed on an "AS IS" BASIS,
+            WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+            See the License for the specific language governing permissions and
+            limitations under the License.
+        </item>
+
+        <item>Copyright 2012 - 2013 Benjamin Weiss
+            Copyright 2012 Neofonie Mobile GmbH
+
+            Licensed under the Apache License, Version 2.0 (the "License");
+            you may not use this file except in compliance with the License.
+            You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+            Unless required by applicable law or agreed to in writing, software
+            distributed under the License is distributed on an "AS IS" BASIS,
+            WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+            See the License for the specific language governing permissions and
+            limitations under the License.
+        </item>
+
+        <item>Copyright 2013 Google Inc.
+
+            Licensed under the Apache License, Version 2.0 (the "License");
+            you may not use this file except in compliance with the License.
+            You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+            Unless required by applicable law or agreed to in writing, software
+            distributed under the License is distributed on an "AS IS" BASIS,
+            WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+            See the License for the specific language governing permissions and
+            limitations under the License.
+        </item>
+
+        <item>Copyright 2013 Niek Haarman
+
+            Licensed under the Apache License, Version 2.0 (the "License");
+            you may not use this file except in compliance with the License.
+            You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+            Unless required by applicable law or agreed to in writing, software
+            distributed under the License is distributed on an "AS IS" BASIS,
+            WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+            See the License for the specific language governing permissions and
+            limitations under the License.
+        </item>
+
+        <item>Copyright 2013 Square, Inc.
+
+            Licensed under the Apache License, Version 2.0 (the "License");
+            you may not use this file except in compliance with the License.
+            You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+            Unless required by applicable law or agreed to in writing, software
+            distributed under the License is distributed on an "AS IS" BASIS,
+            WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+            See the License for the specific language governing permissions and
+            limitations under the License.
+        </item>
+
+        <item>Copyright 2013 Square, Inc.
+
+            Licensed under the Apache License, Version 2.0 (the "License");
+            you may not use this file except in compliance with the License.
+            You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+            Unless required by applicable law or agreed to in writing, software
+            distributed under the License is distributed on an "AS IS" BASIS,
+            WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+            See the License for the specific language governing permissions and
+            limitations under the License.
+        </item>
+
+        <item>Copyright 2013 Emil Sjölander
+
+            Licensed under the Apache License, Version 2.0 (the "License");
+            you may not use this file except in compliance with the License.
+            You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+            Unless required by applicable law or agreed to in writing, software
+            distributed under the License is distributed on an "AS IS" BASIS,
+            WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+            See the License for the specific language governing permissions and
+            limitations under the License.
+        </item>
+
+        <item>Copyright 2011 The Android Open Source Project
+
+            Licensed under the Apache License, Version 2.0 (the "License");
+            you may not use this file except in compliance with the License.
+            You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+            Unless required by applicable law or agreed to in writing, software
+            distributed under the License is distributed on an "AS IS" BASIS,
+            WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+            See the License for the specific language governing permissions and
+            limitations under the License.
+        </item>
+
+
+    </string-array>
+
+    <string name="title_activity_new_card">New card</string>
+    <string name="action_new_card">New card</string>
+    <string name="new_card_created_success">The card was created successfully.</string>
+    <string name="save">Save</string>
+    <string name="title_activity_card_detail">Card Detail</string>
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+    <string name="title_basic_settings">Basic</string>
+    <string name="title_advanced_settings">Advanced</string>
+    <string name="title_assigned_users">Assigned Users</string>
+    <string name="title_comments">Comments</string>
+    <string name="title_card_history">History</string>
+    <string name="title_settings">Settings</string>
+    <string name="title_details">Details</string>
+    <string name="hint_comment_type_comment">Type comment</string>
+    <string name="archive">Archive</string>
+    <string name="no_network_signal">Can\'t load data. Check your connection.</string>
+    <string name="must_have_network">You need an internet connection to complete the action.</string>
+    <string name="must_have_board">You must have a board selected to complete that action.</string>
+    <string name="cant_create_card">Can\'t create card. Try again later.</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="action_help">Help</string>
+    <string name="send_comment">Send comment</string>
+    <string name="selected">selected</string>
+    <string name="action_single_column_view">Single-column view</string>
+    <string name="action_multi_column_view">Multi-column view</string>
+    <string name="an_error_occurred_try_again">An error occurred. Try again later.</string>
+    <string name="no_network_signal_comments">Can\'t load comments. Check your connection.</string>
+    <string name="no_network_signal_save_comment">Can\'t create comment. Try again later.</string>
+    <string name="no_network_signal_move_card">Can\'t move card. Try again later.</string>
+    <string name="no_network_signal_delete_card">Can\'t delete card. Try again later.</string>
+    <string name="no_network_signal_archive">Can\'t load archive. Try again later.</string>
+    <string name="crouton_retry">Can\'t load data. Check your connection.</string>
+    <string name="retry">Retry</string>
+    <string name="content_desc_gravatar_account">Account avatar</string>
+    <string name="lanes">LANES</string>
+    <string name="boards">BOARDS</string>
+    <string name="empty_card_list">No cards in this lane.</string>
+    <string name="no_board_selected">No board selected.</string>
+    <string name="loading_board">Loading board...</string>
+    <string name="due">Due:</string>
+    <string name="section_header_description">Description</string>
+    <string name="section_header_priority">Priority</string>
+    <string name="section_header_size">Size</string>
+    <string name="low_priority">Low</string>
+    <string name="normal_priority">Normal</string>
+    <string name="high_priority">High</string>
+    <string name="critical_priority">Critical</string>
+    <string name="section_header_card_type">Card Type</string>
+    <string name="section_header_tags">Tags</string>
+    <string name="section_header_assigned_users">Assigned Users</string>
+    <string name="deleting_cards">Deleting cards...</string>
+    <string name="deleting_card">Deleting card...</string>
+    <string name="you_will_not_be_able_to_recover">The card will not be recoverable.</string>
+    <string name="no_comments">No comments.</string>
+    <string name="no_comments_yet">No comments yet.</string>
+    <string name="sending_comment">Sending comment...</string>
+    <string name="refreshing_comments">Refreshing comments...</string>
+    <string name="section_header_priority_and_due_date"><![CDATA[Priority & Due Date]]></string>
+    <string name="section_header_card_type_and_size"><![CDATA[Card Type & Size]]></string>
+    <string name="hint_set_date">Set date</string>
+    <string name="new_card_tags_hint">Comma separated list</string>
+    <string name="section_header_lane">Lane</string>
+    <string name="hint_assign_users">  Assign users</string>
+    <string name="hint_assign_users_with_space">Assign users</string>
+    <string name="content_desc_clear">Clear</string>
+    <string name="error_title_required">This field is required</string>
+    <string name="block_reason">Block reason</string>
+    <string name="action_edit">Edit</string>
+    <string name="cant_update_card">Can\'t update card. Try again later.</string>
+    <string name="update_successful">The card was updated successfully.</string>
+    <string name="animate_cards_setting_title">Animate cards into lane</string>
+    <string name="move_card_position_setting_title">New or moved card position</string>
+    <string name="move_card_position_dialog_title">Position in lane</string>
+    <string name="top">top</string>
+    <string name="bottom">bottom</string>
+    <string name="retain_format_html_setting_title">Keep description format</string>
+    <string name="action_add_account">Add account</string>
+    <string name="top_of_lane">Top of lane</string>
+    <string name="bottom_of_lane">Bottom of lane</string>
+    <string name="retain_format_summary">Format from web app kept as inline html tags</string>
+    <string name="saving_card">Saving card...</string>
+    <string name="moving_card">Moving card...</string>
+    <string name="move_card_success">The card was moved successfully.</string>
+    <string name="comments_failed_to_load">Comments failed to load.</string>
+    <string name="check_your_connection">Unable to connect.  Try again.</string>
+    <string name="create_a_board">Don\'t have an account yet?  Visit LeanKit.com from a desktop or laptop and create your board today.</string>
+    <string name="delete_success">The cards were deleted successfully.</string>
+    <string name="delete_single_success">The card was deleted successfully.</string>
+    <string name="auto_load_board_setting_title">Remember board choice</string>
+    <string name="send_feedback">Send feedback</string>
+    <string name="mail_feedback_email">info@appshroom.com</string>
+    <string name="mail_feedback_subject">Feedback for LeanPocket</string>
+    <string name="mail_feedback_message"></string>
+    <string name="title_send_feedback">Send feedback from</string>
+    <string name="about_settings_title">About</string>
+    <string name="title_activity_about">About</string>
+    <string name="content_desc_logo">App logo</string>
+    <string name="app_version">Version 1.0</string>
+    <string name="copyright">\u00A92013 Joseph G. Petrakovich</string>
+    <string name="credits"><u>Credits</u></string>
+    <string name="rate_application"><u>Rate application</u></string>
+    <string name="app_slogan">LeanPocket \u2014 Your kanban board, in your pocket.</string>
+    <string name="open_source_licenses"><u>Open source licenses</u></string>
+    <string name="close">Close</string>
+    <string name="open_source_licenses_dialog_title">Licenses</string>
+    <string name="action_upgrade">Upgrade</string>
+    <string name="enjoy_comments_upgrade">Collaborate with your friends and teammates with card comments by purchasing the premium upgrade.</string>
+    <string name="version">Version</string>
+    <string name="upgrade_reason">Comments are a premium feature.</string>
+    <string name="get_help_title">Send error details</string>
+    <string name="get_help_message">An error occurred while trying to display a lane.  Send error details to the developer to help get it fixed?</string>
+    <string name="mail_feedback_error_help">Delete the below contents if you do not wish for the developer to see the contents of your board lanes.\n\n</string>
+    <string name="crash_dialog_text">An unexpected error occurred.  \n\nPlease help us fix it by sending us the error data, including details about your board structure.  \n\nClick OK to send.</string>
+    <string name="crash_dialog_title">LeanPocket has crashed</string>
+    <string name="crash_dialog_ok_toast">Message sent.  Thank you! </string>
+
+</resources>
