@@ -15,11 +15,20 @@ public class CardFieldData {
     private String blockedReason;
     private String unblockedReason;
     private String tags;
+    private String externalCardId;
     private String laneId;
     private List<BoardUser> assignedUsers;
 
     private int size;
     private int priority;
+
+    public String getExternalCardId() {
+        return externalCardId;
+    }
+
+    public void setExternalCardId(String externalCardId) {
+        this.externalCardId = externalCardId;
+    }
 
     public String getClassOfServiceId() {
         return classOfServiceId;

@@ -28,7 +28,7 @@
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textMultiLine|textCapSentences"
+                    android:inputType="textMultiLine|textCapSentences|textNoSuggestions"
                     android:ems="10"
                     android:id="@+id/et_title"
                     android:hint="@string/add_card_title_hint">
@@ -57,7 +57,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:minHeight="48dp"
-                    android:inputType="textMultiLine|textCapSentences"
+                    android:inputType="textMultiLine|textCapSentences|textNoSuggestions"
                     android:ems="10"
                     android:id="@+id/et_desc"
                     android:hint="@string/add_card_desc_hint"
@@ -166,6 +166,32 @@
                         android:id="@+id/spinner_new_card_class_of_service"
                         android:layout_width="match_parent"
                         android:layout_height="48dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_external_card_id"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="@dimen/element_spacing">
+
+                    <TextView
+                        android:id="@+id/new_card_external_id_section_header"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:text="@string/section_header_external_card_id"
+                        style="@style/sectionHeader" />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="48dp"
+                        android:singleLine="true"
+                        android:ems="10"
+                        android:id="@+id/et_ext_card_id"
+                        android:hint="@string/hint_external_card_id"
+                     />
 
                 </LinearLayout>
 

@@ -18,6 +18,7 @@ import com.appshroom.leanpocket.R;
 import com.appshroom.leanpocket.api.retrofit.RetroLeanKitApi;
 import com.appshroom.leanpocket.api.retrofit.RetroLeanKitCallback;
 import com.appshroom.leanpocket.dto.AddCardReplyData;
+import com.appshroom.leanpocket.dto.BoardSettings;
 import com.appshroom.leanpocket.dto.BoardUser;
 import com.appshroom.leanpocket.dto.Card;
 import com.appshroom.leanpocket.dto.CardFieldData;
@@ -41,14 +42,10 @@ public class NewCardActivity extends Activity implements SharedPreferences.OnSha
 
     RetroLeanKitApi mRetroLeanKitApi;
     String mBoardId;
-    String mDateFormat;
-    List<CardType> mCardTypes;
-    List<ClassOfService> mClassOfServices;
-    boolean mUsesClassOfService;
-    boolean mUsesClassOfServiceColor;
     List<Lane> mLanes;
-    List<BoardUser> mBoardUsers;
     Card mExistingCard;
+    BoardSettings mBoardSettings;
+
     ProgressDialog pd;
     int mPosition;
 
@@ -69,18 +66,11 @@ public class NewCardActivity extends Activity implements SharedPreferences.OnSha
         Intent srcIntent = getIntent();
 
         mBoardId = srcIntent.getStringExtra(Consts.BOARD_ID_EXTRA);
-        mCardTypes = srcIntent.getParcelableArrayListExtra(Consts.CARD_TYPES_EXTRA);
-        mClassOfServices = srcIntent.getParcelableArrayListExtra(Consts.CLASS_OF_SERVICES_EXTRA);
         mLanes = srcIntent.getParcelableArrayListExtra(Consts.ALL_CHILD_LANES_EXTRA);
-        mBoardUsers = srcIntent.getParcelableArrayListExtra(Consts.BOARD_USERS_EXTRA);
-        mUsesClassOfService = srcIntent.getBooleanExtra(Consts.USES_CLASS_OF_SERVICE_EXTRA, false);
-        mUsesClassOfServiceColor = srcIntent.getBooleanExtra(Consts.USES_CLASS_OF_SERVICE_COLOR, false);
+        mBoardSettings = srcIntent.getParcelableExtra(Consts.BOARD_SETTINGS_EXTRA);
 
         mExistingCard = srcIntent.getParcelableExtra(Consts.EXISTING_CARD_EXTRA);
-
         mMode = mExistingCard == null ? MODE.NEW_CARD : MODE.EDIT_EXISTING;
-
-        mDateFormat = srcIntent.getStringExtra(Consts.DATE_FORMAT_EXTRA);
 
         setPosition();
 
@@ -152,36 +142,13 @@ public class NewCardActivity extends Activity implements SharedPreferences.OnSha
         return mExistingCard;
     }
 
-    public String getDateFormat() {
-        return mDateFormat;
+    public BoardSettings getBoardSettings(){
+        return mBoardSettings;
     }
 
-    public void setmDateFormat(String mDateFormat) {
-        this.mDateFormat = mDateFormat;
-    }
 
     public List<Lane> getLanes() {
         return mLanes;
-    }
-
-    public List<BoardUser> getBoardUsers() {
-        return mBoardUsers;
-    }
-
-    public List<CardType> getCardTypes() {
-        return mCardTypes;
-    }
-
-    public List<ClassOfService> getClassOfServices() {
-        return mClassOfServices;
-    }
-
-    public boolean usesClassOfService() {
-        return mUsesClassOfService;
-    }
-
-    public boolean usesClassOfServiceColor() {
-        return mUsesClassOfServiceColor;
     }
 
     public MODE getMode() {
@@ -308,7 +275,7 @@ public class NewCardActivity extends Activity implements SharedPreferences.OnSha
 
             java.util.Date d = format.parse(basicSettings.getDueDate());
 
-            format.applyPattern(mDateFormat);
+            format.applyPattern( mBoardSettings.getDateFormat() );
 
             cardToFill.setDueDate(format.format(d));
 
@@ -325,6 +292,8 @@ public class NewCardActivity extends Activity implements SharedPreferences.OnSha
         cardToFill.setSize(basicSettings.getSize());
 
         cardToFill.setTags(basicSettings.getTags());
+
+        cardToFill.setExternalCardID( basicSettings.getExternalCardId() );
 
         if (mMode == MODE.NEW_CARD) { //edit doesn't support moving lanes.
 

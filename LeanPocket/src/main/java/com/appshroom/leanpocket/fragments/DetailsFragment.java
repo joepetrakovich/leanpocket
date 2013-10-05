@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.appshroom.leanpocket.R;
 import com.appshroom.leanpocket.activities.CardDetailActivity;
 import com.appshroom.leanpocket.dto.AssignedUser;
+import com.appshroom.leanpocket.dto.BoardSettings;
 import com.appshroom.leanpocket.dto.Card;
 import com.appshroom.leanpocket.helpers.Consts;
 import com.appshroom.leanpocket.helpers.GravatarHelpers;
@@ -32,13 +33,15 @@ import java.util.Arrays;
 public class DetailsFragment extends Fragment {
 
     Card mCard;
+    BoardSettings mBoardSettings;
 
-    public static DetailsFragment newInstance(Card card) {
+    public static DetailsFragment newInstance(Card card, BoardSettings settings) {
 
         DetailsFragment f = new DetailsFragment();
 
         Bundle args = new Bundle();
         args.putParcelable("card", card);
+        args.putParcelable("settings", settings);
         f.setArguments(args);
 
         return f;
@@ -53,7 +56,15 @@ public class DetailsFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_card_details, container, false);
 
         getActivity().getActionBar().setDisplayUseLogoEnabled(false);
-        getActivity().getActionBar().setTitle(mCard.getExternalCardID());
+
+        String title = "";
+
+        if (mBoardSettings.isCardIdPrefixEnabled()){
+
+            title = mBoardSettings.getCardIdPrefix();
+        }
+
+        getActivity().getActionBar().setTitle( title + mCard.getExternalCardID() );
 
         createTitle(v);
 
@@ -263,6 +274,7 @@ public class DetailsFragment extends Fragment {
         setHasOptionsMenu(true);
 
         mCard = getArguments().getParcelable("card");
+        mBoardSettings = getArguments().getParcelable("settings");
     }
 
     @Override

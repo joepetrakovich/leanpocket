@@ -147,77 +147,10 @@ public class MainActivity extends Activity
     private boolean mUserHasLearnedDrawer = false;
     private boolean mAutoLoadLastBoard;
     private boolean mDrawerWasOpenedBeforeConfigChanged = false;
+    private boolean mShowArchivedBoards = false;
 
     private IabHelper mBillingHelper;
     private boolean mIsPremium = false;
-
-    // Callback for when a purchase is finished
-    IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
-        public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
-
-            if (mBillingHelper == null) return;
-
-            if (result.isFailure()) {
-                return;
-            }
-
-
-            //Purchase success
-
-            if (purchase.getSku().equals(Consts.SKU_PREMIUM)) {
-                // bought the premium upgrade!
-                // alert("Thank you for upgrading to premium!");
-                mIsPremium = true;
-                mSharedPreferences.edit().putBoolean(Consts.SHARED_PREFS_IS_PREMIUM, mIsPremium).apply();
-
-                removeAdView();
-            }
-
-        }
-    };
-
-    // Listener that's called when we finish querying the items and subscriptions we own
-    IabHelper.QueryInventoryFinishedListener mGotInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
-        public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
-
-            if (mBillingHelper == null) return;
-
-            if (result.isFailure()) {
-
-                return;
-            }
-
-            /*
-             * Check for items we own. Notice that for each purchase, we check
-             * the developer payload to see if it's correct! See
-             * verifyDeveloperPayload().
-             */
-
-            // Do we have the premium upgrade?
-            Purchase premiumPurchase = inventory.getPurchase(Consts.SKU_PREMIUM);
-            mIsPremium = (premiumPurchase != null);
-
-            mSharedPreferences.edit().putBoolean(Consts.SHARED_PREFS_IS_PREMIUM, mIsPremium).apply();
-
-            if (mIsPremium) {
-
-                removeAdView();
-            }
-        }
-    };
-
-    private void removeAdView() {
-
-        LinearLayout mainLayout = (LinearLayout) findViewById(R.id.main_layout);
-        AdView adView = (AdView) mainLayout.findViewById(R.id.adView);
-
-        if (adView != null) {
-
-            mainLayout.removeView(adView);
-
-        }
-
-    }
 
 
     @Override
@@ -308,6 +241,8 @@ public class MainActivity extends Activity
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         mAnimateCards = settings.getBoolean(Consts.SHARED_PREFS_ANIMATE_CARDS, true);
         mAutoLoadLastBoard = settings.getBoolean(Consts.SHARED_PREFS_AUTO_LOAD, true);
+        mShowArchivedBoards = settings.getBoolean(Consts.SHARED_PREFS_SHOW_ARCHIVED_BOARDS, false);
+
 
     }
 
@@ -755,6 +690,7 @@ public class MainActivity extends Activity
         mCardListAdapter.setColorMap(mActiveBoard.getCardColorMap());
         mCardListAdapter.setAccentColorMap(mActiveBoard.getCardAccentColorMap());
         mCardListAdapter.setGravatarUrlMap(mActiveBoard.getUserGravatarUrlMap());
+        mCardListAdapter.setBoardSettings(mActiveBoard.getSettings());
 
         //If activity AND retained fragment were lost...
         if (mSelectedCards == null) {
@@ -1201,13 +1137,8 @@ public class MainActivity extends Activity
             Intent newCardIntent = new Intent(getContext(), NewCardActivity.class);
 
             newCardIntent.putExtra(Consts.BOARD_ID_EXTRA, mActiveBoard.getId());
-            newCardIntent.putParcelableArrayListExtra(Consts.CARD_TYPES_EXTRA, (ArrayList<CardType>) mActiveBoard.getCardTypes());
-            newCardIntent.putParcelableArrayListExtra(Consts.CLASS_OF_SERVICES_EXTRA, (ArrayList<ClassOfService>) mActiveBoard.getClassesOfService());
             newCardIntent.putParcelableArrayListExtra(Consts.ALL_CHILD_LANES_EXTRA, mActiveBoard.getAllOrderedChildLanes());
-            newCardIntent.putParcelableArrayListExtra(Consts.BOARD_USERS_EXTRA, new ArrayList<Parcelable>(mActiveBoard.getBoardUsers()));
-            newCardIntent.putExtra(Consts.DATE_FORMAT_EXTRA, mActiveBoard.getDateFormat());
-            newCardIntent.putExtra(Consts.USES_CLASS_OF_SERVICE_EXTRA, mActiveBoard.isClassOfServiceEnabled());
-            newCardIntent.putExtra(Consts.USES_CLASS_OF_SERVICE_COLOR, mActiveBoard.getCardColorField().equals(Consts.COLOR_FIELD_CLASS_OF_SERVICE));
+            newCardIntent.putExtra(Consts.BOARD_SETTINGS_EXTRA, mActiveBoard.getSettings());
 
             startActivityForResult(newCardIntent, Consts.REQUEST_CODE_NEW_CARD);
 
@@ -1282,13 +1213,8 @@ public class MainActivity extends Activity
 
         cardDetailIntent.putExtra(Consts.CARD_DETAIL_CARD_EXTRA, selectedCard);
         cardDetailIntent.putExtra(Consts.BOARD_ID_EXTRA, mActiveBoard.getId());
-        cardDetailIntent.putParcelableArrayListExtra(Consts.CARD_TYPES_EXTRA, (ArrayList<CardType>) mActiveBoard.getCardTypes());
-        cardDetailIntent.putParcelableArrayListExtra(Consts.CLASS_OF_SERVICES_EXTRA, (ArrayList<ClassOfService>) mActiveBoard.getClassesOfService());
         cardDetailIntent.putParcelableArrayListExtra(Consts.ALL_CHILD_LANES_EXTRA, mActiveBoard.getAllOrderedChildLanes());
-        cardDetailIntent.putParcelableArrayListExtra(Consts.BOARD_USERS_EXTRA, new ArrayList<Parcelable>(mActiveBoard.getBoardUsers()));
-        cardDetailIntent.putExtra(Consts.USES_CLASS_OF_SERVICE_EXTRA, mActiveBoard.isClassOfServiceEnabled());
-        cardDetailIntent.putExtra(Consts.USES_CLASS_OF_SERVICE_COLOR, mActiveBoard.getCardColorField().equals(Consts.COLOR_FIELD_CLASS_OF_SERVICE));
-        cardDetailIntent.putExtra(Consts.DATE_FORMAT_EXTRA, mActiveBoard.getDateFormat());
+        cardDetailIntent.putExtra(Consts.BOARD_SETTINGS_EXTRA, mActiveBoard.getSettings());
 
         startActivityForResult(cardDetailIntent, Consts.REQUEST_CODE_CARD_DETAIL);
     }
@@ -1299,13 +1225,8 @@ public class MainActivity extends Activity
 
         editCardIntent.putExtra(Consts.BOARD_ID_EXTRA, mActiveBoard.getId());
         editCardIntent.putExtra(Consts.EXISTING_CARD_EXTRA, mSelectedCards.get(0));
-        editCardIntent.putParcelableArrayListExtra(Consts.CARD_TYPES_EXTRA, new ArrayList<CardType>(mActiveBoard.getCardTypes()));
-        editCardIntent.putParcelableArrayListExtra(Consts.CLASS_OF_SERVICES_EXTRA, new ArrayList<ClassOfService>(mActiveBoard.getClassesOfService()));
         editCardIntent.putParcelableArrayListExtra(Consts.ALL_CHILD_LANES_EXTRA, mActiveBoard.getAllOrderedChildLanes());
-        editCardIntent.putParcelableArrayListExtra(Consts.BOARD_USERS_EXTRA, new ArrayList<BoardUser>(mActiveBoard.getBoardUsers()));
-        editCardIntent.putExtra(Consts.DATE_FORMAT_EXTRA, mActiveBoard.getDateFormat());
-        editCardIntent.putExtra(Consts.USES_CLASS_OF_SERVICE_EXTRA, mActiveBoard.isClassOfServiceEnabled());
-        editCardIntent.putExtra(Consts.USES_CLASS_OF_SERVICE_COLOR, mActiveBoard.getCardColorField().equals(Consts.COLOR_FIELD_CLASS_OF_SERVICE));
+        editCardIntent.putExtra(Consts.BOARD_SETTINGS_EXTRA, mActiveBoard.getSettings());
 
         startActivityForResult(editCardIntent, Consts.REQUEST_CODE_EDIT_EXISTING);
     }
@@ -1713,7 +1634,21 @@ public class MainActivity extends Activity
     @Override
     public void onBoardsRetrieved(List<GetBoardsBoard> boards) {
 
-        mAvailableGetBoardsBoards = boards;
+        mAvailableGetBoardsBoards = new ArrayList<GetBoardsBoard>();
+
+        if (!mShowArchivedBoards){
+
+            for (GetBoardsBoard board : boards){
+
+                if ( !board.isArchived() ){
+                    mAvailableGetBoardsBoards.add(board);
+                }
+            }
+
+        } else {
+
+            mAvailableGetBoardsBoards = boards;
+        }
 
         mDrawerListStickyAdapter.clear();
         mDrawerListStickyAdapter.addAll(mAvailableGetBoardsBoards);
@@ -1918,6 +1853,9 @@ public class MainActivity extends Activity
                 mCardGrid.setAdapter(mCardListAdapter);
 
             }
+        } else if (key.equals(Consts.SHARED_PREFS_SHOW_ARCHIVED_BOARDS)){
+
+            mShowArchivedBoards = sharedPreferences.getBoolean(Consts.SHARED_PREFS_SHOW_ARCHIVED_BOARDS, false);
         }
 
     }
@@ -2005,6 +1943,76 @@ public class MainActivity extends Activity
     private static final de.keyboardsurfer.android.widget.crouton.Configuration CONFIGURATION_INFINITE = new de.keyboardsurfer.android.widget.crouton.Configuration.Builder()
             .setDuration(de.keyboardsurfer.android.widget.crouton.Configuration.DURATION_INFINITE)
             .build();
+
+
+
+    // Callback for when a purchase is finished
+    IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
+        public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
+
+            if (mBillingHelper == null) return;
+
+            if (result.isFailure()) {
+                return;
+            }
+
+
+            //Purchase success
+
+            if (purchase.getSku().equals(Consts.SKU_PREMIUM)) {
+                // bought the premium upgrade!
+                // alert("Thank you for upgrading to premium!");
+                mIsPremium = true;
+                mSharedPreferences.edit().putBoolean(Consts.SHARED_PREFS_IS_PREMIUM, mIsPremium).apply();
+
+                removeAdView();
+            }
+
+        }
+    };
+
+    // Listener that's called when we finish querying the items and subscriptions we own
+    IabHelper.QueryInventoryFinishedListener mGotInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
+        public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
+
+            if (mBillingHelper == null) return;
+
+            if (result.isFailure()) {
+
+                return;
+            }
+
+            /*
+             * Check for items we own. Notice that for each purchase, we check
+             * the developer payload to see if it's correct! See
+             * verifyDeveloperPayload().
+             */
+
+            // Do we have the premium upgrade?
+            Purchase premiumPurchase = inventory.getPurchase(Consts.SKU_PREMIUM);
+            mIsPremium = (premiumPurchase != null);
+
+            mSharedPreferences.edit().putBoolean(Consts.SHARED_PREFS_IS_PREMIUM, mIsPremium).apply();
+
+            if (mIsPremium) {
+
+                removeAdView();
+            }
+        }
+    };
+
+    private void removeAdView() {
+
+        LinearLayout mainLayout = (LinearLayout) findViewById(R.id.main_layout);
+        AdView adView = (AdView) mainLayout.findViewById(R.id.adView);
+
+        if (adView != null) {
+
+            mainLayout.removeView(adView);
+
+        }
+
+    }
 
 
 }

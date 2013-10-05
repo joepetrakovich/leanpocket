@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.appshroom.leanpocket.R;
 import com.appshroom.leanpocket.dto.AssignedUser;
+import com.appshroom.leanpocket.dto.BoardSettings;
 import com.appshroom.leanpocket.dto.Card;
 import com.appshroom.leanpocket.helpers.Consts;
 import com.squareup.picasso.Picasso;
@@ -36,7 +37,7 @@ public class CardListAdapter extends ArrayAdapter<Card> {
     private HashMap<Integer, Integer> mAccentColorMap;
     private HashMap<String, Integer> mColorMap;
     private HashMap<String, String> mGravatarUrlMap;
-
+    private BoardSettings mBoardSettings;
 
     public CardListAdapter(Context context, int resource, List<Card> cards) {
 
@@ -49,6 +50,10 @@ public class CardListAdapter extends ArrayAdapter<Card> {
         mColorMap = new HashMap<String, Integer>();
         mGravatarUrlMap = new HashMap<String, String>();
 
+    }
+
+    public void setBoardSettings(BoardSettings settings){
+        mBoardSettings = settings;
     }
 
     public void setColorMap(HashMap<String, Integer> map) {
@@ -108,14 +113,24 @@ public class CardListAdapter extends ArrayAdapter<Card> {
             accentColor = getAccentColor(color);
         }
 
-        if (TextUtils.isEmpty(card.getExternalCardID())) {
-            holder.cardIdFrame.setVisibility(View.GONE);
-        } else {
-            holder.cardIdFrame.setVisibility(View.VISIBLE);
+        if (!mBoardSettings.isCardHeaderEnabled()
+                || TextUtils.isEmpty(card.getExternalCardID())) {
 
+            holder.cardIdFrame.setVisibility(View.GONE);
+
+        } else {
+
+            holder.cardIdFrame.setVisibility(View.VISIBLE);
             holder.cardIdFrameShape.setColor(accentColor);
 
-            holder.externalCardId.setText(card.getExternalCardID());
+            if (mBoardSettings.isCardIdPrefixEnabled()){
+
+                holder.externalCardId.setText( mBoardSettings.getCardIdPrefix() + card.getExternalCardID() );
+
+            } else {
+
+                holder.externalCardId.setText(card.getExternalCardID());
+            }
         }
 
         holder.cardShape.setColor(color);

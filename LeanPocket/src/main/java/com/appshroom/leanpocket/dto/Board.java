@@ -65,8 +65,23 @@ public class Board {
     private boolean isPrefixEnabled;
     private boolean isPrefixIncludedInHyperlink;
     private boolean isHyperlinkEnabled;
+    private boolean isAutoIncrementCardIdEnabled;
 
     private boolean hasLoadedArchive;
+
+    private BoardSettings settings;
+
+    public boolean isAutoIncrementCardIdEnabled() {
+        return isAutoIncrementCardIdEnabled;
+    }
+
+    public BoardSettings getSettings() {
+        return settings;
+    }
+
+    public void setSettings(BoardSettings settings) {
+        this.settings = settings;
+    }
 
     public String getId() {
         return id;

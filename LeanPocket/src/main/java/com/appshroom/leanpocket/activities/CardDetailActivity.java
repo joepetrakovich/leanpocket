@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.appshroom.leanpocket.R;
+import com.appshroom.leanpocket.dto.BoardSettings;
 import com.appshroom.leanpocket.dto.BoardUser;
 import com.appshroom.leanpocket.dto.Card;
 import com.appshroom.leanpocket.dto.CardType;
@@ -56,13 +57,10 @@ public class CardDetailActivity extends FragmentActivity
 
     Card mCard;
     String mBoardId;
-    String mDateFormat;
-    List<CardType> mCardTypes;
-    List<ClassOfService> mClassOfServices;
+    BoardSettings mBoardSettings;
+
     List<Lane> mLanes;
-    List<BoardUser> mBoardUsers;
-    boolean mUsesClassOfService;
-    boolean mUsesClassOfServiceColor;
+
     IabHelper mBillingHelper;
     ConfirmDeleteCardDialog mDeleteDialog;
     SharedPreferences mSharedPreferences;
@@ -72,21 +70,16 @@ public class CardDetailActivity extends FragmentActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_card_detail);
 
-        Intent srcIntent = getIntent();
-
         mSharedPreferences = new SecurePreferences(this);
 
         manageInAppBilling();
 
-        mCard = getIntent().getParcelableExtra(Consts.CARD_DETAIL_CARD_EXTRA);
-        mBoardId = getIntent().getStringExtra(Consts.BOARD_ID_EXTRA);
-        mCardTypes = srcIntent.getParcelableArrayListExtra(Consts.CARD_TYPES_EXTRA);
-        mClassOfServices = srcIntent.getParcelableArrayListExtra(Consts.CLASS_OF_SERVICES_EXTRA);
-        mLanes = srcIntent.getParcelableArrayListExtra(Consts.ALL_CHILD_LANES_EXTRA);
-        mBoardUsers = srcIntent.getParcelableArrayListExtra(Consts.BOARD_USERS_EXTRA);
-        mDateFormat = srcIntent.getStringExtra(Consts.DATE_FORMAT_EXTRA);
-        mUsesClassOfService = srcIntent.getBooleanExtra(Consts.USES_CLASS_OF_SERVICE_EXTRA, false);
-        mUsesClassOfServiceColor = srcIntent.getBooleanExtra(Consts.USES_CLASS_OF_SERVICE_COLOR, false);
+        Intent intent = getIntent();
+
+        mCard = intent.getParcelableExtra(Consts.CARD_DETAIL_CARD_EXTRA);
+        mBoardId = intent.getStringExtra(Consts.BOARD_ID_EXTRA);
+        mBoardSettings = intent.getParcelableExtra(Consts.BOARD_SETTINGS_EXTRA);
+        mLanes = intent.getParcelableArrayListExtra(Consts.ALL_CHILD_LANES_EXTRA);
 
         // Set up the action bar.
         final ActionBar actionBar = getActionBar();
@@ -250,14 +243,8 @@ public class CardDetailActivity extends FragmentActivity
 
         editCardIntent.putExtra(Consts.BOARD_ID_EXTRA, mBoardId);
         editCardIntent.putExtra(Consts.EXISTING_CARD_EXTRA, mCard);
-        editCardIntent.putParcelableArrayListExtra(Consts.CARD_TYPES_EXTRA, new ArrayList<CardType>(mCardTypes));
-        editCardIntent.putParcelableArrayListExtra(Consts.CLASS_OF_SERVICES_EXTRA, new ArrayList<ClassOfService>(mClassOfServices));
+        editCardIntent.putExtra(Consts.BOARD_SETTINGS_EXTRA, mBoardSettings);
         editCardIntent.putParcelableArrayListExtra(Consts.ALL_CHILD_LANES_EXTRA, new ArrayList<Lane>(mLanes));
-        editCardIntent.putParcelableArrayListExtra(Consts.BOARD_USERS_EXTRA, new ArrayList<BoardUser>(mBoardUsers));
-        editCardIntent.putExtra(Consts.USES_CLASS_OF_SERVICE_EXTRA, mUsesClassOfService);
-        editCardIntent.putExtra(Consts.USES_CLASS_OF_SERVICE_COLOR, mUsesClassOfServiceColor);
-
-        editCardIntent.putExtra(Consts.DATE_FORMAT_EXTRA, mDateFormat);
 
         startActivityForResult(editCardIntent, Consts.REQUEST_CODE_EDIT_EXISTING);
     }
@@ -390,7 +377,7 @@ public class CardDetailActivity extends FragmentActivity
             switch (position) {
 
                 case 0:
-                    return DetailsFragment.newInstance(mCard);
+                    return DetailsFragment.newInstance(mCard, mBoardSettings);
 
                 case 1:
                     return CommentsFragment.newInstance(mCard, mBoardId);

@@ -304,7 +304,7 @@
     <string name="title_activity_about">About</string>
     <string name="content_desc_logo">App logo</string>
     <string name="app_version">Version 1.0</string>
-    <string name="copyright">\u00A92013 Joseph G. Petrakovich</string>
+    <string name="copyright">\u00A92013 Joe Petrakovich</string>
     <string name="credits"><u>Credits</u></string>
     <string name="rate_application"><u>Rate application</u></string>
     <string name="app_slogan">LeanPocket \u2014 Your kanban board, in your pocket.</string>
@@ -322,5 +322,9 @@
     <string name="crash_dialog_title">LeanPocket has crashed</string>
     <string name="crash_dialog_ok_toast">Message sent.  Thank you! </string>
     <string name="section_header_class_of_service">Class Of Service</string>
+    <string name="section_header_external_card_id">External Card Id</string>
+    <string name="hint_external_card_id">External card ID</string>
+    <string name="show_archived_boards_setting_title">Show archived boards</string>
+    <string name="archived_boards_summary">Requires app restart or account switch to take effect</string>
 
 </resources>
