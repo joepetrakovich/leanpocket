@@ -456,6 +456,9 @@ public class LeanKitWorkerFragment extends Fragment {
             board.setOrderedBacklogChildLanes(orderedBacklogChildLanes);
             board.setOrderedArchiveChildLanes(orderedArchiveChildLanes);
 
+            ClassOfService defaultCOS = new ClassOfService("None");
+            board.getClassesOfService().add(0, defaultCOS);
+
             HashMap<String, Integer> colorMap = generateCardColorsFromHex(board.getCardTypes(), board.getClassesOfService());
 
             HashMap<Integer, Integer> accentColorMap = generateCardAccentColors(colorMap);

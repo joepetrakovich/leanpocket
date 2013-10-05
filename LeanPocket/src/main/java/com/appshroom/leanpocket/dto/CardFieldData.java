@@ -10,6 +10,7 @@ public class CardFieldData {
     private String title;
     private String description;
     private String cardTypeId;
+    private String classOfServiceId;
     private String dueDate;
     private String blockedReason;
     private String unblockedReason;
@@ -19,6 +20,14 @@ public class CardFieldData {
 
     private int size;
     private int priority;
+
+    public String getClassOfServiceId() {
+        return classOfServiceId;
+    }
+
+    public void setClassOfServiceId(String classOfServiceId) {
+        this.classOfServiceId = classOfServiceId;
+    }
 
     public String getTags() {
         return tags;

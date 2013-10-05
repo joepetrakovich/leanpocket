@@ -22,6 +22,7 @@ import com.appshroom.leanpocket.dto.BoardUser;
 import com.appshroom.leanpocket.dto.Card;
 import com.appshroom.leanpocket.dto.CardFieldData;
 import com.appshroom.leanpocket.dto.CardType;
+import com.appshroom.leanpocket.dto.ClassOfService;
 import com.appshroom.leanpocket.dto.Lane;
 import com.appshroom.leanpocket.dto.UpdateCardReplyData;
 import com.appshroom.leanpocket.fragments.NewCardBasicFragment;
@@ -42,6 +43,9 @@ public class NewCardActivity extends Activity implements SharedPreferences.OnSha
     String mBoardId;
     String mDateFormat;
     List<CardType> mCardTypes;
+    List<ClassOfService> mClassOfServices;
+    boolean mUsesClassOfService;
+    boolean mUsesClassOfServiceColor;
     List<Lane> mLanes;
     List<BoardUser> mBoardUsers;
     Card mExistingCard;
@@ -66,8 +70,11 @@ public class NewCardActivity extends Activity implements SharedPreferences.OnSha
 
         mBoardId = srcIntent.getStringExtra(Consts.BOARD_ID_EXTRA);
         mCardTypes = srcIntent.getParcelableArrayListExtra(Consts.CARD_TYPES_EXTRA);
+        mClassOfServices = srcIntent.getParcelableArrayListExtra(Consts.CLASS_OF_SERVICES_EXTRA);
         mLanes = srcIntent.getParcelableArrayListExtra(Consts.ALL_CHILD_LANES_EXTRA);
         mBoardUsers = srcIntent.getParcelableArrayListExtra(Consts.BOARD_USERS_EXTRA);
+        mUsesClassOfService = srcIntent.getBooleanExtra(Consts.USES_CLASS_OF_SERVICE_EXTRA, false);
+        mUsesClassOfServiceColor = srcIntent.getBooleanExtra(Consts.USES_CLASS_OF_SERVICE_COLOR, false);
 
         mExistingCard = srcIntent.getParcelableExtra(Consts.EXISTING_CARD_EXTRA);
 
@@ -163,6 +170,18 @@ public class NewCardActivity extends Activity implements SharedPreferences.OnSha
 
     public List<CardType> getCardTypes() {
         return mCardTypes;
+    }
+
+    public List<ClassOfService> getClassOfServices() {
+        return mClassOfServices;
+    }
+
+    public boolean usesClassOfService() {
+        return mUsesClassOfService;
+    }
+
+    public boolean usesClassOfServiceColor() {
+        return mUsesClassOfServiceColor;
     }
 
     public MODE getMode() {
@@ -293,7 +312,6 @@ public class NewCardActivity extends Activity implements SharedPreferences.OnSha
 
             cardToFill.setDueDate(format.format(d));
 
-
         } catch (ParseException ex) {
 
             //TODO: what to do?
@@ -301,6 +319,8 @@ public class NewCardActivity extends Activity implements SharedPreferences.OnSha
 
 
         cardToFill.setTypeId(basicSettings.getCardTypeId());
+
+        cardToFill.setClassOfServiceId(basicSettings.getClassOfServiceId());
 
         cardToFill.setSize(basicSettings.getSize());
 

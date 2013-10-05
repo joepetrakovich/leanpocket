@@ -40,6 +40,7 @@ import com.appshroom.leanpocket.dto.BoardUser;
 import com.appshroom.leanpocket.dto.Card;
 import com.appshroom.leanpocket.dto.CardFieldData;
 import com.appshroom.leanpocket.dto.CardType;
+import com.appshroom.leanpocket.dto.ClassOfService;
 import com.appshroom.leanpocket.dto.Lane;
 import com.appshroom.leanpocket.helpers.Consts;
 import com.appshroom.leanpocket.helpers.GravatarHelpers;
@@ -64,16 +65,19 @@ public class NewCardBasicFragment extends Fragment {
     EditText etTags;
     EditText etBlockReason;
     TextView mDueDateView;
+    View classOfServiceFrame;
 
     TextView mLaneSectionHeader;
 
     ToggleButton toggleBlocked;
 
     Spinner mSpinnerCardTypes;
+    Spinner mSpinnerClassOfServices;
     Spinner mSpinnerPriorities;
     Spinner mSpinnerLanes;
 
     ArrayAdapter<CardType> mCardTypeAdapter;
+    ArrayAdapter<ClassOfService> mClassOfServiceAdapter;
     ArrayAdapter<String> mPrioritiesAdapter;
     ArrayAdapter<Lane> mLanesAdapter;
 
@@ -81,6 +85,7 @@ public class NewCardBasicFragment extends Fragment {
     AssignUsersDialogFragment assignUserDialog;
 
     List<CardType> mCardTypes;
+    List<ClassOfService> mClassOfServices;
     List<Lane> mLanes;
     List<BoardUser> mAvailableUsers;
     List<BoardUser> mAssignedUsers;
@@ -101,14 +106,19 @@ public class NewCardBasicFragment extends Fragment {
     private Card mExistingCard;
     private String mDateFormat;
     private boolean mKeepFormat;
+    private boolean mUsesClassOfService;
+    private boolean mUsesClassOfServiceColor;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         mCardTypes = ((NewCardActivity) getActivity()).getCardTypes();
+        mClassOfServices = ((NewCardActivity) getActivity()).getClassOfServices();
         mLanes = ((NewCardActivity) getActivity()).getLanes();
         mAvailableUsers = ((NewCardActivity) getActivity()).getBoardUsers();
+        mUsesClassOfService = ((NewCardActivity) getActivity()).usesClassOfService();
+        mUsesClassOfServiceColor = ((NewCardActivity) getActivity()).usesClassOfServiceColor();
 
         mMode = ((NewCardActivity) getActivity()).getMode();
 
@@ -235,9 +245,12 @@ public class NewCardBasicFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                CardType selectedType = (CardType) parent.getItemAtPosition(position);
+                if (!mUsesClassOfServiceColor) {
 
-                titleFrame.setBackgroundColor(Color.parseColor(selectedType.getColorHex()));
+                    CardType selectedType = (CardType) parent.getItemAtPosition(position);
+
+                    titleFrame.setBackgroundColor(Color.parseColor(selectedType.getColorHex()));
+                }
             }
 
             @Override
@@ -245,6 +258,35 @@ public class NewCardBasicFragment extends Fragment {
 
             }
         });
+
+        classOfServiceFrame = v.findViewById(R.id.layout_class_of_service);
+
+        mSpinnerClassOfServices = (Spinner) v.findViewById(R.id.spinner_new_card_class_of_service);
+
+        mClassOfServiceAdapter = new ArrayAdapter<ClassOfService>(getActivity(), android.R.layout.simple_spinner_dropdown_item, mClassOfServices);
+        mSpinnerClassOfServices.setAdapter(mClassOfServiceAdapter);
+        mSpinnerClassOfServices.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                if (mUsesClassOfServiceColor) {
+
+                    ClassOfService selectedClass = (ClassOfService) parent.getItemAtPosition(position);
+
+                    titleFrame.setBackgroundColor(Color.parseColor(selectedClass.getColorHex()));
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        if (!mUsesClassOfService) {
+            classOfServiceFrame.setVisibility(View.GONE);
+        }
+
 
         etTags = (EditText) v.findViewById(R.id.et_new_card_tags);
 
@@ -333,6 +375,17 @@ public class NewCardBasicFragment extends Fragment {
                 break;
             }
         }
+
+
+        for (int i = 0; i < mClassOfServices.size(); i++) {
+
+            if (mExistingCard.getClassOfServiceId().equals(mClassOfServices.get(i).getId())) {
+
+                mSpinnerClassOfServices.setSelection(i);
+                break;
+            }
+        }
+
 
         int size = mExistingCard.getSize();
 
@@ -535,6 +588,8 @@ public class NewCardBasicFragment extends Fragment {
         data.setDueDate(mDueDateView.getText().toString());
 
         data.setCardTypeId(((CardType) mSpinnerCardTypes.getSelectedItem()).getId());
+
+        data.setClassOfServiceId(((ClassOfService) mSpinnerClassOfServices.getSelectedItem()).getId());
 
         String size = etSize.getText().toString();
         if (TextUtils.isEmpty(size.trim())) {

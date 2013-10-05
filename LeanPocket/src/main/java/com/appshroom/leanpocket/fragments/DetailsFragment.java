@@ -67,6 +67,8 @@ public class DetailsFragment extends Fragment {
 
         createCardType(v);
 
+        createClassOfService(v);
+
         createTags(v);
 
         createAssignedUsers(v);
@@ -109,6 +111,21 @@ public class DetailsFragment extends Fragment {
     private void createCardType(View v) {
         TextView type = (TextView) v.findViewById(R.id.tv_card_detail_card_type);
         type.setText(mCard.getTypeName());
+    }
+
+    private void createClassOfService(View v) {
+
+        View cosLayout = v.findViewById(R.id.layout_class_of_service);
+
+        if (TextUtils.isEmpty(mCard.getClassOfServiceTitle())) {
+
+            cosLayout.setVisibility(View.GONE);
+
+        } else {
+
+            TextView tvCOS = (TextView) cosLayout.findViewById(R.id.tv_card_detail_class_of_service);
+            tvCOS.setText(mCard.getClassOfServiceTitle());
+        }
     }
 
     private void createTags(View v) {
@@ -217,11 +234,10 @@ public class DetailsFragment extends Fragment {
     private void createTitle(View v) {
 
         View titleBackground = v.findViewById(R.id.layout_title_wrapper);
-        titleBackground.setBackgroundColor(Color.parseColor(mCard.getTypeColorHex()));
+        titleBackground.setBackgroundColor(Color.parseColor(mCard.getColor()));
 
         TextView title = (TextView) v.findViewById(R.id.tv_card_detail_title);
         title.setText(mCard.getTitle());
-
 
         TextView dueDate = (TextView) v.findViewById(R.id.tv_card_detail_due_date);
 
