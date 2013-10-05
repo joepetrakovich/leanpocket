@@ -6,6 +6,8 @@ import android.app.Fragment;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.appshroom.leanpocket.R;
 import com.appshroom.leanpocket.activities.MyApplication;
@@ -13,6 +15,7 @@ import com.appshroom.leanpocket.adapters.BoardSection;
 import com.appshroom.leanpocket.api.retrofit.RetroLeanKitApi;
 import com.appshroom.leanpocket.api.retrofit.RetroLeanKitCallback;
 import com.appshroom.leanpocket.dto.Board;
+import com.appshroom.leanpocket.dto.BoardSettings;
 import com.appshroom.leanpocket.dto.BoardUser;
 import com.appshroom.leanpocket.dto.Card;
 import com.appshroom.leanpocket.dto.CardType;
@@ -471,14 +474,39 @@ public class LeanKitWorkerFragment extends Fragment {
 
             board.setDateFormat(getDateFormat(board.getBoardUsers()));
 
+            board.setSettings( getBoardSettings(board) );
+
             return board;
         }
+
 
         @Override
         protected void onPostExecute(Board board) {
 
             mLeanKitWorkerListener.onBoardReadyForUse(board);
         }
+    }
+
+    private BoardSettings getBoardSettings(Board board){
+
+        BoardSettings settings = new BoardSettings();
+
+        settings.setCardTypes( board.getCardTypes() );
+        settings.setClassOfServices( board.getClassesOfService() );
+        settings.setBoardUsers( board.getBoardUsers() );
+
+        settings.setDateFormat( board.getDateFormat() );
+        settings.setCardIdPrefix( board.getPrefix() );
+
+        settings.setUsesClassOfService( board.isClassOfServiceEnabled() );
+        settings.setUsesClassOfServiceColor( board.getCardColorField().equals(Consts.COLOR_FIELD_CLASS_OF_SERVICE) );
+        settings.setUsesExternalCardId( board.isCardIdEnabled() );
+        settings.setCardHeaderEnabled( board.isHeaderEnabled() );
+        settings.setCardIdPrefixEnabled( board.isPrefixEnabled() );
+        settings.setAutoIncrementCardIdEnabled( board.isAutoIncrementCardIdEnabled() );
+
+        return settings;
+
     }
 
     private void setLaneBoardSectionTypes(List<Lane> lanes, BoardSection.BoardSectionType type) {

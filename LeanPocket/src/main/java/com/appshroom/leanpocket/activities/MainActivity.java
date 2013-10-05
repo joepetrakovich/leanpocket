@@ -755,6 +755,7 @@ public class MainActivity extends Activity
         mCardListAdapter.setColorMap(mActiveBoard.getCardColorMap());
         mCardListAdapter.setAccentColorMap(mActiveBoard.getCardAccentColorMap());
         mCardListAdapter.setGravatarUrlMap(mActiveBoard.getUserGravatarUrlMap());
+        mCardListAdapter.setBoardSettings(mActiveBoard.getSettings());
 
         //If activity AND retained fragment were lost...
         if (mSelectedCards == null) {
