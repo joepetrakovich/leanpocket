@@ -83,6 +83,7 @@ public final class Consts {
     public static final String INTENT_FILTER_PREM_PURCHASE = "premium_purchase";
     public static final String COLOR_FIELD_CLASS_OF_SERVICE = "ClassOfService";
     public static final String COLOR_FIELD_CARD_TYPE = "CardType";
+    public static final String BOARD_SETTINGS_EXTRA = "BoardSettings";
 
 
     public final class PRIORITY {

@@ -151,74 +151,6 @@ public class MainActivity extends Activity
     private IabHelper mBillingHelper;
     private boolean mIsPremium = false;
 
-    // Callback for when a purchase is finished
-    IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
-        public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
-
-            if (mBillingHelper == null) return;
-
-            if (result.isFailure()) {
-                return;
-            }
-
-
-            //Purchase success
-
-            if (purchase.getSku().equals(Consts.SKU_PREMIUM)) {
-                // bought the premium upgrade!
-                // alert("Thank you for upgrading to premium!");
-                mIsPremium = true;
-                mSharedPreferences.edit().putBoolean(Consts.SHARED_PREFS_IS_PREMIUM, mIsPremium).apply();
-
-                removeAdView();
-            }
-
-        }
-    };
-
-    // Listener that's called when we finish querying the items and subscriptions we own
-    IabHelper.QueryInventoryFinishedListener mGotInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
-        public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
-
-            if (mBillingHelper == null) return;
-
-            if (result.isFailure()) {
-
-                return;
-            }
-
-            /*
-             * Check for items we own. Notice that for each purchase, we check
-             * the developer payload to see if it's correct! See
-             * verifyDeveloperPayload().
-             */
-
-            // Do we have the premium upgrade?
-            Purchase premiumPurchase = inventory.getPurchase(Consts.SKU_PREMIUM);
-            mIsPremium = (premiumPurchase != null);
-
-            mSharedPreferences.edit().putBoolean(Consts.SHARED_PREFS_IS_PREMIUM, mIsPremium).apply();
-
-            if (mIsPremium) {
-
-                removeAdView();
-            }
-        }
-    };
-
-    private void removeAdView() {
-
-        LinearLayout mainLayout = (LinearLayout) findViewById(R.id.main_layout);
-        AdView adView = (AdView) mainLayout.findViewById(R.id.adView);
-
-        if (adView != null) {
-
-            mainLayout.removeView(adView);
-
-        }
-
-    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1283,13 +1215,8 @@ public class MainActivity extends Activity
 
         cardDetailIntent.putExtra(Consts.CARD_DETAIL_CARD_EXTRA, selectedCard);
         cardDetailIntent.putExtra(Consts.BOARD_ID_EXTRA, mActiveBoard.getId());
-        cardDetailIntent.putParcelableArrayListExtra(Consts.CARD_TYPES_EXTRA, (ArrayList<CardType>) mActiveBoard.getCardTypes());
-        cardDetailIntent.putParcelableArrayListExtra(Consts.CLASS_OF_SERVICES_EXTRA, (ArrayList<ClassOfService>) mActiveBoard.getClassesOfService());
         cardDetailIntent.putParcelableArrayListExtra(Consts.ALL_CHILD_LANES_EXTRA, mActiveBoard.getAllOrderedChildLanes());
-        cardDetailIntent.putParcelableArrayListExtra(Consts.BOARD_USERS_EXTRA, new ArrayList<Parcelable>(mActiveBoard.getBoardUsers()));
-        cardDetailIntent.putExtra(Consts.USES_CLASS_OF_SERVICE_EXTRA, mActiveBoard.isClassOfServiceEnabled());
-        cardDetailIntent.putExtra(Consts.USES_CLASS_OF_SERVICE_COLOR, mActiveBoard.getCardColorField().equals(Consts.COLOR_FIELD_CLASS_OF_SERVICE));
-        cardDetailIntent.putExtra(Consts.DATE_FORMAT_EXTRA, mActiveBoard.getDateFormat());
+        cardDetailIntent.putExtra(Consts.BOARD_SETTINGS_EXTRA, mActiveBoard.getSettings());
 
         startActivityForResult(cardDetailIntent, Consts.REQUEST_CODE_CARD_DETAIL);
     }
@@ -2006,6 +1933,76 @@ public class MainActivity extends Activity
     private static final de.keyboardsurfer.android.widget.crouton.Configuration CONFIGURATION_INFINITE = new de.keyboardsurfer.android.widget.crouton.Configuration.Builder()
             .setDuration(de.keyboardsurfer.android.widget.crouton.Configuration.DURATION_INFINITE)
             .build();
+
+
+
+    // Callback for when a purchase is finished
+    IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
+        public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
+
+            if (mBillingHelper == null) return;
+
+            if (result.isFailure()) {
+                return;
+            }
+
+
+            //Purchase success
+
+            if (purchase.getSku().equals(Consts.SKU_PREMIUM)) {
+                // bought the premium upgrade!
+                // alert("Thank you for upgrading to premium!");
+                mIsPremium = true;
+                mSharedPreferences.edit().putBoolean(Consts.SHARED_PREFS_IS_PREMIUM, mIsPremium).apply();
+
+                removeAdView();
+            }
+
+        }
+    };
+
+    // Listener that's called when we finish querying the items and subscriptions we own
+    IabHelper.QueryInventoryFinishedListener mGotInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
+        public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
+
+            if (mBillingHelper == null) return;
+
+            if (result.isFailure()) {
+
+                return;
+            }
+
+            /*
+             * Check for items we own. Notice that for each purchase, we check
+             * the developer payload to see if it's correct! See
+             * verifyDeveloperPayload().
+             */
+
+            // Do we have the premium upgrade?
+            Purchase premiumPurchase = inventory.getPurchase(Consts.SKU_PREMIUM);
+            mIsPremium = (premiumPurchase != null);
+
+            mSharedPreferences.edit().putBoolean(Consts.SHARED_PREFS_IS_PREMIUM, mIsPremium).apply();
+
+            if (mIsPremium) {
+
+                removeAdView();
+            }
+        }
+    };
+
+    private void removeAdView() {
+
+        LinearLayout mainLayout = (LinearLayout) findViewById(R.id.main_layout);
+        AdView adView = (AdView) mainLayout.findViewById(R.id.adView);
+
+        if (adView != null) {
+
+            mainLayout.removeView(adView);
+
+        }
+
+    }
 
 
 }

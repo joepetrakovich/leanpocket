@@ -116,6 +116,19 @@ public class BoardSettings implements Parcelable {
         isAutoIncrementCardIdEnabled = autoIncrementCardIdEnabled;
     }
 
+    public static final Creator<BoardSettings> CREATOR = new Creator<BoardSettings>() {
+
+        @Override
+        public BoardSettings createFromParcel(Parcel source) {
+            return new BoardSettings(source);
+        }
+
+        @Override
+        public BoardSettings[] newArray(int size) {
+            return new BoardSettings[size];
+        }
+    };
+
     public BoardSettings(Parcel p){
 
         cardTypes = new ArrayList<CardType>();
