@@ -18,10 +18,12 @@ import com.appshroom.leanpocket.R;
 import com.appshroom.leanpocket.api.retrofit.RetroLeanKitApi;
 import com.appshroom.leanpocket.api.retrofit.RetroLeanKitCallback;
 import com.appshroom.leanpocket.dto.AddCardReplyData;
+import com.appshroom.leanpocket.dto.BoardSettings;
 import com.appshroom.leanpocket.dto.BoardUser;
 import com.appshroom.leanpocket.dto.Card;
 import com.appshroom.leanpocket.dto.CardFieldData;
 import com.appshroom.leanpocket.dto.CardType;
+import com.appshroom.leanpocket.dto.ClassOfService;
 import com.appshroom.leanpocket.dto.Lane;
 import com.appshroom.leanpocket.dto.UpdateCardReplyData;
 import com.appshroom.leanpocket.fragments.NewCardBasicFragment;
@@ -40,11 +42,10 @@ public class NewCardActivity extends Activity implements SharedPreferences.OnSha
 
     RetroLeanKitApi mRetroLeanKitApi;
     String mBoardId;
-    String mDateFormat;
-    List<CardType> mCardTypes;
     List<Lane> mLanes;
-    List<BoardUser> mBoardUsers;
     Card mExistingCard;
+    BoardSettings mBoardSettings;
+
     ProgressDialog pd;
     int mPosition;
 
@@ -65,15 +66,11 @@ public class NewCardActivity extends Activity implements SharedPreferences.OnSha
         Intent srcIntent = getIntent();
 
         mBoardId = srcIntent.getStringExtra(Consts.BOARD_ID_EXTRA);
-        mCardTypes = srcIntent.getParcelableArrayListExtra(Consts.CARD_TYPES_EXTRA);
         mLanes = srcIntent.getParcelableArrayListExtra(Consts.ALL_CHILD_LANES_EXTRA);
-        mBoardUsers = srcIntent.getParcelableArrayListExtra(Consts.BOARD_USERS_EXTRA);
+        mBoardSettings = srcIntent.getParcelableExtra(Consts.BOARD_SETTINGS_EXTRA);
 
         mExistingCard = srcIntent.getParcelableExtra(Consts.EXISTING_CARD_EXTRA);
-
         mMode = mExistingCard == null ? MODE.NEW_CARD : MODE.EDIT_EXISTING;
-
-        mDateFormat = srcIntent.getStringExtra(Consts.DATE_FORMAT_EXTRA);
 
         setPosition();
 
@@ -145,24 +142,13 @@ public class NewCardActivity extends Activity implements SharedPreferences.OnSha
         return mExistingCard;
     }
 
-    public String getDateFormat() {
-        return mDateFormat;
+    public BoardSettings getBoardSettings(){
+        return mBoardSettings;
     }
 
-    public void setmDateFormat(String mDateFormat) {
-        this.mDateFormat = mDateFormat;
-    }
 
     public List<Lane> getLanes() {
         return mLanes;
-    }
-
-    public List<BoardUser> getBoardUsers() {
-        return mBoardUsers;
-    }
-
-    public List<CardType> getCardTypes() {
-        return mCardTypes;
     }
 
     public MODE getMode() {
@@ -289,10 +275,9 @@ public class NewCardActivity extends Activity implements SharedPreferences.OnSha
 
             java.util.Date d = format.parse(basicSettings.getDueDate());
 
-            format.applyPattern(mDateFormat);
+            format.applyPattern( mBoardSettings.getDateFormat() );
 
             cardToFill.setDueDate(format.format(d));
-
 
         } catch (ParseException ex) {
 
@@ -302,9 +287,13 @@ public class NewCardActivity extends Activity implements SharedPreferences.OnSha
 
         cardToFill.setTypeId(basicSettings.getCardTypeId());
 
+        cardToFill.setClassOfServiceId(basicSettings.getClassOfServiceId());
+
         cardToFill.setSize(basicSettings.getSize());
 
         cardToFill.setTags(basicSettings.getTags());
+
+        cardToFill.setExternalCardID( basicSettings.getExternalCardId() );
 
         if (mMode == MODE.NEW_CARD) { //edit doesn't support moving lanes.
 

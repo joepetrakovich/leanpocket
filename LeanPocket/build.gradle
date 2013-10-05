@@ -38,5 +38,20 @@ dependencies {
     compile files('libs/com.haarman.listviewanimations-2.4.0.jar', 'libs/GoogleAdMobAdsSdk-6.4.1.jar')
 }
 
+signingConfigs {
+    releaseConfig {
+        storeFile file("/Users/jpetrakovich/Dropbox/leanpocket/leanpocket-release-key.keystore")
+        storePassword "Nhat0Hanh123"
+        keyAlias "leanpocket-release-key"
+        keyPassword "Nhat0Hanh123"
+    }
+}
 
+buildTypes {
+    release {
+        runProguard true
+        proguardFile file('proguard-android.txt')
+        signingConfig signingConfigs.releaseConfig
+    }
 
+}

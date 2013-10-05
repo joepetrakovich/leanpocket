@@ -36,10 +36,12 @@ import com.appshroom.leanpocket.activities.NewCardActivity;
 import com.appshroom.leanpocket.adapters.AssignUserCheckableListAdapter;
 import com.appshroom.leanpocket.adapters.LanesSpinnerAdapter;
 import com.appshroom.leanpocket.dto.AssignedUser;
+import com.appshroom.leanpocket.dto.BoardSettings;
 import com.appshroom.leanpocket.dto.BoardUser;
 import com.appshroom.leanpocket.dto.Card;
 import com.appshroom.leanpocket.dto.CardFieldData;
 import com.appshroom.leanpocket.dto.CardType;
+import com.appshroom.leanpocket.dto.ClassOfService;
 import com.appshroom.leanpocket.dto.Lane;
 import com.appshroom.leanpocket.helpers.Consts;
 import com.appshroom.leanpocket.helpers.GravatarHelpers;
@@ -63,27 +65,32 @@ public class NewCardBasicFragment extends Fragment {
     EditText etSize;
     EditText etTags;
     EditText etBlockReason;
+    EditText etExternalCardId;
     TextView mDueDateView;
+    View classOfServiceFrame;
+    View externalCardIdFrame;
 
     TextView mLaneSectionHeader;
 
     ToggleButton toggleBlocked;
 
     Spinner mSpinnerCardTypes;
+    Spinner mSpinnerClassOfServices;
     Spinner mSpinnerPriorities;
     Spinner mSpinnerLanes;
 
     ArrayAdapter<CardType> mCardTypeAdapter;
+    ArrayAdapter<ClassOfService> mClassOfServiceAdapter;
     ArrayAdapter<String> mPrioritiesAdapter;
     ArrayAdapter<Lane> mLanesAdapter;
 
     DatePickerFragment datePickerFragment;
     AssignUsersDialogFragment assignUserDialog;
 
-    List<CardType> mCardTypes;
     List<Lane> mLanes;
-    List<BoardUser> mAvailableUsers;
+
     List<BoardUser> mAssignedUsers;
+    BoardSettings mBoardSettings;
 
     LinearLayout mAssignedUsersHolder;
     LinearLayout mLayoutAfterTitleWrapper;
@@ -99,16 +106,15 @@ public class NewCardBasicFragment extends Fragment {
 
     private NewCardActivity.MODE mMode;
     private Card mExistingCard;
-    private String mDateFormat;
     private boolean mKeepFormat;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mCardTypes = ((NewCardActivity) getActivity()).getCardTypes();
+        mBoardSettings = ((NewCardActivity) getActivity()).getBoardSettings();
         mLanes = ((NewCardActivity) getActivity()).getLanes();
-        mAvailableUsers = ((NewCardActivity) getActivity()).getBoardUsers();
 
         mMode = ((NewCardActivity) getActivity()).getMode();
 
@@ -116,8 +122,6 @@ public class NewCardBasicFragment extends Fragment {
 
             mExistingCard = ((NewCardActivity) getActivity()).getExistingCard();
         }
-
-        mDateFormat = ((NewCardActivity) getActivity()).getDateFormat();
 
         mKeepFormat = PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean(Consts.SHARED_PREFS_KEEP_FORMAT, false);
 
@@ -229,15 +233,18 @@ public class NewCardBasicFragment extends Fragment {
         });
 
         mSpinnerCardTypes = (Spinner) v.findViewById(R.id.spinner_card_type);
-        mCardTypeAdapter = new ArrayAdapter<CardType>(getActivity(), android.R.layout.simple_spinner_dropdown_item, mCardTypes);
+        mCardTypeAdapter = new ArrayAdapter<CardType>(getActivity(), android.R.layout.simple_spinner_dropdown_item, mBoardSettings.getCardTypes());
         mSpinnerCardTypes.setAdapter(mCardTypeAdapter);
         mSpinnerCardTypes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                CardType selectedType = (CardType) parent.getItemAtPosition(position);
+                if (!mBoardSettings.usesClassOfServiceColor()) {
 
-                titleFrame.setBackgroundColor(Color.parseColor(selectedType.getColorHex()));
+                    CardType selectedType = (CardType) parent.getItemAtPosition(position);
+
+                    titleFrame.setBackgroundColor(Color.parseColor(selectedType.getColorHex()));
+                }
             }
 
             @Override
@@ -246,7 +253,44 @@ public class NewCardBasicFragment extends Fragment {
             }
         });
 
+        classOfServiceFrame = v.findViewById(R.id.layout_class_of_service);
+
+        mSpinnerClassOfServices = (Spinner) v.findViewById(R.id.spinner_new_card_class_of_service);
+
+        mClassOfServiceAdapter = new ArrayAdapter<ClassOfService>(getActivity(), android.R.layout.simple_spinner_dropdown_item, mBoardSettings.getClassOfServices());
+        mSpinnerClassOfServices.setAdapter(mClassOfServiceAdapter);
+        mSpinnerClassOfServices.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                if (mBoardSettings.usesClassOfServiceColor()) {
+
+                    ClassOfService selectedClass = (ClassOfService) parent.getItemAtPosition(position);
+
+                    titleFrame.setBackgroundColor(Color.parseColor(selectedClass.getColorHex()));
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        if (!mBoardSettings.usesClassOfService()) {
+            classOfServiceFrame.setVisibility(View.GONE);
+        }
+
+
         etTags = (EditText) v.findViewById(R.id.et_new_card_tags);
+
+        externalCardIdFrame = v.findViewById(R.id.layout_external_card_id);
+        etExternalCardId = (EditText) externalCardIdFrame.findViewById(R.id.et_ext_card_id);
+
+        if (!mBoardSettings.usesExternalCardId() || mBoardSettings.isAutoIncrementCardIdEnabled()){
+
+            externalCardIdFrame.setVisibility(View.GONE);
+        }
 
         mLaneSectionHeader = (TextView) v.findViewById(R.id.new_card_lane_section_header);
         mSpinnerLanes = (Spinner) v.findViewById(R.id.spinner_new_card_lane);
@@ -288,9 +332,9 @@ public class NewCardBasicFragment extends Fragment {
         mSpinnerPriorities.setSelection(1);
 
         //Begin card type spinner on default type if exists
-        for (int i = 0; i < mCardTypes.size(); i++) {
+        for (int i = 0; i < mBoardSettings.getCardTypes().size(); i++) {
 
-            if (mCardTypes.get(i).isDefault()) {
+            if (mBoardSettings.getCardTypes().get(i).isDefault()) {
                 mSpinnerCardTypes.setSelection(i);
                 break;
             }
@@ -325,14 +369,26 @@ public class NewCardBasicFragment extends Fragment {
         }
 
         //Begin card type spinner on default type if exists
-        for (int i = 0; i < mCardTypes.size(); i++) {
+        for (int i = 0; i < mBoardSettings.getCardTypes().size(); i++) {
 
-            if (mExistingCard.getTypeId().equals(mCardTypes.get(i).getId())) {
+            if (mExistingCard.getTypeId().equals(mBoardSettings.getCardTypes().get(i).getId())) {
 
                 mSpinnerCardTypes.setSelection(i);
                 break;
             }
         }
+
+
+        for (int i = 0; i < mBoardSettings.getClassOfServices().size(); i++) {
+
+            if (mExistingCard.getClassOfServiceId().equals(mBoardSettings.getClassOfServices().get(i).getId())) {
+
+                mSpinnerClassOfServices.setSelection(i);
+                break;
+            }
+        }
+
+        etExternalCardId.setText( mExistingCard.getExternalCardID() ); //TODO: make sure doesn't conflict with auto-increment
 
         int size = mExistingCard.getSize();
 
@@ -359,7 +415,7 @@ public class NewCardBasicFragment extends Fragment {
     private void populateDueDateFromExisting() {
         try {
 
-            SimpleDateFormat format = new SimpleDateFormat(mDateFormat);
+            SimpleDateFormat format = new SimpleDateFormat( mBoardSettings.getDateFormat() );
 
             Date date = format.parse(mExistingCard.getDueDate());
 
@@ -388,7 +444,7 @@ public class NewCardBasicFragment extends Fragment {
 
         for (AssignedUser assignedUser : assignedUsers) {
 
-            for (BoardUser boardUser : mAvailableUsers) {
+            for (BoardUser boardUser : mBoardSettings.getBoardUsers()) {
 
                 if (boardUser.getId().equals(assignedUser.getId())) {
 
@@ -536,6 +592,8 @@ public class NewCardBasicFragment extends Fragment {
 
         data.setCardTypeId(((CardType) mSpinnerCardTypes.getSelectedItem()).getId());
 
+        data.setClassOfServiceId(((ClassOfService) mSpinnerClassOfServices.getSelectedItem()).getId());
+
         String size = etSize.getText().toString();
         if (TextUtils.isEmpty(size.trim())) {
             data.setSize(0);
@@ -544,6 +602,8 @@ public class NewCardBasicFragment extends Fragment {
         }
 
         data.setTags(etTags.getText().toString().trim());
+
+        data.setExternalCardId( etExternalCardId.getText().toString() );
 
         data.setLaneId(((Lane) mSpinnerLanes.getSelectedItem()).getId());
 
@@ -597,7 +657,7 @@ public class NewCardBasicFragment extends Fragment {
 
             setRetainInstance(true);
 
-            AssignUserCheckableListAdapter a = new AssignUserCheckableListAdapter(getActivity(), mAvailableUsers);
+            AssignUserCheckableListAdapter a = new AssignUserCheckableListAdapter(getActivity(), mBoardSettings.getBoardUsers());
 
             final ListView list = new ListView(getActivity());
             list.setAdapter(a);
@@ -605,9 +665,9 @@ public class NewCardBasicFragment extends Fragment {
 
             for (BoardUser assignedUser : mAssignedUsers) {
 
-                for (int i = 0; i < mAvailableUsers.size(); i++) {
+                for (int i = 0; i < mBoardSettings.getBoardUsers().size(); i++) {
 
-                    if (assignedUser.getId().equals(mAvailableUsers.get(i).getId())) {
+                    if (assignedUser.getId().equals(mBoardSettings.getBoardUsers().get(i).getId())) {
 
                         list.setItemChecked(i, true);
                     }

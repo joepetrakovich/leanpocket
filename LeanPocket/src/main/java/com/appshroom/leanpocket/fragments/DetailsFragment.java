@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.appshroom.leanpocket.R;
 import com.appshroom.leanpocket.activities.CardDetailActivity;
 import com.appshroom.leanpocket.dto.AssignedUser;
+import com.appshroom.leanpocket.dto.BoardSettings;
 import com.appshroom.leanpocket.dto.Card;
 import com.appshroom.leanpocket.helpers.Consts;
 import com.appshroom.leanpocket.helpers.GravatarHelpers;
@@ -32,13 +33,15 @@ import java.util.Arrays;
 public class DetailsFragment extends Fragment {
 
     Card mCard;
+    BoardSettings mBoardSettings;
 
-    public static DetailsFragment newInstance(Card card) {
+    public static DetailsFragment newInstance(Card card, BoardSettings settings) {
 
         DetailsFragment f = new DetailsFragment();
 
         Bundle args = new Bundle();
         args.putParcelable("card", card);
+        args.putParcelable("settings", settings);
         f.setArguments(args);
 
         return f;
@@ -53,7 +56,15 @@ public class DetailsFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_card_details, container, false);
 
         getActivity().getActionBar().setDisplayUseLogoEnabled(false);
-        getActivity().getActionBar().setTitle(mCard.getExternalCardID());
+
+        String title = "";
+
+        if (mBoardSettings.isCardIdPrefixEnabled()){
+
+            title = mBoardSettings.getCardIdPrefix();
+        }
+
+        getActivity().getActionBar().setTitle( title + mCard.getExternalCardID() );
 
         createTitle(v);
 
@@ -66,6 +77,8 @@ public class DetailsFragment extends Fragment {
         createSize(v);
 
         createCardType(v);
+
+        createClassOfService(v);
 
         createTags(v);
 
@@ -109,6 +122,21 @@ public class DetailsFragment extends Fragment {
     private void createCardType(View v) {
         TextView type = (TextView) v.findViewById(R.id.tv_card_detail_card_type);
         type.setText(mCard.getTypeName());
+    }
+
+    private void createClassOfService(View v) {
+
+        View cosLayout = v.findViewById(R.id.layout_class_of_service);
+
+        if (TextUtils.isEmpty(mCard.getClassOfServiceTitle())) {
+
+            cosLayout.setVisibility(View.GONE);
+
+        } else {
+
+            TextView tvCOS = (TextView) cosLayout.findViewById(R.id.tv_card_detail_class_of_service);
+            tvCOS.setText(mCard.getClassOfServiceTitle());
+        }
     }
 
     private void createTags(View v) {
@@ -217,11 +245,10 @@ public class DetailsFragment extends Fragment {
     private void createTitle(View v) {
 
         View titleBackground = v.findViewById(R.id.layout_title_wrapper);
-        titleBackground.setBackgroundColor(Color.parseColor(mCard.getTypeColorHex()));
+        titleBackground.setBackgroundColor(Color.parseColor(mCard.getColor()));
 
         TextView title = (TextView) v.findViewById(R.id.tv_card_detail_title);
         title.setText(mCard.getTitle());
-
 
         TextView dueDate = (TextView) v.findViewById(R.id.tv_card_detail_due_date);
 
@@ -247,6 +274,7 @@ public class DetailsFragment extends Fragment {
         setHasOptionsMenu(true);
 
         mCard = getArguments().getParcelable("card");
+        mBoardSettings = getArguments().getParcelable("settings");
     }
 
     @Override

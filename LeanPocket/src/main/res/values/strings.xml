@@ -66,6 +66,7 @@
     </string-array>
 
     <string-array name="open_source_license_titles">
+        <item>License for ACRA</item>
         <item>License for AppRater</item>
         <item>License for Crouton</item>
         <item>License for google-gson</item>
@@ -77,6 +78,21 @@
 
     <string-array name="open_source_licenses">
 
+
+        <item>Copyright 2013 Kevin Gaudin
+
+            Licensed under the Apache License, Version 2.0 (the "License");
+            you may not use this file except in compliance with the License.
+            You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+            Unless required by applicable law or agreed to in writing, software
+            distributed under the License is distributed on an "AS IS" BASIS,
+            WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+            See the License for the specific language governing permissions and
+            limitations under the License.
+        </item>
 
         <item>
             Copyright 2013 Andrew Jackson
@@ -288,7 +304,7 @@
     <string name="title_activity_about">About</string>
     <string name="content_desc_logo">App logo</string>
     <string name="app_version">Version 1.0</string>
-    <string name="copyright">\u00A92013 Joseph G. Petrakovich</string>
+    <string name="copyright">\u00A92013 Joe Petrakovich</string>
     <string name="credits"><u>Credits</u></string>
     <string name="rate_application"><u>Rate application</u></string>
     <string name="app_slogan">LeanPocket \u2014 Your kanban board, in your pocket.</string>
@@ -305,5 +321,10 @@
     <string name="crash_dialog_text">An unexpected error occurred.  \n\nPlease help us fix it by sending us the error data, including details about your board structure.  \n\nClick OK to send.</string>
     <string name="crash_dialog_title">LeanPocket has crashed</string>
     <string name="crash_dialog_ok_toast">Message sent.  Thank you! </string>
+    <string name="section_header_class_of_service">Class Of Service</string>
+    <string name="section_header_external_card_id">External Card Id</string>
+    <string name="hint_external_card_id">External card ID</string>
+    <string name="show_archived_boards_setting_title">Show archived boards</string>
+    <string name="archived_boards_summary">Requires app restart or account switch to take effect</string>
 
 </resources>

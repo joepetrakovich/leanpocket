@@ -10,15 +10,33 @@ public class CardFieldData {
     private String title;
     private String description;
     private String cardTypeId;
+    private String classOfServiceId;
     private String dueDate;
     private String blockedReason;
     private String unblockedReason;
     private String tags;
+    private String externalCardId;
     private String laneId;
     private List<BoardUser> assignedUsers;
 
     private int size;
     private int priority;
+
+    public String getExternalCardId() {
+        return externalCardId;
+    }
+
+    public void setExternalCardId(String externalCardId) {
+        this.externalCardId = externalCardId;
+    }
+
+    public String getClassOfServiceId() {
+        return classOfServiceId;
+    }
+
+    public void setClassOfServiceId(String classOfServiceId) {
+        this.classOfServiceId = classOfServiceId;
+    }
 
     public String getTags() {
         return tags;

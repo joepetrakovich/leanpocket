@@ -59,14 +59,29 @@ public class Board {
     private List<String> topLevelLaneIds;
 
     private boolean isActive;
-    private boolean isClassOfServiceEnabled;
+    private boolean classOfServiceEnabled;
     private boolean isCardIdEnabled;
     private boolean isHeaderEnabled;
     private boolean isPrefixEnabled;
     private boolean isPrefixIncludedInHyperlink;
     private boolean isHyperlinkEnabled;
+    private boolean isAutoIncrementCardIdEnabled;
 
     private boolean hasLoadedArchive;
+
+    private BoardSettings settings;
+
+    public boolean isAutoIncrementCardIdEnabled() {
+        return isAutoIncrementCardIdEnabled;
+    }
+
+    public BoardSettings getSettings() {
+        return settings;
+    }
+
+    public void setSettings(BoardSettings settings) {
+        this.settings = settings;
+    }
 
     public String getId() {
         return id;
@@ -253,11 +268,11 @@ public class Board {
     }
 
     public boolean isClassOfServiceEnabled() {
-        return isClassOfServiceEnabled;
+        return classOfServiceEnabled;
     }
 
     public void setClassOfServiceEnabled(boolean classOfServiceEnabled) {
-        isClassOfServiceEnabled = classOfServiceEnabled;
+        this.classOfServiceEnabled = classOfServiceEnabled;
     }
 
     public boolean isCardIdEnabled() {

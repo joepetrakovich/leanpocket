@@ -41,6 +41,7 @@ public final class Consts {
     public static final String SHARED_PREFS_KEEP_FORMAT = "keep_format_key";
     public static final String SHARED_PREFS_CARD_POSITION = "card_position_key";
     public static final String SHARED_PREFS_AUTO_LOAD = "auto_load_key";
+    public static final String SHARED_PREFS_SHOW_ARCHIVED_BOARDS = "show_archived_boards_key";
 
     public static final String SHARED_PREFS_IS_PREMIUM = "is_premium";
     public static final String SHARED_PREFS_K = "k";
@@ -63,6 +64,9 @@ public final class Consts {
 
     public static final String BOARD_ID_EXTRA = "boardId";
     public static final String CARD_TYPES_EXTRA = "cardTypes";
+    public static final String CLASS_OF_SERVICES_EXTRA = "classOfServices";
+    public static final String USES_CLASS_OF_SERVICE_EXTRA = "usesClassOfService";
+    public static final String USES_CLASS_OF_SERVICE_COLOR = "usesClassOfServiceColor";
     public static final String CARD_DETAIL_CARD_EXTRA = "card";
     public static final String SHARED_PREFS_SINGLE_COL_MODE = "single_column_mode";
     public static final String ALL_CHILD_LANES_EXTRA = "all_child_lanes";
@@ -80,6 +84,7 @@ public final class Consts {
     public static final String INTENT_FILTER_PREM_PURCHASE = "premium_purchase";
     public static final String COLOR_FIELD_CLASS_OF_SERVICE = "ClassOfService";
     public static final String COLOR_FIELD_CARD_TYPE = "CardType";
+    public static final String BOARD_SETTINGS_EXTRA = "BoardSettings";
 
 
     public final class PRIORITY {

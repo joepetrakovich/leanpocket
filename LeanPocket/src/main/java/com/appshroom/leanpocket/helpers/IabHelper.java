@@ -568,6 +568,8 @@ public class IabHelper {
             throw new IabException(IABHELPER_REMOTE_EXCEPTION, "Remote exception while refreshing inventory.", e);
         } catch (JSONException e) {
             throw new IabException(IABHELPER_BAD_RESPONSE, "Error parsing JSON response while refreshing inventory.", e);
+        }catch (NullPointerException e) {
+            throw new IabException(IABHELPER_UNKNOWN_ERROR, "NullPointer while refreshing inventory.", e);
         }
     }
 
