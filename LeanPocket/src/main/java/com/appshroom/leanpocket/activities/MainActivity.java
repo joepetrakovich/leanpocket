@@ -147,6 +147,7 @@ public class MainActivity extends Activity
     private boolean mUserHasLearnedDrawer = false;
     private boolean mAutoLoadLastBoard;
     private boolean mDrawerWasOpenedBeforeConfigChanged = false;
+    private boolean mShowArchivedBoards = false;
 
     private IabHelper mBillingHelper;
     private boolean mIsPremium = false;
@@ -240,6 +241,8 @@ public class MainActivity extends Activity
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         mAnimateCards = settings.getBoolean(Consts.SHARED_PREFS_ANIMATE_CARDS, true);
         mAutoLoadLastBoard = settings.getBoolean(Consts.SHARED_PREFS_AUTO_LOAD, true);
+        mShowArchivedBoards = settings.getBoolean(Consts.SHARED_PREFS_SHOW_ARCHIVED_BOARDS, false);
+
 
     }
 
@@ -1631,7 +1634,21 @@ public class MainActivity extends Activity
     @Override
     public void onBoardsRetrieved(List<GetBoardsBoard> boards) {
 
-        mAvailableGetBoardsBoards = boards;
+        mAvailableGetBoardsBoards = new ArrayList<GetBoardsBoard>();
+
+        if (!mShowArchivedBoards){
+
+            for (GetBoardsBoard board : boards){
+
+                if ( !board.isArchived() ){
+                    mAvailableGetBoardsBoards.add(board);
+                }
+            }
+
+        } else {
+
+            mAvailableGetBoardsBoards = boards;
+        }
 
         mDrawerListStickyAdapter.clear();
         mDrawerListStickyAdapter.addAll(mAvailableGetBoardsBoards);
@@ -1836,6 +1853,9 @@ public class MainActivity extends Activity
                 mCardGrid.setAdapter(mCardListAdapter);
 
             }
+        } else if (key.equals(Consts.SHARED_PREFS_SHOW_ARCHIVED_BOARDS)){
+
+            mShowArchivedBoards = sharedPreferences.getBoolean(Consts.SHARED_PREFS_SHOW_ARCHIVED_BOARDS, false);
         }
 
     }

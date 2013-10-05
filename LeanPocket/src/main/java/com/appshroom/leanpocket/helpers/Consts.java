@@ -41,6 +41,7 @@ public final class Consts {
     public static final String SHARED_PREFS_KEEP_FORMAT = "keep_format_key";
     public static final String SHARED_PREFS_CARD_POSITION = "card_position_key";
     public static final String SHARED_PREFS_AUTO_LOAD = "auto_load_key";
+    public static final String SHARED_PREFS_SHOW_ARCHIVED_BOARDS = "show_archived_boards_key";
 
     public static final String SHARED_PREFS_IS_PREMIUM = "is_premium";
     public static final String SHARED_PREFS_K = "k";

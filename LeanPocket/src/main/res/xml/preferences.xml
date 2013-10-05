@@ -18,6 +18,12 @@
         android:defaultValue="true" />
 
     <CheckBoxPreference
+        android:title="@string/show_archived_boards_setting_title"
+        android:key="show_archived_boards_key"
+        android:summary="@string/archived_boards_summary"
+        android:defaultValue="false" />
+
+    <CheckBoxPreference
         android:title="@string/retain_format_html_setting_title"
         android:summary="@string/retain_format_summary"
         android:key="keep_format_key"

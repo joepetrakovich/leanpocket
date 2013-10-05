@@ -324,5 +324,7 @@
     <string name="section_header_class_of_service">Class Of Service</string>
     <string name="section_header_external_card_id">External Card Id</string>
     <string name="hint_external_card_id">External card ID</string>
+    <string name="show_archived_boards_setting_title">Show archived boards</string>
+    <string name="archived_boards_summary">Requires app restart or account switch to take effect</string>
 
 </resources>
