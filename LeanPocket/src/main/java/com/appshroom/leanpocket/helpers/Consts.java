@@ -63,6 +63,9 @@ public final class Consts {
 
     public static final String BOARD_ID_EXTRA = "boardId";
     public static final String CARD_TYPES_EXTRA = "cardTypes";
+    public static final String CLASS_OF_SERVICES_EXTRA = "classOfServices";
+    public static final String USES_CLASS_OF_SERVICE_EXTRA = "usesClassOfService";
+    public static final String USES_CLASS_OF_SERVICE_COLOR = "usesClassOfServiceColor";
     public static final String CARD_DETAIL_CARD_EXTRA = "card";
     public static final String SHARED_PREFS_SINGLE_COL_MODE = "single_column_mode";
     public static final String ALL_CHILD_LANES_EXTRA = "all_child_lanes";

@@ -456,19 +456,10 @@ public class LeanKitWorkerFragment extends Fragment {
             board.setOrderedBacklogChildLanes(orderedBacklogChildLanes);
             board.setOrderedArchiveChildLanes(orderedArchiveChildLanes);
 
-            HashMap<String, Integer> colorMap;
+            ClassOfService defaultCOS = new ClassOfService("None");
+            board.getClassesOfService().add(0, defaultCOS);
 
-            //    String colorField = board.getCardColorField();
-
-            //    if ( colorField.equals( Consts.COLOR_FIELD_CLASS_OF_SERVICE ) ){
-
-            //        colorMap = generateClassOfServiceCardColorsFromHex( board.getClassesOfService() );
-
-            //   } else {
-
-            colorMap = generateCardColorsFromHex(board.getCardTypes());
-
-            //   }
+            HashMap<String, Integer> colorMap = generateCardColorsFromHex(board.getCardTypes(), board.getClassesOfService());
 
             HashMap<Integer, Integer> accentColorMap = generateCardAccentColors(colorMap);
 
@@ -512,7 +503,7 @@ public class LeanKitWorkerFragment extends Fragment {
         return "MM/dd/yyyy";
     }
 
-    private HashMap<String, Integer> generateCardColorsFromHex(List<CardType> cardTypes) {
+    private HashMap<String, Integer> generateCardColorsFromHex(List<CardType> cardTypes, List<ClassOfService> classesOfService) {
 
         HashMap<String, Integer> colorSet = new HashMap<String, Integer>();
 
@@ -524,13 +515,6 @@ public class LeanKitWorkerFragment extends Fragment {
             colorSet.put(colorHex, color);
         }
 
-        return colorSet;
-    }
-
-    private HashMap<String, Integer> generateClassOfServiceCardColorsFromHex(List<ClassOfService> classesOfService) {
-
-        HashMap<String, Integer> colorSet = new HashMap<String, Integer>();
-
         for (ClassOfService cos : classesOfService) {
 
             String colorHex = cos.getColorHex();
@@ -539,8 +523,10 @@ public class LeanKitWorkerFragment extends Fragment {
             colorSet.put(colorHex, color);
         }
 
+
         return colorSet;
     }
+
 
     private HashMap<Integer, Integer> generateCardAccentColors(HashMap<String, Integer> colorSet) {
 

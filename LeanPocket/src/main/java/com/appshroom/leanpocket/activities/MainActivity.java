@@ -48,6 +48,7 @@ import com.appshroom.leanpocket.dto.Board;
 import com.appshroom.leanpocket.dto.BoardUser;
 import com.appshroom.leanpocket.dto.Card;
 import com.appshroom.leanpocket.dto.CardType;
+import com.appshroom.leanpocket.dto.ClassOfService;
 import com.appshroom.leanpocket.dto.GetBoardsBoard;
 import com.appshroom.leanpocket.dto.Lane;
 import com.appshroom.leanpocket.fragments.ConfirmDeleteCardDialog;
@@ -1201,12 +1202,12 @@ public class MainActivity extends Activity
 
             newCardIntent.putExtra(Consts.BOARD_ID_EXTRA, mActiveBoard.getId());
             newCardIntent.putParcelableArrayListExtra(Consts.CARD_TYPES_EXTRA, (ArrayList<CardType>) mActiveBoard.getCardTypes());
-
+            newCardIntent.putParcelableArrayListExtra(Consts.CLASS_OF_SERVICES_EXTRA, (ArrayList<ClassOfService>) mActiveBoard.getClassesOfService());
             newCardIntent.putParcelableArrayListExtra(Consts.ALL_CHILD_LANES_EXTRA, mActiveBoard.getAllOrderedChildLanes());
-
             newCardIntent.putParcelableArrayListExtra(Consts.BOARD_USERS_EXTRA, new ArrayList<Parcelable>(mActiveBoard.getBoardUsers()));
-
             newCardIntent.putExtra(Consts.DATE_FORMAT_EXTRA, mActiveBoard.getDateFormat());
+            newCardIntent.putExtra(Consts.USES_CLASS_OF_SERVICE_EXTRA, mActiveBoard.isClassOfServiceEnabled());
+            newCardIntent.putExtra(Consts.USES_CLASS_OF_SERVICE_COLOR, mActiveBoard.getCardColorField().equals(Consts.COLOR_FIELD_CLASS_OF_SERVICE));
 
             startActivityForResult(newCardIntent, Consts.REQUEST_CODE_NEW_CARD);
 
@@ -1282,10 +1283,11 @@ public class MainActivity extends Activity
         cardDetailIntent.putExtra(Consts.CARD_DETAIL_CARD_EXTRA, selectedCard);
         cardDetailIntent.putExtra(Consts.BOARD_ID_EXTRA, mActiveBoard.getId());
         cardDetailIntent.putParcelableArrayListExtra(Consts.CARD_TYPES_EXTRA, (ArrayList<CardType>) mActiveBoard.getCardTypes());
-
+        cardDetailIntent.putParcelableArrayListExtra(Consts.CLASS_OF_SERVICES_EXTRA, (ArrayList<ClassOfService>) mActiveBoard.getClassesOfService());
         cardDetailIntent.putParcelableArrayListExtra(Consts.ALL_CHILD_LANES_EXTRA, mActiveBoard.getAllOrderedChildLanes());
         cardDetailIntent.putParcelableArrayListExtra(Consts.BOARD_USERS_EXTRA, new ArrayList<Parcelable>(mActiveBoard.getBoardUsers()));
-
+        cardDetailIntent.putExtra(Consts.USES_CLASS_OF_SERVICE_EXTRA, mActiveBoard.isClassOfServiceEnabled());
+        cardDetailIntent.putExtra(Consts.USES_CLASS_OF_SERVICE_COLOR, mActiveBoard.getCardColorField().equals(Consts.COLOR_FIELD_CLASS_OF_SERVICE));
         cardDetailIntent.putExtra(Consts.DATE_FORMAT_EXTRA, mActiveBoard.getDateFormat());
 
         startActivityForResult(cardDetailIntent, Consts.REQUEST_CODE_CARD_DETAIL);
@@ -1298,9 +1300,12 @@ public class MainActivity extends Activity
         editCardIntent.putExtra(Consts.BOARD_ID_EXTRA, mActiveBoard.getId());
         editCardIntent.putExtra(Consts.EXISTING_CARD_EXTRA, mSelectedCards.get(0));
         editCardIntent.putParcelableArrayListExtra(Consts.CARD_TYPES_EXTRA, new ArrayList<CardType>(mActiveBoard.getCardTypes()));
+        editCardIntent.putParcelableArrayListExtra(Consts.CLASS_OF_SERVICES_EXTRA, new ArrayList<ClassOfService>(mActiveBoard.getClassesOfService()));
         editCardIntent.putParcelableArrayListExtra(Consts.ALL_CHILD_LANES_EXTRA, mActiveBoard.getAllOrderedChildLanes());
         editCardIntent.putParcelableArrayListExtra(Consts.BOARD_USERS_EXTRA, new ArrayList<BoardUser>(mActiveBoard.getBoardUsers()));
         editCardIntent.putExtra(Consts.DATE_FORMAT_EXTRA, mActiveBoard.getDateFormat());
+        editCardIntent.putExtra(Consts.USES_CLASS_OF_SERVICE_EXTRA, mActiveBoard.isClassOfServiceEnabled());
+        editCardIntent.putExtra(Consts.USES_CLASS_OF_SERVICE_COLOR, mActiveBoard.getCardColorField().equals(Consts.COLOR_FIELD_CLASS_OF_SERVICE));
 
         startActivityForResult(editCardIntent, Consts.REQUEST_CODE_EDIT_EXISTING);
     }

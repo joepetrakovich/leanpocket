@@ -59,7 +59,7 @@ public class Board {
     private List<String> topLevelLaneIds;
 
     private boolean isActive;
-    private boolean isClassOfServiceEnabled;
+    private boolean classOfServiceEnabled;
     private boolean isCardIdEnabled;
     private boolean isHeaderEnabled;
     private boolean isPrefixEnabled;
@@ -253,11 +253,11 @@ public class Board {
     }
 
     public boolean isClassOfServiceEnabled() {
-        return isClassOfServiceEnabled;
+        return classOfServiceEnabled;
     }
 
     public void setClassOfServiceEnabled(boolean classOfServiceEnabled) {
-        isClassOfServiceEnabled = classOfServiceEnabled;
+        this.classOfServiceEnabled = classOfServiceEnabled;
     }
 
     public boolean isCardIdEnabled() {

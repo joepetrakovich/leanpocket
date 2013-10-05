@@ -19,6 +19,7 @@ import com.appshroom.leanpocket.R;
 import com.appshroom.leanpocket.dto.BoardUser;
 import com.appshroom.leanpocket.dto.Card;
 import com.appshroom.leanpocket.dto.CardType;
+import com.appshroom.leanpocket.dto.ClassOfService;
 import com.appshroom.leanpocket.dto.Lane;
 import com.appshroom.leanpocket.fragments.CommentsFragment;
 import com.appshroom.leanpocket.fragments.ConfirmDeleteCardDialog;
@@ -57,8 +58,11 @@ public class CardDetailActivity extends FragmentActivity
     String mBoardId;
     String mDateFormat;
     List<CardType> mCardTypes;
+    List<ClassOfService> mClassOfServices;
     List<Lane> mLanes;
     List<BoardUser> mBoardUsers;
+    boolean mUsesClassOfService;
+    boolean mUsesClassOfServiceColor;
     IabHelper mBillingHelper;
     ConfirmDeleteCardDialog mDeleteDialog;
     SharedPreferences mSharedPreferences;
@@ -77,9 +81,12 @@ public class CardDetailActivity extends FragmentActivity
         mCard = getIntent().getParcelableExtra(Consts.CARD_DETAIL_CARD_EXTRA);
         mBoardId = getIntent().getStringExtra(Consts.BOARD_ID_EXTRA);
         mCardTypes = srcIntent.getParcelableArrayListExtra(Consts.CARD_TYPES_EXTRA);
+        mClassOfServices = srcIntent.getParcelableArrayListExtra(Consts.CLASS_OF_SERVICES_EXTRA);
         mLanes = srcIntent.getParcelableArrayListExtra(Consts.ALL_CHILD_LANES_EXTRA);
         mBoardUsers = srcIntent.getParcelableArrayListExtra(Consts.BOARD_USERS_EXTRA);
         mDateFormat = srcIntent.getStringExtra(Consts.DATE_FORMAT_EXTRA);
+        mUsesClassOfService = srcIntent.getBooleanExtra(Consts.USES_CLASS_OF_SERVICE_EXTRA, false);
+        mUsesClassOfServiceColor = srcIntent.getBooleanExtra(Consts.USES_CLASS_OF_SERVICE_COLOR, false);
 
         // Set up the action bar.
         final ActionBar actionBar = getActionBar();
@@ -244,8 +251,12 @@ public class CardDetailActivity extends FragmentActivity
         editCardIntent.putExtra(Consts.BOARD_ID_EXTRA, mBoardId);
         editCardIntent.putExtra(Consts.EXISTING_CARD_EXTRA, mCard);
         editCardIntent.putParcelableArrayListExtra(Consts.CARD_TYPES_EXTRA, new ArrayList<CardType>(mCardTypes));
+        editCardIntent.putParcelableArrayListExtra(Consts.CLASS_OF_SERVICES_EXTRA, new ArrayList<ClassOfService>(mClassOfServices));
         editCardIntent.putParcelableArrayListExtra(Consts.ALL_CHILD_LANES_EXTRA, new ArrayList<Lane>(mLanes));
         editCardIntent.putParcelableArrayListExtra(Consts.BOARD_USERS_EXTRA, new ArrayList<BoardUser>(mBoardUsers));
+        editCardIntent.putExtra(Consts.USES_CLASS_OF_SERVICE_EXTRA, mUsesClassOfService);
+        editCardIntent.putExtra(Consts.USES_CLASS_OF_SERVICE_COLOR, mUsesClassOfServiceColor);
+
         editCardIntent.putExtra(Consts.DATE_FORMAT_EXTRA, mDateFormat);
 
         startActivityForResult(editCardIntent, Consts.REQUEST_CODE_EDIT_EXISTING);

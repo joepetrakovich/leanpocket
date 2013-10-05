@@ -1,6 +1,7 @@
 package com.appshroom.leanpocket.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
@@ -82,9 +83,30 @@ public class CardListAdapter extends ArrayAdapter<Card> {
 
         Card card = getItem(position);
 
-        String colorHex = card.getTypeColorHex();
+        String colorHex = card.getColor();
+
         Integer color = getColor(colorHex);
-        Integer accentColor = getAccentColor(color);
+        Integer accentColor;
+
+        if (color == null) {
+
+            //card type or class of service not set so the color sent from LeanKi won't be in the cache, let's add it.
+
+            color = Color.parseColor(colorHex);
+
+            float[] hsv = new float[3];
+            Color.colorToHSV(color, hsv);
+            hsv[2] = hsv[2] * 0.5f;
+
+            accentColor = Color.HSVToColor(hsv);
+
+            putColor(colorHex, color);
+            putAccentColor(color, accentColor);
+
+        } else {
+
+            accentColor = getAccentColor(color);
+        }
 
         if (TextUtils.isEmpty(card.getExternalCardID())) {
             holder.cardIdFrame.setVisibility(View.GONE);
@@ -128,6 +150,16 @@ public class CardListAdapter extends ArrayAdapter<Card> {
     private Integer getColor(String colorHex) {
 
         return mColorMap.get(colorHex);
+    }
+
+    private void putColor(String colorHex, Integer color) {
+
+        mColorMap.put(colorHex, color);
+    }
+
+    private void putAccentColor(Integer color, Integer accentColor) {
+
+        mAccentColorMap.put(color, accentColor);
     }
 
     private void configureIcons(Card card, ViewHolder holder) {
