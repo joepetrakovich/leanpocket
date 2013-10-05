@@ -322,5 +322,7 @@
     <string name="crash_dialog_title">LeanPocket has crashed</string>
     <string name="crash_dialog_ok_toast">Message sent.  Thank you! </string>
     <string name="section_header_class_of_service">Class Of Service</string>
+    <string name="section_header_external_card_id">External Card Id</string>
+    <string name="hint_external_card_id">External card ID</string>
 
 </resources>

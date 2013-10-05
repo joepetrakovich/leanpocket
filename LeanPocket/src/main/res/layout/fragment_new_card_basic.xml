@@ -169,6 +169,32 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/layout_external_card_id"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="@dimen/element_spacing">
+
+                    <TextView
+                        android:id="@+id/new_card_external_id_section_header"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:text="@string/section_header_external_card_id"
+                        style="@style/sectionHeader" />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="48dp"
+                        android:singleLine="true"
+                        android:ems="10"
+                        android:id="@+id/et_ext_card_id"
+                        android:hint="@string/hint_external_card_id"
+                     />
+
+                </LinearLayout>
+
                 <TextView
                     android:id="@+id/new_card_tags_section_header"
                     android:layout_height="wrap_content"
