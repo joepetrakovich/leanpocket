@@ -76,9 +76,11 @@
     <orderEntry type="library" exported="" name="ComGithubCodechimpOrgAppraterLibrary106.aar" level="project" />
     <orderEntry type="library" exported="" name="gson-2.2.4" level="project" />
     <orderEntry type="library" exported="" name="GoogleAdMobAdsSdk-6.4.1" level="project" />
+    <orderEntry type="library" exported="" name="okhttp-1.2.1" level="project" />
     <orderEntry type="library" exported="" name="com.haarman.listviewanimations-2.4.0" level="project" />
     <orderEntry type="library" exported="" name="acra-4.5.0" level="project" />
     <orderEntry type="library" exported="" name="library-2.4.0" level="project" />
+    <orderEntry type="library" exported="" name="okhttp-protocols-1.2.1" level="project" />
   </component>
 </module>
 
