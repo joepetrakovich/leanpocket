@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.5.+'
+        classpath 'com.android.tools.build:gradle:0.9.+'
     }
 }
 apply plugin: 'android'
@@ -13,12 +13,12 @@ repositories {
 }
 
 android {
-    compileSdkVersion 18
-    buildToolsVersion "17.0.0"
+    compileSdkVersion 19
+    buildToolsVersion "19.0.1"
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 18
+        targetSdkVersion 19
     }
 }
 
@@ -26,7 +26,7 @@ dependencies {
 
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.nineoldandroids:library:2.4.0'
-    compile 'com.android.support:support-v4:13.0.+'
+    compile 'com.android.support:support-v4:19.0.+'
     compile 'com.github.codechimp-org.apprater:library:1.0.+'
     compile 'ch.acra:acra:4.5.0'
     compile 'com.squareup.okhttp:okhttp:1.2.1'
@@ -42,10 +42,10 @@ dependencies {
 android {
     signingConfigs {
         releaseConfig {
-            storeFile file("/Users/jpetrakovich/Dropbox/leanpocket/leanpocket-release-key.keystore")
-            storePassword "Nhat0Hanh123"
-            keyAlias "leanpocket-release-key"
-            keyPassword "Nhat0Hanh123"
+            storeFile file("--")
+            storePassword "---"
+            keyAlias "--"
+            keyPassword "---"
         }
     }
 
