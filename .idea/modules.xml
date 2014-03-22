@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/LeanPocket/LeanPocket.iml" filepath="$PROJECT_DIR$/LeanPocket/LeanPocket.iml" />
       <module fileurl="file://$PROJECT_DIR$/LeanPocketProject.iml" filepath="$PROJECT_DIR$/LeanPocketProject.iml" />
+      <module fileurl="file://$PROJECT_DIR$/leanpocket.iml" filepath="$PROJECT_DIR$/leanpocket.iml" />
     </modules>
   </component>
 </project>

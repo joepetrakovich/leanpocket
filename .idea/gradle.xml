@@ -5,6 +5,12 @@
       <GradleProjectSettings>
         <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="modules">
+          <set>
+            <option value="C:\Users\petrakjo\AndroidStudioProjects\leanpocket" />
+            <option value="C:\Users\petrakjo\AndroidStudioProjects\leanpocket\LeanPocket" />
+          </set>
+        </option>
       </GradleProjectSettings>
     </option>
   </component>
