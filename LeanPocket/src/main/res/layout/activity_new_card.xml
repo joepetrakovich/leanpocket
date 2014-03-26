@@ -8,6 +8,7 @@
         android:name="com.appshroom.leanpocket.fragments.NewCardBasicFragment"
         android:id="@+id/new_card_fragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        tools:layout="@layout/fragment_new_card_basic" />
 
 </FrameLayout>
