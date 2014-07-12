@@ -35,6 +35,11 @@
 
     </style>
 
+    <style name="Theme.Leankit.MainActivity">
+        <item name="android:actionBarStyle">@style/ActionBar.Solid.Leankit.DontFlashTitle</item>
+    </style>
+
+
     <style name="new_card_title_edit_text_style" parent="android:Widget.EditText">
         <item name="android:background">@drawable/edit_text_holo_light</item>
         <item name="android:textColor">#000000</item>
@@ -51,6 +56,10 @@
         <item name="android:backgroundStacked">@drawable/ab_stacked_solid_leankit</item>
         <item name="android:backgroundSplit">@drawable/ab_bottom_solid_leankit</item>
         <item name="android:progressBarStyle">@style/ProgressBar.Leankit</item>
+    </style>
+
+    <style name="ActionBar.Solid.Leankit.DontFlashTitle">
+        <item name="android:displayOptions">useLogo|showHome</item>
     </style>
 
     <style name="ActionBar.Transparent.Leankit" parent="@android:style/Widget.Holo.ActionBar">
