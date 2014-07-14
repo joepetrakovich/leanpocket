@@ -64,7 +64,7 @@
                 <EditText
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:inputType="textMultiLine|textCapSentences|textAutoComplete|textAutoCorrect"
+                    android:inputType="textMultiLine|textCapSentences|textAutoCorrect"
                     android:capitalize="sentences"
                     android:ems="10"
                     android:id="@+id/et_comment"
@@ -90,7 +90,9 @@
         android:id="@+id/layout_lock_veil"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:background="#000">
+        android:background="#000"
+
+        >
 
         <LinearLayout
             android:layout_centerInParent="true"

@@ -28,7 +28,7 @@
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textMultiLine|textCapSentences|textNoSuggestions"
+                    android:inputType="textMultiLine|textCapSentences|textAutoCorrect"
                     android:ems="10"
                     android:id="@+id/et_title"
                     android:hint="@string/add_card_title_hint">
@@ -57,7 +57,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:minHeight="48dp"
-                    android:inputType="textMultiLine|textCapSentences|textNoSuggestions"
+                    android:inputType="textMultiLine|textCapSentences|textAutoCorrect"
                     android:ems="10"
                     android:id="@+id/et_desc"
                     android:hint="@string/add_card_desc_hint"
@@ -206,7 +206,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:minHeight="48dp"
-                    android:inputType="textMultiLine"
+                    android:inputType="textMultiLine|textAutoCorrect"
                     android:ems="10"
                     android:id="@+id/et_new_card_tags"
                     android:hint="@string/new_card_tags_hint"
