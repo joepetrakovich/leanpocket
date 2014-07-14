@@ -18,6 +18,8 @@ import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -32,6 +34,7 @@ import com.appshroom.leanpocket.helpers.SecurePreferences;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.GsonBuilder;
 
+import java.lang.reflect.Array;
 import java.util.List;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
@@ -67,7 +70,7 @@ public class LoginActivity extends AccountAuthenticatorActivity {
 
 
     // UI references.
-    private EditText mEmailView;
+    private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
     private View mLoginFormView;
     private View mLoginStatusView;
@@ -105,8 +108,10 @@ public class LoginActivity extends AccountAuthenticatorActivity {
 
         // Set up the login form.
 
-        mEmailView = (EditText) findViewById(R.id.email);
+        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         mEmailView.setText(mEmail);
+        mEmailView.setAdapter(getEmailAddressAdapter(this));
+
 
         if (mHostToVerify != null) {
             mEmailView.setEnabled(false);
@@ -142,6 +147,15 @@ public class LoginActivity extends AccountAuthenticatorActivity {
 
             }
         });
+    }
+
+    private ArrayAdapter<String> getEmailAddressAdapter(Context context) {
+        Account[] accounts = mAccountManager.getAccountsByType("com.google");
+        String[] addresses = new String[accounts.length];
+        for (int i = 0; i < accounts.length; i++) {
+            addresses[i] = accounts[i].name;
+        }
+        return new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, addresses);
     }
 
     private void dismissSoftKeyboard() {
