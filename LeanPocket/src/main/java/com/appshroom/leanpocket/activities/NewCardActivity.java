@@ -169,36 +169,38 @@ public class NewCardActivity extends Activity implements SharedPreferences.OnSha
 
                 showProgressDialog();
 
-                mRetroLeanKitApi.addCard(card, mBoardId, card.getLaneId(), mPosition, new RetroLeanKitCallback<AddCardReplyData>() {
-                    @Override
-                    public void onSuccess(int replyCode, String replyText, List<AddCardReplyData> replyData) {
+                if (card != null) {
+                    mRetroLeanKitApi.addCard(card, mBoardId, card.getLaneId(), mPosition, new RetroLeanKitCallback<AddCardReplyData>() {
+                        @Override
+                        public void onSuccess(int replyCode, String replyText, List<AddCardReplyData> replyData) {
 
-                        setResult(RESULT_OK);
-                        finish();
-                    }
+                            setResult(RESULT_OK);
+                            finish();
+                        }
 
-                    @Override
-                    public void onLeanKitException(int replyCode, String replyText, List<AddCardReplyData> replyData) {
+                        @Override
+                        public void onLeanKitException(int replyCode, String replyText, List<AddCardReplyData> replyData) {
 
-                        Crouton.makeText(getActivity(), replyText, Style.ALERT).show();
-                        dismissProgressDialog();
-                    }
+                            Crouton.makeText(getActivity(), replyText, Style.ALERT).show();
+                            dismissProgressDialog();
+                        }
 
-                    @Override
-                    public void onWIPOverrideCommentRequired() {
+                        @Override
+                        public void onWIPOverrideCommentRequired() {
 
-                        Crouton.makeText(getActivity(), getString(R.string.wip_not_supported), Style.ALERT).show();
-                        dismissProgressDialog();
-                    }
+                            Crouton.makeText(getActivity(), getString(R.string.wip_not_supported), Style.ALERT).show();
+                            dismissProgressDialog();
+                        }
 
-                    @Override
-                    public void failure(RetrofitError retrofitError) {
+                        @Override
+                        public void failure(RetrofitError retrofitError) {
 
-                        Crouton.makeText(getActivity(), getResources().getString(R.string.cant_create_card), Style.ALERT).show();
-                        dismissProgressDialog();
+                            Crouton.makeText(getActivity(), getResources().getString(R.string.cant_create_card), Style.ALERT).show();
+                            dismissProgressDialog();
 
-                    }
-                });
+                        }
+                    });
+                }
             } else {
 
                 mExistingCard = retrieveAllCardSettings(mExistingCard);
