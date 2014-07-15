@@ -244,49 +244,51 @@ public class CommentsFragment extends Fragment {
 
         showProgress();
 
-        mRetroLeanKitApi.getComments(mBoardId, mCard.getId(), new RetroLeanKitCallback<List<Comment>>() {
+        if (mCard != null) { //TODO: why would this be null for many users?
 
-            @Override
-            public void onSuccess(int replyCode, String replyText, List<List<Comment>> replyData) {
+            mRetroLeanKitApi.getComments(mBoardId, mCard.getId(), new RetroLeanKitCallback<List<Comment>>() {
 
-                commentsText = mHostActivity.getString(R.string.no_comments_yet);
-                mEmptyCommentsText.setText(commentsText);
+                @Override
+                public void onSuccess(int replyCode, String replyText, List<List<Comment>> replyData) {
 
-                mComments = replyData.get(0);
-                mCommentsAdapter.clear();
-                mCommentsAdapter.addAll(mComments);
-                mCommentsAdapter.notifyDataSetChanged();
+                    commentsText = mHostActivity.getString(R.string.no_comments_yet);
+                    mEmptyCommentsText.setText(commentsText);
 
-                hideProgress();
+                    mComments = replyData.get(0);
+                    mCommentsAdapter.clear();
+                    mCommentsAdapter.addAll(mComments);
+                    mCommentsAdapter.notifyDataSetChanged();
 
-            }
+                    hideProgress();
 
-            @Override
-            public void onLeanKitException(int replyCode, String replyText, List<List<Comment>> replyData) {
+                }
 
-                hideProgress();
+                @Override
+                public void onLeanKitException(int replyCode, String replyText, List<List<Comment>> replyData) {
 
-                commentsText = mHostActivity.getString(R.string.comments_failed_to_load);
-                mEmptyCommentsText.setText(commentsText);
-                Crouton.makeText(getActivity(), replyText, Style.ALERT, R.id.layout_comments_fragment).show(); //TODO: risky showing reply text here
-            }
+                    hideProgress();
 
-            @Override
-            public void onWIPOverrideCommentRequired() {
+                    commentsText = mHostActivity.getString(R.string.comments_failed_to_load);
+                    mEmptyCommentsText.setText(commentsText);
+                    Crouton.makeText(getActivity(), replyText, Style.ALERT, R.id.layout_comments_fragment).show(); //TODO: risky showing reply text here
+                }
 
-            }
+                @Override
+                public void onWIPOverrideCommentRequired() {
 
-            @Override
-            public void failure(RetrofitError retrofitError) {
+                }
 
-                hideProgress();
-                commentsText = mHostActivity.getString(R.string.comments_failed_to_load);
-                mEmptyCommentsText.setText(commentsText);
-                handleRetrofitError(retrofitError, mHostActivity.getString(R.string.no_network_signal_comments));
+                @Override
+                public void failure(RetrofitError retrofitError) {
 
-            }
-        });
+                    hideProgress();
+                    commentsText = mHostActivity.getString(R.string.comments_failed_to_load);
+                    mEmptyCommentsText.setText(commentsText);
+                    handleRetrofitError(retrofitError, mHostActivity.getString(R.string.no_network_signal_comments));
 
+                }
+            });
+        }
     }
 
     private void showProgress() {

@@ -7,8 +7,13 @@
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="modules">
           <set>
+<<<<<<< HEAD
             <option value="C:\Users\petrakjo\AndroidStudioProjects\leanpocket" />
             <option value="C:\Users\petrakjo\AndroidStudioProjects\leanpocket\LeanPocket" />
+=======
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/LeanPocket" />
+>>>>>>> release-1.3
           </set>
         </option>
       </GradleProjectSettings>

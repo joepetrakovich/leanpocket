@@ -22,8 +22,6 @@ import com.appshroom.leanpocket.dto.BoardSettings;
 import com.appshroom.leanpocket.dto.BoardUser;
 import com.appshroom.leanpocket.dto.Card;
 import com.appshroom.leanpocket.dto.CardFieldData;
-import com.appshroom.leanpocket.dto.CardType;
-import com.appshroom.leanpocket.dto.ClassOfService;
 import com.appshroom.leanpocket.dto.Lane;
 import com.appshroom.leanpocket.dto.UpdateCardReplyData;
 import com.appshroom.leanpocket.fragments.NewCardBasicFragment;
@@ -130,7 +128,8 @@ public class NewCardActivity extends Activity implements SharedPreferences.OnSha
         actionBar.setDisplayOptions(
                 ActionBar.DISPLAY_SHOW_CUSTOM,
                 ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
-                        | ActionBar.DISPLAY_SHOW_TITLE);
+                        | ActionBar.DISPLAY_SHOW_TITLE );
+        actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setCustomView(customActionBarView, new ActionBar.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
@@ -170,36 +169,38 @@ public class NewCardActivity extends Activity implements SharedPreferences.OnSha
 
                 showProgressDialog();
 
-                mRetroLeanKitApi.addCard(card, mBoardId, card.getLaneId(), mPosition, new RetroLeanKitCallback<AddCardReplyData>() {
-                    @Override
-                    public void onSuccess(int replyCode, String replyText, List<AddCardReplyData> replyData) {
+                if (card != null) {
+                    mRetroLeanKitApi.addCard(card, mBoardId, card.getLaneId(), mPosition, new RetroLeanKitCallback<AddCardReplyData>() {
+                        @Override
+                        public void onSuccess(int replyCode, String replyText, List<AddCardReplyData> replyData) {
 
-                        setResult(RESULT_OK);
-                        finish();
-                    }
+                            setResult(RESULT_OK);
+                            finish();
+                        }
 
-                    @Override
-                    public void onLeanKitException(int replyCode, String replyText, List<AddCardReplyData> replyData) {
+                        @Override
+                        public void onLeanKitException(int replyCode, String replyText, List<AddCardReplyData> replyData) {
 
-                        Crouton.makeText(getActivity(), replyText, Style.ALERT).show();
-                        dismissProgressDialog();
-                    }
+                            Crouton.makeText(getActivity(), replyText, Style.ALERT).show();
+                            dismissProgressDialog();
+                        }
 
-                    @Override
-                    public void onWIPOverrideCommentRequired() {
+                        @Override
+                        public void onWIPOverrideCommentRequired() {
 
-                        Crouton.makeText(getActivity(), getString(R.string.wip_not_supported), Style.ALERT).show();
-                        dismissProgressDialog();
-                    }
+                            Crouton.makeText(getActivity(), getString(R.string.wip_not_supported), Style.ALERT).show();
+                            dismissProgressDialog();
+                        }
 
-                    @Override
-                    public void failure(RetrofitError retrofitError) {
+                        @Override
+                        public void failure(RetrofitError retrofitError) {
 
-                        Crouton.makeText(getActivity(), getResources().getString(R.string.cant_create_card), Style.ALERT).show();
-                        dismissProgressDialog();
+                            Crouton.makeText(getActivity(), getResources().getString(R.string.cant_create_card), Style.ALERT).show();
+                            dismissProgressDialog();
 
-                    }
-                });
+                        }
+                    });
+                }
             } else {
 
                 mExistingCard = retrieveAllCardSettings(mExistingCard);
