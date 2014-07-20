@@ -244,51 +244,53 @@ public class CommentsFragment extends Fragment {
 
         showProgress();
 
-        if (mCard != null) { //TODO: why would this be null for many users?
-
-            mRetroLeanKitApi.getComments(mBoardId, mCard.getId(), new RetroLeanKitCallback<List<Comment>>() {
-
-                @Override
-                public void onSuccess(int replyCode, String replyText, List<List<Comment>> replyData) {
-
-                    commentsText = mHostActivity.getString(R.string.no_comments_yet);
-                    mEmptyCommentsText.setText(commentsText);
-
-                    mComments = replyData.get(0);
-                    mCommentsAdapter.clear();
-                    mCommentsAdapter.addAll(mComments);
-                    mCommentsAdapter.notifyDataSetChanged();
-
-                    hideProgress();
-
-                }
-
-                @Override
-                public void onLeanKitException(int replyCode, String replyText, List<List<Comment>> replyData) {
-
-                    hideProgress();
-
-                    commentsText = mHostActivity.getString(R.string.comments_failed_to_load);
-                    mEmptyCommentsText.setText(commentsText);
-                    Crouton.makeText(getActivity(), replyText, Style.ALERT, R.id.layout_comments_fragment).show(); //TODO: risky showing reply text here
-                }
-
-                @Override
-                public void onWIPOverrideCommentRequired() {
-
-                }
-
-                @Override
-                public void failure(RetrofitError retrofitError) {
-
-                    hideProgress();
-                    commentsText = mHostActivity.getString(R.string.comments_failed_to_load);
-                    mEmptyCommentsText.setText(commentsText);
-                    handleRetrofitError(retrofitError, mHostActivity.getString(R.string.no_network_signal_comments));
-
-                }
-            });
+        if (mRetroLeanKitApi == null){ //if this doesnt work, may need to rebuild retrofit instance.
+            mRetroLeanKitApi = ((MyApplication) getActivity().getApplication()).getRetroLeanKitApiInstance();
         }
+
+        mRetroLeanKitApi.getComments(mBoardId, mCard.getId(), new RetroLeanKitCallback<List<Comment>>() {
+
+            @Override
+            public void onSuccess(int replyCode, String replyText, List<List<Comment>> replyData) {
+
+                commentsText = mHostActivity.getString(R.string.no_comments_yet);
+                mEmptyCommentsText.setText(commentsText);
+
+                mComments = replyData.get(0);
+                mCommentsAdapter.clear();
+                mCommentsAdapter.addAll(mComments);
+                mCommentsAdapter.notifyDataSetChanged();
+
+                hideProgress();
+
+            }
+
+            @Override
+            public void onLeanKitException(int replyCode, String replyText, List<List<Comment>> replyData) {
+
+                hideProgress();
+
+                commentsText = mHostActivity.getString(R.string.comments_failed_to_load);
+                mEmptyCommentsText.setText(commentsText);
+                Crouton.makeText(getActivity(), replyText, Style.ALERT, R.id.layout_comments_fragment).show(); //TODO: risky showing reply text here
+            }
+
+            @Override
+            public void onWIPOverrideCommentRequired() {
+
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+
+                hideProgress();
+                commentsText = mHostActivity.getString(R.string.comments_failed_to_load);
+                mEmptyCommentsText.setText(commentsText);
+                handleRetrofitError(retrofitError, mHostActivity.getString(R.string.no_network_signal_comments));
+
+            }
+        });
+
     }
 
     private void showProgress() {
