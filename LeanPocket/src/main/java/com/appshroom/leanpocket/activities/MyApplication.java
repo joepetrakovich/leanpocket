@@ -87,7 +87,7 @@ public class MyApplication extends Application {
         GsonConverter gsonConverter = new GsonConverter(gb.create());
 
         mRestAdapter = new RestAdapter.Builder()
-                .setServer(Consts.HTTPS_URL_PREFIX + hostName + Consts.API_URL_SUFFIX)
+                .setEndpoint(Consts.HTTPS_URL_PREFIX + hostName + Consts.API_URL_SUFFIX)
                 .setConverter(gsonConverter)
                 .setRequestInterceptor(new BasicAuthInterceptor(userName, pwd))
                 .build();
