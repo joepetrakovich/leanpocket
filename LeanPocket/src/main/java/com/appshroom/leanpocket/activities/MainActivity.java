@@ -43,7 +43,9 @@ import com.appshroom.leanpocket.adapters.CardListAdapter;
 import com.appshroom.leanpocket.adapters.DrawerListAdapter;
 import com.appshroom.leanpocket.adapters.DrawerListItem;
 import com.appshroom.leanpocket.adapters.LanesWithCardAmountsSpinnerAdapter;
+import com.appshroom.leanpocket.dto.AssignedUser;
 import com.appshroom.leanpocket.dto.Board;
+import com.appshroom.leanpocket.dto.BoardUser;
 import com.appshroom.leanpocket.dto.Card;
 import com.appshroom.leanpocket.dto.GetBoardsBoard;
 import com.appshroom.leanpocket.dto.Lane;
@@ -51,6 +53,7 @@ import com.appshroom.leanpocket.fragments.ConfirmDeleteCardDialog;
 import com.appshroom.leanpocket.fragments.LeanKitWorkerFragment;
 import com.appshroom.leanpocket.fragments.MoveCardDialog;
 import com.appshroom.leanpocket.helpers.AdStarter;
+import com.appshroom.leanpocket.helpers.BoardHelpers;
 import com.appshroom.leanpocket.helpers.Consts;
 import com.appshroom.leanpocket.helpers.IabHelper;
 import com.appshroom.leanpocket.helpers.IabResult;
@@ -104,6 +107,7 @@ public class MainActivity extends Activity
     private List<Account> mAvailableAccounts;
 
     private Board mActiveBoard;
+    private String mUserName="";
     private int mActiveLaneSpinnerSelection;
     private int mCardGridScrollY;
     private BoardSection mInFlightSection;
@@ -130,6 +134,9 @@ public class MainActivity extends Activity
     private TextView mErrorCroutonText;
     private boolean mInitializedView;
     private boolean mInitializedAccountSpinner;
+    private boolean mIsFiltered = false;
+    private TextView mFilterTitle;
+    private TextView mEmptyView;
 
     private LeanKitWorkerFragment mLeanKitWorker;
     private ProgressDialog pd;
@@ -275,6 +282,10 @@ public class MainActivity extends Activity
 
             }
         });
+
+        mFilterTitle = (TextView) findViewById(R.id.filter_textview);
+        mEmptyView = (TextView) findViewById(R.id.emptyText);
+
 
         mCardGrid = (GridView) findViewById(R.id.gridView_cards);
 
@@ -591,6 +602,8 @@ public class MainActivity extends Activity
         mCardGridScrollY = mLeanKitWorker.getCardGridScrollY();
         mDrawerWasOpenedBeforeConfigChanged = mLeanKitWorker.isDrawerOpened();
 
+        mUserName = mAccountManager.getUserData(mActiveAccount, Consts.LEANKIT_USERDATA_EMAIL);
+
         if (mAvailableGetBoardsBoards == null) {
 
             selectAccount(mAccountsSpinner.getSelectedItemPosition());
@@ -603,6 +616,7 @@ public class MainActivity extends Activity
             mBacklogSection = mLeanKitWorker.getBacklogSection();
             mArchiveSection = mLeanKitWorker.getArchiveSection();
             mLastActiveSection = mLeanKitWorker.getLastActiveSection();
+            mIsFiltered = mLeanKitWorker.isFiltered();
 
             mDrawerListStickyAdapter.clear();
             mDrawerListStickyAdapter.addAll(mAvailableGetBoardsBoards);
@@ -674,7 +688,7 @@ public class MainActivity extends Activity
 
             showLoadingProgress();
 
-            mLeanKitWorker.getBoard(mActiveBoard.getId());
+            mLeanKitWorker.getBoard(mActiveBoard.getId(), mUserName);
 
         }
     }
@@ -693,8 +707,6 @@ public class MainActivity extends Activity
             mSelectedCards = new ArrayList<Card>();
         }
 
-        TextView emptyView = (TextView) findViewById(R.id.emptyText);
-        emptyView.setText(getString(R.string.empty_card_list));
         mTitle = mActiveBoard.getTitle();
 
         if (mDrawerWasOpenedBeforeConfigChanged) {
@@ -709,8 +721,13 @@ public class MainActivity extends Activity
 
         activateBoardInNavDrawer();
 
-        openBoardSection();
+        if (mIsFiltered){
+            filterCardsAssignedToUser();
+        } else {
+            openBoardSection();
+        }
 
+        invalidateOptionsMenu();
     }
 
     private void activateBoardInNavDrawer() {
@@ -759,17 +776,26 @@ public class MainActivity extends Activity
 
     private void populateLanesSpinner(List<Lane> lanes) {
 
+        mIsFiltered = false;
+        mFilterTitle.setVisibility(View.GONE);
+        mEmptyView.setText(getString(R.string.empty_card_list));
+
         mLanesHeaderSpinner.setVisibility(View.VISIBLE);
         mLanesHeaderSpinner.setAlpha(1);
-
         mLanesHeaderSpinnerAdapter.clear();
         mLanesHeaderSpinnerAdapter.addAll(lanes);
         mLanesHeaderSpinnerAdapter.notifyDataSetChanged();
 
         mLanesHeaderSpinner.setSelection(mActiveLaneSpinnerSelection, false);
 
+        setVisibleCardsToAdapter( ((Lane) mLanesHeaderSpinner.getSelectedItem()).getCards() );
+
+    }
+
+    private void setVisibleCardsToAdapter(List<Card> cards) {
+
         mCardListAdapter.clear();
-        mCardListAdapter.addAll(((Lane) mLanesHeaderSpinner.getSelectedItem()).getCards());
+        mCardListAdapter.addAll(cards);
 
         if (mCardGridScrollY != 0 || mAnimateCards == false) {
 
@@ -783,7 +809,6 @@ public class MainActivity extends Activity
             mCardGrid.setAdapter(mSwingInAnimationAdapter);
             resetCardGridAdapter();
         }
-
     }
 
     private void handleBoardClick(GetBoardsBoard getBoardsBoard) {
@@ -797,7 +822,7 @@ public class MainActivity extends Activity
 
         showLoadingProgress();
 
-        mLeanKitWorker.getBoard(boardId);
+        mLeanKitWorker.getBoard(boardId, mUserName);
     }
 
     private void dismissContextualActionBar() {
@@ -987,9 +1012,9 @@ public class MainActivity extends Activity
         mActiveBoard = null;
         mAvailableGetBoardsBoards = null;
         mTitle = getTitle();
-
+        invalidateOptionsMenu();
         enableLogo();
-
+        mFilterTitle.setVisibility(View.GONE);
         TextView emptyView = (TextView) findViewById(R.id.emptyText);
         emptyView.setText(getString(R.string.no_board_selected));
 
@@ -1475,11 +1500,14 @@ public class MainActivity extends Activity
 
         boolean isMultiColumnView = mCardGrid.getNumColumns() == getResources().getInteger(R.integer.num_columns_multi);
 
-        menu.findItem(R.id.action_multi_column_view).setVisible(!isMultiColumnView && !drawerOpen);
-        menu.findItem(R.id.action_single_column_view).setVisible(isMultiColumnView && !drawerOpen);
+        menu.findItem(R.id.action_multi_column_view).setVisible(!isMultiColumnView && !drawerOpen && mActiveBoard!=null);
+        menu.findItem(R.id.action_single_column_view).setVisible(isMultiColumnView && !drawerOpen && mActiveBoard!=null);
 
-        menu.findItem(R.id.action_new_card).setVisible(!drawerOpen);
-        menu.findItem(R.id.action_refresh).setVisible(!drawerOpen);
+        menu.findItem(R.id.action_filter_default).setVisible(mIsFiltered && !drawerOpen && mActiveBoard!=null);
+        menu.findItem(R.id.action_filter_assigned_to_me).setVisible( !mIsFiltered && !drawerOpen && mActiveBoard!=null && !(mBacklogSection.isActive() || mArchiveSection.isActive())  );
+
+        menu.findItem(R.id.action_new_card).setVisible(!drawerOpen && mActiveBoard!=null);
+        menu.findItem(R.id.action_refresh).setVisible(!drawerOpen && mActiveBoard!=null);
 
         menu.findItem(R.id.action_upgrade).setVisible(!mIsPremium);
 
@@ -1516,6 +1544,14 @@ public class MainActivity extends Activity
                 setNumColumns(getResources().getInteger(R.integer.num_columns_multi));
                 return true;
 
+            case R.id.action_filter_assigned_to_me:
+                filterCardsAssignedToUser();
+                return true;
+
+            case R.id.action_filter_default:
+                openBoardSection();
+                return true;
+
             case R.id.action_refresh:
                 refreshBoard();
                 return true;
@@ -1541,6 +1577,19 @@ public class MainActivity extends Activity
 
         return false;
     }
+
+    private void filterCardsAssignedToUser(){
+
+        mIsFiltered = true;
+
+        setVisibleCardsToAdapter( mActiveBoard.getCardsAssignedToAppUser() );
+
+        mFilterTitle.setVisibility(View.VISIBLE);
+        mEmptyView.setText(getString(R.string.no_assigned_cards));
+
+
+    }
+
 
     private void openHelpWebPageIntent() {
 
@@ -1598,7 +1647,7 @@ public class MainActivity extends Activity
         mLeanKitWorker.setLoadingProgressBarDisplayed(mProgressLoadingDisplayed);
         mLeanKitWorker.setSelectedCards(mSelectedCards);
         mLeanKitWorker.setDrawerOpened(mDrawerLayout.isDrawerOpen(GravityCompat.START));
-
+        mLeanKitWorker.setIsFiltered(mIsFiltered);
     }
 
     @Override
@@ -1929,10 +1978,10 @@ public class MainActivity extends Activity
     private void prepareRetrofit() {
 
         String hostName = mAccountManager.getUserData(mActiveAccount, Consts.LEANKIT_USERDATA_ORG_HOST);
-        String userName = mAccountManager.getUserData(mActiveAccount, Consts.LEANKIT_USERDATA_EMAIL);
+        mUserName = mAccountManager.getUserData(mActiveAccount, Consts.LEANKIT_USERDATA_EMAIL);
         String pwd = mActiveAccountAuthToken;
 
-        ((MyApplication) getApplication()).initRetroLeanKitApi(hostName, userName, pwd);
+        ((MyApplication) getApplication()).initRetroLeanKitApi(hostName, mUserName, pwd);
 
     }
 
