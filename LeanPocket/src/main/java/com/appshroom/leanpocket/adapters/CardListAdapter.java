@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Filter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,6 +23,7 @@ import com.appshroom.leanpocket.dto.Card;
 import com.appshroom.leanpocket.helpers.Consts;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -37,6 +39,8 @@ public class CardListAdapter extends ArrayAdapter<Card> {
     private HashMap<Integer, Integer> mAccentColorMap;
     private HashMap<String, Integer> mColorMap;
     private HashMap<String, String> mGravatarUrlMap;
+
+
     private BoardSettings mBoardSettings;
 
     public CardListAdapter(Context context, int resource, List<Card> cards) {
@@ -155,6 +159,8 @@ public class CardListAdapter extends ArrayAdapter<Card> {
 
         return cardView;
     }
+
+
 
     private Integer getAccentColor(Integer color) {
 
@@ -326,6 +332,7 @@ public class CardListAdapter extends ArrayAdapter<Card> {
 
 
     }
+
 
 
 }

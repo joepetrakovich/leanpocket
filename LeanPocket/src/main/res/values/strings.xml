@@ -326,5 +326,10 @@
     <string name="hint_external_card_id">External card ID</string>
     <string name="show_archived_boards_setting_title">Show archived boards</string>
     <string name="archived_boards_summary">Requires app restart or account switch to take effect</string>
+    <string name="show_assigned_to_me">Show assigned to me</string>
+    <string name="show_lanes">Show cards by lane</string>
+    <string name="assigned_to_me">Filter: Assigned to me</string>
+    <string name="no_assigned_cards">No assigned cards.</string>
+
 
 </resources>

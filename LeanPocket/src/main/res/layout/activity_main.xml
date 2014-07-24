@@ -24,6 +24,14 @@
                 android:layout_width="match_parent"
                 android:visibility="gone" />
 
+            <TextView
+                android:id="@+id/filter_textview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/assigned_to_me"
+                android:textSize="18sp"
+                android:gravity="center"
+                android:visibility="visible"/>
             <Spinner
                 android:id="@+id/spinner_lanes_header"
                 android:layout_height="match_parent"
@@ -32,6 +40,7 @@
                 android:visibility="invisible"
 
                 />
+
 
 
         </LinearLayout>
