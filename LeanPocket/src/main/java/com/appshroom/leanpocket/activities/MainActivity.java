@@ -601,7 +601,7 @@ public class MainActivity extends Activity
         mActiveLaneSpinnerSelection = mLeanKitWorker.getLastActiveLaneSpinnerSelection();
         mCardGridScrollY = mLeanKitWorker.getCardGridScrollY();
         mDrawerWasOpenedBeforeConfigChanged = mLeanKitWorker.isDrawerOpened();
-
+        mFilterTitle.setVisibility(View.GONE);
         mUserName = mAccountManager.getUserData(mActiveAccount, Consts.LEANKIT_USERDATA_EMAIL);
 
         if (mAvailableGetBoardsBoards == null) {
