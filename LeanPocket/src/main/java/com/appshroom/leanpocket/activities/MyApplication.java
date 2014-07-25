@@ -1,17 +1,24 @@
 package com.appshroom.leanpocket.activities;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Application;
+import android.content.SharedPreferences;
 import android.util.Base64;
 
 import com.appshroom.leanpocket.R;
 import com.appshroom.leanpocket.api.retrofit.RetroLeanKitApi;
 import com.appshroom.leanpocket.helpers.Consts;
+import com.appshroom.leanpocket.helpers.SecurePreferences;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.GsonBuilder;
 
 import org.acra.ACRA;
 import org.acra.ReportingInteractionMode;
 import org.acra.annotation.ReportsCrashes;
+
+import java.util.Arrays;
+import java.util.List;
 
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
@@ -60,7 +67,17 @@ public class MyApplication extends Application {
      *
      * @return
      */
-    public static RetroLeanKitApi getRetroLeanKitApiInstance() {
+    public RetroLeanKitApi getRetroLeanKitApiInstance() {
+
+        if (mRetroLeanKitApi == null){
+
+            SharedPreferences mSharedPreferences = new SecurePreferences(getApplicationContext());
+            String host = mSharedPreferences.getString(Consts.SHARED_PREFS_HOST_NAME, "");
+            String email = mSharedPreferences.getString(Consts.SHARED_PREFS_USER_NAME, "");
+            String pwd = mSharedPreferences.getString(Consts.SHARED_PREFS_PWD, "");
+
+            initRetroLeanKitApi(host, email, pwd);
+        }
 
         return mRetroLeanKitApi;
     }
@@ -87,7 +104,7 @@ public class MyApplication extends Application {
         GsonConverter gsonConverter = new GsonConverter(gb.create());
 
         mRestAdapter = new RestAdapter.Builder()
-                .setServer(Consts.HTTPS_URL_PREFIX + hostName + Consts.API_URL_SUFFIX)
+                .setEndpoint(Consts.HTTPS_URL_PREFIX + hostName + Consts.API_URL_SUFFIX)
                 .setConverter(gsonConverter)
                 .setRequestInterceptor(new BasicAuthInterceptor(userName, pwd))
                 .build();

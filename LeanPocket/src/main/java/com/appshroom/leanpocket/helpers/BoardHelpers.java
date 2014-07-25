@@ -1,6 +1,8 @@
 package com.appshroom.leanpocket.helpers;
 
+import com.appshroom.leanpocket.dto.AssignedUser;
 import com.appshroom.leanpocket.dto.Board;
+import com.appshroom.leanpocket.dto.BoardUser;
 import com.appshroom.leanpocket.dto.Card;
 import com.appshroom.leanpocket.dto.Identifier;
 import com.appshroom.leanpocket.dto.Lane;
@@ -213,6 +215,25 @@ public class BoardHelpers {
 
         return null;
 
+    }
+
+
+    public static List<Card> getCardsAssignedToUser(String userName, List<Card> cards){
+
+        List<Card> cardsAssignedToUser = new ArrayList<Card>();
+
+        for (Card card : cards){
+
+            for (AssignedUser assignedUser : card.getAssignedUsers()){
+
+                if (userName.equals(assignedUser.getEmailAddress())){
+                    cardsAssignedToUser.add(card);
+                    break;
+                }
+            }
+        }
+
+        return cardsAssignedToUser;
     }
 
     private static String getIdentifierNameById(String id, List<Identifier> identifiers) {

@@ -102,7 +102,7 @@ public class LoginActivity extends AccountAuthenticatorActivity {
         GsonConverter gsonConverter = new GsonConverter(gb.create());
 
         retroLeanKitNonPublicApi = new RestAdapter.Builder()
-                .setServer(Consts.LEANKIT_LOGIN_SEARCH_URL_PREFIX)
+                .setEndpoint(Consts.LEANKIT_LOGIN_SEARCH_URL_PREFIX)
                 .setConverter(gsonConverter)
                 .build().create(RetroLeanKitNonPublicApi.class);
 

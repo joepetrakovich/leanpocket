@@ -52,6 +52,8 @@ public class Board {
 
     private ArrayList<Lane> allOrderedChildLanes;
 
+    private List<Card> cardsAssignedToAppUser;
+
     private HashMap<String, Integer> cardColorMap;
     private HashMap<Integer, Integer> cardAccentColorMap;
     private HashMap<String, String> userGravatarUrlMap;
@@ -70,6 +72,14 @@ public class Board {
     private boolean hasLoadedArchive;
 
     private BoardSettings settings;
+
+    public List<Card> getCardsAssignedToAppUser() {
+        return cardsAssignedToAppUser;
+    }
+
+    public void setCardsAssignedToAppUser(List<Card> cardsAssignedToAppUser) {
+        this.cardsAssignedToAppUser = cardsAssignedToAppUser;
+    }
 
     public boolean isAutoIncrementCardIdEnabled() {
         return isAutoIncrementCardIdEnabled;

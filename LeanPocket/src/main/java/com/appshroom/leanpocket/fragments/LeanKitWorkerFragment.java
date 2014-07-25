@@ -27,6 +27,7 @@ import com.appshroom.leanpocket.dto.LeanKitTreeifiedLane;
 import com.appshroom.leanpocket.helpers.BoardHelpers;
 import com.appshroom.leanpocket.helpers.Consts;
 import com.appshroom.leanpocket.helpers.GravatarHelpers;
+import com.appshroom.leanpocket.helpers.SecurePreferences;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -96,6 +97,7 @@ public class LeanKitWorkerFragment extends Fragment {
     int mCardGridScrollY;
     boolean mDrawerProgressBarDisplayed;
     boolean mLoadingCroutonDisplayed;
+    boolean mIsFiltered;
     private boolean isDrawerOpened;
     String mLoadingCroutonText;
     Gson gson = new Gson();
@@ -111,6 +113,13 @@ public class LeanKitWorkerFragment extends Fragment {
 
     }
 
+    public boolean isFiltered() {
+        return mIsFiltered;
+    }
+
+    public void setIsFiltered(boolean mIsFiltered) {
+        this.mIsFiltered = mIsFiltered;
+    }
 
     public void setDrawerOpened(boolean drawerOpened) {
         this.isDrawerOpened = drawerOpened;
@@ -363,14 +372,18 @@ public class LeanKitWorkerFragment extends Fragment {
 
     }
 
-    public void getBoard(String boardId) {
+    public void getBoard(final String boardId) {
 
         mRetroLeanKitApi.getBoard(boardId, new RetroLeanKitCallback<Board>() {
 
             @Override
             public void onSuccess(int replyCode, String replyText, List<Board> replyData) {
 
-                new StructureBoardTask().execute(replyData.get(0));
+                String userName = new SecurePreferences(getActivity()).getString(Consts.SHARED_PREFS_USER_NAME, "");
+
+                BoardData bd = new BoardData(replyData.get(0), userName);
+
+                new StructureBoardTask().execute(bd);
             }
 
             @Override
@@ -417,14 +430,27 @@ public class LeanKitWorkerFragment extends Fragment {
         });
     }
 
-    private class StructureBoardTask extends AsyncTask<Board, Void, Board> {
+    private class BoardData{
+
+        public String userName;
+        public Board board;
+
+        public BoardData(Board board, String userName){
+            this.userName = userName;
+            this.board = board;
+        }
+    }
+
+    private class StructureBoardTask extends AsyncTask<BoardData, Void, Board> {
 
         @Override
-        protected Board doInBackground(Board... params) {
+        protected Board doInBackground(BoardData... params) {
 
-            Board board = params[0];
+            Board board = params[0].board;
+            String userName = params[0].userName;
 
             ACRA.getErrorReporter().putCustomData("board", gson.toJson(board));
+
 
             //Temp
 
@@ -458,6 +484,11 @@ public class LeanKitWorkerFragment extends Fragment {
             board.setOrderedInFlightChildLanes(orderedInFlightChildLanes);
             board.setOrderedBacklogChildLanes(orderedBacklogChildLanes);
             board.setOrderedArchiveChildLanes(orderedArchiveChildLanes);
+
+            board.setCardsAssignedToAppUser(
+                    BoardHelpers.getCardsAssignedToUser( userName
+                          , BoardHelpers.getAllCards( board.getOrderedInFlightChildLanes()))
+            );
 
             ClassOfService defaultCOS = new ClassOfService("None");
             board.getClassesOfService().add(0, defaultCOS);

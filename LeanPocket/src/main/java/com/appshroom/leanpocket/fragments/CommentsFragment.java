@@ -38,8 +38,10 @@ import com.appshroom.leanpocket.helpers.IabHelper;
 import com.appshroom.leanpocket.helpers.IabResult;
 import com.appshroom.leanpocket.helpers.Purchase;
 import com.appshroom.leanpocket.helpers.SecurePreferences;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import org.acra.ACRA;
 import org.apache.http.HttpStatus;
 
 import java.util.ArrayList;
@@ -235,6 +237,7 @@ public class CommentsFragment extends Fragment {
         mBoardId = getArguments().getString("boardId");
         mSharedPreferences = new SecurePreferences(getActivity());
 
+
         mRetroLeanKitApi = ((MyApplication) getActivity().getApplication()).getRetroLeanKitApiInstance();
 
     }
@@ -244,51 +247,53 @@ public class CommentsFragment extends Fragment {
 
         showProgress();
 
-        if (mCard != null) { //TODO: why would this be null for many users?
+        ACRA.getErrorReporter().putCustomData("mBoardId during refreshCommentsList", mBoardId);
+        ACRA.getErrorReporter().putCustomData("mCard during refreshCommentsList", new Gson().toJson(mCard));
+        ACRA.getErrorReporter().putCustomData("mRetroLeanKitApi during refreshCommentsList", mRetroLeanKitApi==null ? "isNull" : "is not null");
 
-            mRetroLeanKitApi.getComments(mBoardId, mCard.getId(), new RetroLeanKitCallback<List<Comment>>() {
+        mRetroLeanKitApi.getComments(mBoardId, mCard.getId(), new RetroLeanKitCallback<List<Comment>>() {
 
-                @Override
-                public void onSuccess(int replyCode, String replyText, List<List<Comment>> replyData) {
+            @Override
+            public void onSuccess(int replyCode, String replyText, List<List<Comment>> replyData) {
 
-                    commentsText = mHostActivity.getString(R.string.no_comments_yet);
-                    mEmptyCommentsText.setText(commentsText);
+                commentsText = mHostActivity.getString(R.string.no_comments_yet);
+                mEmptyCommentsText.setText(commentsText);
 
-                    mComments = replyData.get(0);
-                    mCommentsAdapter.clear();
-                    mCommentsAdapter.addAll(mComments);
-                    mCommentsAdapter.notifyDataSetChanged();
+                mComments = replyData.get(0);
+                mCommentsAdapter.clear();
+                mCommentsAdapter.addAll(mComments);
+                mCommentsAdapter.notifyDataSetChanged();
 
-                    hideProgress();
+                hideProgress();
 
-                }
+            }
 
-                @Override
-                public void onLeanKitException(int replyCode, String replyText, List<List<Comment>> replyData) {
+            @Override
+            public void onLeanKitException(int replyCode, String replyText, List<List<Comment>> replyData) {
 
-                    hideProgress();
+                hideProgress();
 
-                    commentsText = mHostActivity.getString(R.string.comments_failed_to_load);
-                    mEmptyCommentsText.setText(commentsText);
-                    Crouton.makeText(getActivity(), replyText, Style.ALERT, R.id.layout_comments_fragment).show(); //TODO: risky showing reply text here
-                }
+                commentsText = mHostActivity.getString(R.string.comments_failed_to_load);
+                mEmptyCommentsText.setText(commentsText);
+                Crouton.makeText(getActivity(), replyText, Style.ALERT, R.id.layout_comments_fragment).show(); //TODO: risky showing reply text here
+            }
 
-                @Override
-                public void onWIPOverrideCommentRequired() {
+            @Override
+            public void onWIPOverrideCommentRequired() {
 
-                }
+            }
 
-                @Override
-                public void failure(RetrofitError retrofitError) {
+            @Override
+            public void failure(RetrofitError retrofitError) {
 
-                    hideProgress();
-                    commentsText = mHostActivity.getString(R.string.comments_failed_to_load);
-                    mEmptyCommentsText.setText(commentsText);
-                    handleRetrofitError(retrofitError, mHostActivity.getString(R.string.no_network_signal_comments));
+                hideProgress();
+                commentsText = mHostActivity.getString(R.string.comments_failed_to_load);
+                mEmptyCommentsText.setText(commentsText);
+                handleRetrofitError(retrofitError, mHostActivity.getString(R.string.no_network_signal_comments));
 
-                }
-            });
-        }
+            }
+        });
+
     }
 
     private void showProgress() {
