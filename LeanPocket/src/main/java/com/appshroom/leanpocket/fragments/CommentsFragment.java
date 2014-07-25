@@ -38,8 +38,10 @@ import com.appshroom.leanpocket.helpers.IabHelper;
 import com.appshroom.leanpocket.helpers.IabResult;
 import com.appshroom.leanpocket.helpers.Purchase;
 import com.appshroom.leanpocket.helpers.SecurePreferences;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import org.acra.ACRA;
 import org.apache.http.HttpStatus;
 
 import java.util.ArrayList;
@@ -235,6 +237,7 @@ public class CommentsFragment extends Fragment {
         mBoardId = getArguments().getString("boardId");
         mSharedPreferences = new SecurePreferences(getActivity());
 
+
         mRetroLeanKitApi = ((MyApplication) getActivity().getApplication()).getRetroLeanKitApiInstance();
 
     }
@@ -244,9 +247,9 @@ public class CommentsFragment extends Fragment {
 
         showProgress();
 
-        if (mRetroLeanKitApi == null){ //if this doesnt work, may need to rebuild retrofit instance.
-            mRetroLeanKitApi = ((MyApplication) getActivity().getApplication()).getRetroLeanKitApiInstance();
-        }
+        ACRA.getErrorReporter().putCustomData("mBoardId during refreshCommentsList", mBoardId);
+        ACRA.getErrorReporter().putCustomData("mCard during refreshCommentsList", new Gson().toJson(mCard));
+        ACRA.getErrorReporter().putCustomData("mRetroLeanKitApi during refreshCommentsList", mRetroLeanKitApi==null ? "isNull" : "is not null");
 
         mRetroLeanKitApi.getComments(mBoardId, mCard.getId(), new RetroLeanKitCallback<List<Comment>>() {
 

@@ -602,7 +602,6 @@ public class MainActivity extends Activity
         mCardGridScrollY = mLeanKitWorker.getCardGridScrollY();
         mDrawerWasOpenedBeforeConfigChanged = mLeanKitWorker.isDrawerOpened();
         mFilterTitle.setVisibility(View.GONE);
-        mUserName = mAccountManager.getUserData(mActiveAccount, Consts.LEANKIT_USERDATA_EMAIL);
 
         if (mAvailableGetBoardsBoards == null) {
 
@@ -688,7 +687,7 @@ public class MainActivity extends Activity
 
             showLoadingProgress();
 
-            mLeanKitWorker.getBoard(mActiveBoard.getId(), mUserName);
+            mLeanKitWorker.getBoard(mActiveBoard.getId());
 
         }
     }
@@ -822,7 +821,7 @@ public class MainActivity extends Activity
 
         showLoadingProgress();
 
-        mLeanKitWorker.getBoard(boardId, mUserName);
+        mLeanKitWorker.getBoard(boardId);
     }
 
     private void dismissContextualActionBar() {
@@ -1980,6 +1979,10 @@ public class MainActivity extends Activity
         String hostName = mAccountManager.getUserData(mActiveAccount, Consts.LEANKIT_USERDATA_ORG_HOST);
         mUserName = mAccountManager.getUserData(mActiveAccount, Consts.LEANKIT_USERDATA_EMAIL);
         String pwd = mActiveAccountAuthToken;
+
+        mSharedPreferences.edit().putString(Consts.SHARED_PREFS_HOST_NAME, hostName).apply();
+        mSharedPreferences.edit().putString(Consts.SHARED_PREFS_USER_NAME, mUserName).apply();
+        mSharedPreferences.edit().putString(Consts.SHARED_PREFS_PWD, pwd).apply();
 
         ((MyApplication) getApplication()).initRetroLeanKitApi(hostName, mUserName, pwd);
 
