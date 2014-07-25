@@ -27,6 +27,7 @@ import com.appshroom.leanpocket.dto.LeanKitTreeifiedLane;
 import com.appshroom.leanpocket.helpers.BoardHelpers;
 import com.appshroom.leanpocket.helpers.Consts;
 import com.appshroom.leanpocket.helpers.GravatarHelpers;
+import com.appshroom.leanpocket.helpers.SecurePreferences;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -371,12 +372,14 @@ public class LeanKitWorkerFragment extends Fragment {
 
     }
 
-    public void getBoard(final String boardId, final String userName) {
+    public void getBoard(final String boardId) {
 
         mRetroLeanKitApi.getBoard(boardId, new RetroLeanKitCallback<Board>() {
 
             @Override
             public void onSuccess(int replyCode, String replyText, List<Board> replyData) {
+
+                String userName = new SecurePreferences(getActivity()).getString(Consts.SHARED_PREFS_USER_NAME, "");
 
                 BoardData bd = new BoardData(replyData.get(0), userName);
 

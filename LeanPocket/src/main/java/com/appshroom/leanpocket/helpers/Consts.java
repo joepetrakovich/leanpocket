@@ -85,6 +85,9 @@ public final class Consts {
     public static final String COLOR_FIELD_CLASS_OF_SERVICE = "ClassOfService";
     public static final String COLOR_FIELD_CARD_TYPE = "CardType";
     public static final String BOARD_SETTINGS_EXTRA = "BoardSettings";
+    public static final String SHARED_PREFS_PWD ="pref_pwd" ;
+    public static final String SHARED_PREFS_USER_NAME = "pref_uname";
+    public static final String SHARED_PREFS_HOST_NAME = "pref_hname";
 
 
     public final class PRIORITY {
