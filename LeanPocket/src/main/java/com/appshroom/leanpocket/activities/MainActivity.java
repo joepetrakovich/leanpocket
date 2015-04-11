@@ -43,25 +43,16 @@ import com.appshroom.leanpocket.adapters.CardListAdapter;
 import com.appshroom.leanpocket.adapters.DrawerListAdapter;
 import com.appshroom.leanpocket.adapters.DrawerListItem;
 import com.appshroom.leanpocket.adapters.LanesWithCardAmountsSpinnerAdapter;
-import com.appshroom.leanpocket.dto.AssignedUser;
 import com.appshroom.leanpocket.dto.Board;
-import com.appshroom.leanpocket.dto.BoardUser;
 import com.appshroom.leanpocket.dto.Card;
 import com.appshroom.leanpocket.dto.GetBoardsBoard;
 import com.appshroom.leanpocket.dto.Lane;
 import com.appshroom.leanpocket.fragments.ConfirmDeleteCardDialog;
 import com.appshroom.leanpocket.fragments.LeanKitWorkerFragment;
 import com.appshroom.leanpocket.fragments.MoveCardDialog;
-import com.appshroom.leanpocket.helpers.AdStarter;
-import com.appshroom.leanpocket.helpers.BoardHelpers;
 import com.appshroom.leanpocket.helpers.Consts;
-import com.appshroom.leanpocket.helpers.IabHelper;
-import com.appshroom.leanpocket.helpers.IabResult;
-import com.appshroom.leanpocket.helpers.Inventory;
-import com.appshroom.leanpocket.helpers.Purchase;
 import com.appshroom.leanpocket.helpers.SecurePreferences;
 import com.emilsjolander.components.stickylistheaders.StickyListHeadersListView;
-import com.google.ads.AdView;
 import com.haarman.listviewanimations.swinginadapters.prepared.SwingBottomInAnimationAdapter;
 
 import org.apache.http.HttpStatus;
@@ -152,8 +143,6 @@ public class MainActivity extends Activity
     private boolean mDrawerWasOpenedBeforeConfigChanged = false;
     private boolean mShowArchivedBoards = false;
 
-    private IabHelper mBillingHelper;
-    private boolean mIsPremium = false;
 
 
     @Override
@@ -193,8 +182,6 @@ public class MainActivity extends Activity
             repopulateFromConfigChange();
         }
 
-        manageInAppBilling();
-        AdStarter.app_launched(getContext(), (AdView) findViewById(R.id.adView));
         AppRater.app_launched(this);
     }
 
@@ -239,7 +226,6 @@ public class MainActivity extends Activity
         mUserHasLearnedDrawer = mSharedPreferences.getBoolean(Consts.SHARED_PREFS_USER_HAS_LEARNED_DRAWER, false);
         mLastUsedAccount = mSharedPreferences.getString(Consts.SHARED_PREFS_LAST_USED_ACCOUNT, "");
         mSingleColumnMode = mSharedPreferences.getBoolean(Consts.SHARED_PREFS_SINGLE_COL_MODE, false);
-        mIsPremium = mSharedPreferences.getBoolean(Consts.SHARED_PREFS_IS_PREMIUM, false);
 
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         mAnimateCards = settings.getBoolean(Consts.SHARED_PREFS_ANIMATE_CARDS, true);
@@ -1338,12 +1324,6 @@ public class MainActivity extends Activity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        // Pass on the activity result to the helper for handling
-
-        if (!mBillingHelper.handleActivityResult(requestCode, resultCode, data)) {
-            // not handled, so handle it ourselves (here's where you'd
-            // perform any handling of activity results not related to in-app
-            // billing..
 
 
             switch (requestCode) {
@@ -1382,21 +1362,10 @@ public class MainActivity extends Activity
 
                     break;
 
-                case Consts.REQUEST_CODE_BILLING:
 
-                    //A billing dialog was closed after a rotation...
-                    checkForPremiumPurchase();
-                    break;
 
-            }
 
         }
-
-    }
-
-    private void checkForPremiumPurchase() {
-
-        mBillingHelper.queryInventoryAsync(mGotInventoryListener);
 
     }
 
@@ -1417,10 +1386,6 @@ public class MainActivity extends Activity
 
         }
 
-        if (mSharedPreferences.getBoolean(Consts.SHARED_PREFS_IS_PREMIUM, false)) {
-
-            removeAdView();
-        }
     }
 
     private void handleDeleteAttempt(Intent data) {
@@ -1508,8 +1473,6 @@ public class MainActivity extends Activity
         menu.findItem(R.id.action_new_card).setVisible(!drawerOpen && mActiveBoard!=null);
         menu.findItem(R.id.action_refresh).setVisible(!drawerOpen && mActiveBoard!=null);
 
-        menu.findItem(R.id.action_upgrade).setVisible(!mIsPremium);
-
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -1553,10 +1516,6 @@ public class MainActivity extends Activity
 
             case R.id.action_refresh:
                 refreshBoard();
-                return true;
-
-            case R.id.action_upgrade:
-                onUpgradeClicked();
                 return true;
 
             case R.id.action_settings:
@@ -1664,11 +1623,6 @@ public class MainActivity extends Activity
         PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(this);
         Crouton.cancelAllCroutons();
 
-        if (mBillingHelper != null) {
-            mBillingHelper.dispose();
-        }
-
-        mBillingHelper = null;
     }
 
     private Context getContext() {
@@ -1930,49 +1884,6 @@ public class MainActivity extends Activity
         }
     }
 
-    private void manageInAppBilling() {
-
-        String helpMenu = "LCBWViN55bSBRzLe3x28uALBdp8vvok5wSOpoK3gxR0BSCCGR91lQgLWvK3ASeUYu9hE";
-        String key = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlu" + helpMenu + "69kStM20W8GEP73tBrUXS7XsLjlnDJTjC+K/XwAf3H6zBxNEesF4+nq/Ou8azGu9jRAmFOdSpHENZ5NuLfyOd/G6m05BQIDBVe9YE7XOBwPCW9fRdIiMJWR3JhsQQgrIIfKd/dEZ/8b0gT7jW7zNgKI9D8SqoCXbL8tZyo2SZmhmY7ChKHC6ABYiwzfryq9e9lPQGEeiz3TAgsJP73m6j1xchoyoKtkJq2EDLixAQK4h825eXagglAjECgrQRp8MNtdodzuxwVGBf/xwIDAQAB";
-
-        mSharedPreferences.edit().putString(Consts.SHARED_PREFS_K, key).apply();
-
-
-        mBillingHelper = new IabHelper(this, key);
-
-
-        // Start setup. This is asynchronous and the specified listener
-        // will be called once setup completes.
-
-        mBillingHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
-            public void onIabSetupFinished(IabResult result) {
-
-
-                if (!result.isSuccess()) {
-                    // Oh noes, there was a problem.
-
-                    return;
-                }
-
-                // Hooray, IAB is fully set up. Now, let's get an inventory of stuff we own.
-
-                // Have we been disposed of in the meantime? If so, quit.
-                if (mBillingHelper == null) return;
-
-                mBillingHelper.queryInventoryAsync(mGotInventoryListener);
-            }
-        });
-
-    }
-
-    // User clicked the "Upgrade to Premium" button.
-    public void onUpgradeClicked() {
-
-        String payload = "";
-
-        mBillingHelper.launchPurchaseFlow(this, Consts.SKU_PREMIUM, Consts.REQUEST_CODE_BILLING,
-                mPurchaseFinishedListener, payload);
-    }
 
     private void prepareRetrofit() {
 
@@ -1993,74 +1904,6 @@ public class MainActivity extends Activity
             .build();
 
 
-
-    // Callback for when a purchase is finished
-    IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
-        public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
-
-            if (mBillingHelper == null) return;
-
-            if (result.isFailure()) {
-                return;
-            }
-
-
-            //Purchase success
-
-            if (purchase.getSku().equals(Consts.SKU_PREMIUM)) {
-                // bought the premium upgrade!
-                // alert("Thank you for upgrading to premium!");
-                mIsPremium = true;
-                mSharedPreferences.edit().putBoolean(Consts.SHARED_PREFS_IS_PREMIUM, mIsPremium).apply();
-
-                removeAdView();
-            }
-
-        }
-    };
-
-    // Listener that's called when we finish querying the items and subscriptions we own
-    IabHelper.QueryInventoryFinishedListener mGotInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
-        public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
-
-            if (mBillingHelper == null) return;
-
-            if (result.isFailure()) {
-
-                return;
-            }
-
-            /*
-             * Check for items we own. Notice that for each purchase, we check
-             * the developer payload to see if it's correct! See
-             * verifyDeveloperPayload().
-             */
-
-            // Do we have the premium upgrade?
-            Purchase premiumPurchase = inventory.getPurchase(Consts.SKU_PREMIUM);
-            mIsPremium = (premiumPurchase != null);
-
-            mSharedPreferences.edit().putBoolean(Consts.SHARED_PREFS_IS_PREMIUM, mIsPremium).apply();
-
-            if (mIsPremium) {
-
-                removeAdView();
-            }
-        }
-    };
-
-    private void removeAdView() {
-
-        LinearLayout mainLayout = (LinearLayout) findViewById(R.id.main_layout);
-        AdView adView = (AdView) mainLayout.findViewById(R.id.adView);
-
-        if (adView != null) {
-
-            mainLayout.removeView(adView);
-
-        }
-
-    }
 
 
 }
