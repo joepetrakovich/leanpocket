@@ -1143,7 +1143,7 @@ public class MainActivity extends Activity
             Intent newCardIntent = new Intent(getContext(), NewCardActivity.class);
 
             newCardIntent.putExtra(Consts.BOARD_ID_EXTRA, mActiveBoard.getId());
-            newCardIntent.putParcelableArrayListExtra(Consts.ALL_CHILD_LANES_EXTRA, mActiveBoard.getAllOrderedChildLanes());
+            newCardIntent.putParcelableArrayListExtra(Consts.ALL_CHILD_LANES_EXTRA, mActiveBoard.getAllChildLaneNames());
             newCardIntent.putExtra(Consts.BOARD_SETTINGS_EXTRA, mActiveBoard.getSettings());
 
             startActivityForResult(newCardIntent, Consts.REQUEST_CODE_NEW_CARD);
@@ -1215,11 +1215,11 @@ public class MainActivity extends Activity
 
     private void startCardDetailActivity(Card selectedCard) {
 
-        Intent cardDetailIntent = new Intent(getContext(), CardDetailActivity.class);
+        Intent cardDetailIntent = new Intent(this, CardDetailActivity.class);
 
         cardDetailIntent.putExtra(Consts.CARD_DETAIL_CARD_EXTRA, selectedCard);
         cardDetailIntent.putExtra(Consts.BOARD_ID_EXTRA, mActiveBoard.getId());
-        cardDetailIntent.putParcelableArrayListExtra(Consts.ALL_CHILD_LANES_EXTRA, mActiveBoard.getAllOrderedChildLanes());
+        cardDetailIntent.putParcelableArrayListExtra(Consts.ALL_CHILD_LANES_EXTRA, mActiveBoard.getAllChildLaneNames());
         cardDetailIntent.putExtra(Consts.BOARD_SETTINGS_EXTRA, mActiveBoard.getSettings());
 
         startActivityForResult(cardDetailIntent, Consts.REQUEST_CODE_CARD_DETAIL);
@@ -1231,7 +1231,7 @@ public class MainActivity extends Activity
 
         editCardIntent.putExtra(Consts.BOARD_ID_EXTRA, mActiveBoard.getId());
         editCardIntent.putExtra(Consts.EXISTING_CARD_EXTRA, mSelectedCards.get(0));
-        editCardIntent.putParcelableArrayListExtra(Consts.ALL_CHILD_LANES_EXTRA, mActiveBoard.getAllOrderedChildLanes());
+        editCardIntent.putParcelableArrayListExtra(Consts.ALL_CHILD_LANES_EXTRA, mActiveBoard.getAllChildLaneNames());
         editCardIntent.putExtra(Consts.BOARD_SETTINGS_EXTRA, mActiveBoard.getSettings());
 
         startActivityForResult(editCardIntent, Consts.REQUEST_CODE_EDIT_EXISTING);
@@ -1250,7 +1250,7 @@ public class MainActivity extends Activity
 
         MoveCardDialog moveCardDialog = MoveCardDialog.newInstance(mActiveBoard.getId(),
                 mSelectedCards.get(0),
-                mActiveBoard.getAllOrderedChildLanes());
+                mActiveBoard.getAllChildLaneNames());
 
         moveCardDialog.show(getFragmentManager(), "MoveCardDialog");
     }

@@ -52,6 +52,8 @@ public class Board {
 
     private ArrayList<Lane> allOrderedChildLanes;
 
+    private ArrayList<LaneDescription> allChildLaneNames;
+
     private List<Card> cardsAssignedToAppUser;
 
     private HashMap<String, Integer> cardColorMap;
@@ -436,4 +438,23 @@ public class Board {
     public void setAllOrderedChildLanes(ArrayList<Lane> allOrderedChildLanes) {
         this.allOrderedChildLanes = allOrderedChildLanes;
     }
+
+    public ArrayList<LaneDescription> getAllChildLaneNames(){
+        return allChildLaneNames;
+    }
+    public void setAllChildLaneNames(ArrayList<Lane> allOrderedChildLanes) {
+
+        ArrayList<LaneDescription> allNames = new ArrayList<LaneDescription>();
+
+        for (Lane laneHeavy: allOrderedChildLanes){
+            LaneDescription laneLite = new LaneDescription();
+            laneLite.setName(laneHeavy.getTitle());
+            laneLite.setId(laneHeavy.getId());
+            laneLite.setBoardSectionType(laneHeavy.getBoardSectionType());
+            allNames.add(laneLite);
+        }
+
+        this.allChildLaneNames = allNames;
+    }
 }
+

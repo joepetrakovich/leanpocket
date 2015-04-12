@@ -10,19 +10,21 @@ import android.widget.TextView;
 
 import com.appshroom.leanpocket.R;
 import com.appshroom.leanpocket.dto.Lane;
+import com.appshroom.leanpocket.dto.LaneDescription;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by jpetrakovich on 9/9/13.
  */
-public class LanesSpinnerAdapter extends ArrayAdapter<Lane> {
+public class LanesSpinnerAdapter extends ArrayAdapter<LaneDescription> {
 
     private Holder hold;
     private ViewHolder holder;
     private int layoutResource;
 
-    public LanesSpinnerAdapter(Context context, List<Lane> objects) {
+    public LanesSpinnerAdapter(Context context, List<LaneDescription> objects) {
         super(context, R.layout.into_lane_item, objects);
 
         this.layoutResource = R.layout.into_lane_item;
@@ -48,9 +50,9 @@ public class LanesSpinnerAdapter extends ArrayAdapter<Lane> {
         }
 
 
-        Lane lane = getItem(position);
+        LaneDescription lane = getItem(position);
 
-        hold.text.setText(lane.toString());
+        hold.text.setText(lane.getName());
 
         return itemView;
     }
@@ -76,9 +78,9 @@ public class LanesSpinnerAdapter extends ArrayAdapter<Lane> {
         }
 
 
-        Lane lane = getItem(position);
+        LaneDescription lane = getItem(position);
 
-        holder.laneName.setText(lane.toString());
+        holder.laneName.setText(lane.getName());
 
         return itemView;
     }

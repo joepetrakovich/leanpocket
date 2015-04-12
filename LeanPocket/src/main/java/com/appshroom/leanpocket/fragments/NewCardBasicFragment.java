@@ -43,6 +43,7 @@ import com.appshroom.leanpocket.dto.CardFieldData;
 import com.appshroom.leanpocket.dto.CardType;
 import com.appshroom.leanpocket.dto.ClassOfService;
 import com.appshroom.leanpocket.dto.Lane;
+import com.appshroom.leanpocket.dto.LaneDescription;
 import com.appshroom.leanpocket.helpers.Consts;
 import com.appshroom.leanpocket.helpers.GravatarHelpers;
 import com.squareup.picasso.Picasso;
@@ -82,12 +83,12 @@ public class NewCardBasicFragment extends Fragment {
     ArrayAdapter<CardType> mCardTypeAdapter;
     ArrayAdapter<ClassOfService> mClassOfServiceAdapter;
     ArrayAdapter<String> mPrioritiesAdapter;
-    ArrayAdapter<Lane> mLanesAdapter;
+    ArrayAdapter<LaneDescription> mLanesAdapter;
 
     DatePickerFragment datePickerFragment;
     AssignUsersDialogFragment assignUserDialog;
 
-    List<Lane> mLanes;
+    List<LaneDescription> mLanes;
 
     List<BoardUser> mAssignedUsers;
     BoardSettings mBoardSettings;

@@ -23,6 +23,7 @@ import com.appshroom.leanpocket.dto.BoardUser;
 import com.appshroom.leanpocket.dto.Card;
 import com.appshroom.leanpocket.dto.CardFieldData;
 import com.appshroom.leanpocket.dto.Lane;
+import com.appshroom.leanpocket.dto.LaneDescription;
 import com.appshroom.leanpocket.dto.UpdateCardReplyData;
 import com.appshroom.leanpocket.fragments.NewCardBasicFragment;
 import com.appshroom.leanpocket.helpers.Consts;
@@ -40,7 +41,7 @@ public class NewCardActivity extends Activity implements SharedPreferences.OnSha
 
     RetroLeanKitApi mRetroLeanKitApi;
     String mBoardId;
-    List<Lane> mLanes;
+    ArrayList<LaneDescription> mLanes;
     Card mExistingCard;
     BoardSettings mBoardSettings;
 
@@ -146,7 +147,7 @@ public class NewCardActivity extends Activity implements SharedPreferences.OnSha
     }
 
 
-    public List<Lane> getLanes() {
+    public List<LaneDescription> getLanes() {
         return mLanes;
     }
 

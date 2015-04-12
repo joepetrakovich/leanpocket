@@ -19,6 +19,7 @@ import com.appshroom.leanpocket.R;
 import com.appshroom.leanpocket.dto.BoardSettings;
 import com.appshroom.leanpocket.dto.Card;
 import com.appshroom.leanpocket.dto.Lane;
+import com.appshroom.leanpocket.dto.LaneDescription;
 import com.appshroom.leanpocket.fragments.CommentsFragment;
 import com.appshroom.leanpocket.fragments.ConfirmDeleteCardDialog;
 import com.appshroom.leanpocket.fragments.DetailsFragment;
@@ -52,7 +53,7 @@ public class CardDetailActivity extends FragmentActivity
     String mBoardId;
     BoardSettings mBoardSettings;
 
-    List<Lane> mLanes;
+    ArrayList<LaneDescription> mLanes;
 
     ConfirmDeleteCardDialog mDeleteDialog;
     SharedPreferences mSharedPreferences;
@@ -213,7 +214,7 @@ public class CardDetailActivity extends FragmentActivity
         editCardIntent.putExtra(Consts.BOARD_ID_EXTRA, mBoardId);
         editCardIntent.putExtra(Consts.EXISTING_CARD_EXTRA, mCard);
         editCardIntent.putExtra(Consts.BOARD_SETTINGS_EXTRA, mBoardSettings);
-        editCardIntent.putParcelableArrayListExtra(Consts.ALL_CHILD_LANES_EXTRA, new ArrayList<Lane>(mLanes));
+        editCardIntent.putParcelableArrayListExtra(Consts.ALL_CHILD_LANES_EXTRA, mLanes);
 
         startActivityForResult(editCardIntent, Consts.REQUEST_CODE_EDIT_EXISTING);
     }

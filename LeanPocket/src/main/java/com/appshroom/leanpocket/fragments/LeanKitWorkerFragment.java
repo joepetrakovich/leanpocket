@@ -485,7 +485,7 @@ public class LeanKitWorkerFragment extends Fragment {
             allCardHoldableLanes.addAll(orderedArchiveChildLanes);
 
             board.setAllOrderedChildLanes(allCardHoldableLanes);
-
+            board.setAllChildLaneNames(allCardHoldableLanes);
             board.setOrderedInFlightChildLanes(orderedInFlightChildLanes);
             board.setOrderedBacklogChildLanes(orderedBacklogChildLanes);
             board.setOrderedArchiveChildLanes(orderedArchiveChildLanes);
