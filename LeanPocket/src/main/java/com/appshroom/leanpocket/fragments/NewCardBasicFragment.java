@@ -606,7 +606,7 @@ public class NewCardBasicFragment extends Fragment {
 
         data.setExternalCardId( etExternalCardId.getText().toString() );
 
-        data.setLaneId(((Lane) mSpinnerLanes.getSelectedItem()).getId());
+        data.setLaneId(((LaneDescription) mSpinnerLanes.getSelectedItem()).getId());
 
         data.setAssignedUsers(mAssignedUsers);
 
