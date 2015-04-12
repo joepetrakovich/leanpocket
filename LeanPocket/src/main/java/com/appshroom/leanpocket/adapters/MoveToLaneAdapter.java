@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.appshroom.leanpocket.R;
 import com.appshroom.leanpocket.dto.Lane;
+import com.appshroom.leanpocket.dto.LaneDescription;
 import com.emilsjolander.components.stickylistheaders.StickyListHeadersAdapter;
 
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.List;
 /**
  * Created by jpetrakovich on 9/6/13.
  */
-public class MoveToLaneAdapter extends ArrayAdapter<Lane> implements StickyListHeadersAdapter {
+public class MoveToLaneAdapter extends ArrayAdapter<LaneDescription> implements StickyListHeadersAdapter {
 
 
     private Context mContext;
@@ -28,7 +29,7 @@ public class MoveToLaneAdapter extends ArrayAdapter<Lane> implements StickyListH
     String inflightName;
     String backlogName;
 
-    public MoveToLaneAdapter(Context context, List<Lane> items) {
+    public MoveToLaneAdapter(Context context, List<LaneDescription> items) {
         super(context, R.layout.move_to_lane_list_item, items);
 
         mContext = context;
@@ -55,7 +56,7 @@ public class MoveToLaneAdapter extends ArrayAdapter<Lane> implements StickyListH
             holder = (HeaderViewHolder) convertView.getTag();
         }
 
-        Lane lane = getItem(position);
+        LaneDescription lane = getItem(position);
 
         switch (lane.getBoardSectionType()) {
 
@@ -127,9 +128,9 @@ public class MoveToLaneAdapter extends ArrayAdapter<Lane> implements StickyListH
         }
 
 
-        Lane lane = getItem(position);
+        LaneDescription lane = getItem(position);
 
-        holder.laneName.setText(lane.toString());
+        holder.laneName.setText(lane.getName());
 
         return itemView;
     }
