@@ -3,6 +3,7 @@ package com.appshroom.leanpocket.fragments;
 import android.accounts.Account;
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -379,11 +380,15 @@ public class LeanKitWorkerFragment extends Fragment {
             @Override
             public void onSuccess(int replyCode, String replyText, List<Board> replyData) {
 
-                String userName = new SecurePreferences(getActivity()).getString(Consts.SHARED_PREFS_USER_NAME, "");
+                Context c = getActivity();
 
-                BoardData bd = new BoardData(replyData.get(0), userName);
+                if (c != null) {
+                    String userName = new SecurePreferences(getActivity()).getString(Consts.SHARED_PREFS_USER_NAME, "");
 
-                new StructureBoardTask().execute(bd);
+                    BoardData bd = new BoardData(replyData.get(0), userName);
+
+                    new StructureBoardTask().execute(bd);
+                }
             }
 
             @Override
@@ -480,7 +485,7 @@ public class LeanKitWorkerFragment extends Fragment {
             allCardHoldableLanes.addAll(orderedArchiveChildLanes);
 
             board.setAllOrderedChildLanes(allCardHoldableLanes);
-
+            board.setAllChildLaneNames(allCardHoldableLanes);
             board.setOrderedInFlightChildLanes(orderedInFlightChildLanes);
             board.setOrderedBacklogChildLanes(orderedBacklogChildLanes);
             board.setOrderedArchiveChildLanes(orderedArchiveChildLanes);

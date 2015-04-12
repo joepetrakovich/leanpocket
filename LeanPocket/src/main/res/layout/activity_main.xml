@@ -81,14 +81,6 @@
 
         </RelativeLayout>
 
-
-        <com.google.ads.AdView
-            android:id="@+id/adView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            ads:adUnitId="ca-app-pub-6985768594076587/1372250953"
-            ads:adSize="SMART_BANNER" />
-
     </LinearLayout>
 
 

@@ -20,7 +20,7 @@
 
     <style name="Theme.Leankit" parent="@android:style/Theme.Holo.Light.DarkActionBar">
         <item name="android:actionBarItemBackground">@drawable/selectable_background_leankit</item>
-        <item name="android:popupMenuStyle">@style/PopupMenu.Leankit</item>
+        <!--<item name="android:popupMenuStyle">@style/PopupMenu.Leankit</item>-->
         <item name="android:dropDownListViewStyle">@style/DropDownListView.Leankit</item>
         <item name="android:actionBarTabStyle">@style/ActionBarTabStyle.Leankit</item>
         <item name="android:actionDropDownStyle">@style/DropDownNav.Leankit</item>
@@ -67,9 +67,9 @@
         <item name="android:progressBarStyle">@style/ProgressBar.Leankit</item>
     </style>
 
-    <style name="PopupMenu.Leankit" parent="@android:style/Widget.Holo.Light.ListPopupWindow">
-        <item name="android:popupBackground">@drawable/menu_dropdown_panel_leankit</item>
-    </style>
+    <!--<style name="PopupMenu.Leankit" parent="@android:style/Widget.Holo.Light.ListPopupWindow">-->
+        <!--<item name="android:popupBackground">@drawable/menu_dropdown_panel_leankit</item>-->
+    <!--</style>-->
 
     <style name="DropDownListView.Leankit" parent="@android:style/Widget.Holo.Light.ListView.DropDown">
         <item name="android:listSelector">@drawable/selectable_background_leankit</item>
@@ -95,7 +95,7 @@
 
     <!-- this style is only referenced in a Light.DarkActionBar based theme -->
     <style name="Theme.Leankit.Widget" parent="@android:style/Theme.Holo">
-        <item name="android:popupMenuStyle">@style/PopupMenu.Leankit</item>
+        <!--<item name="android:popupMenuStyle">@style/PopupMenu.Leankit</item>-->
         <item name="android:dropDownListViewStyle">@style/DropDownListView.Leankit</item>
     </style>
 

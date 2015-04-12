@@ -34,9 +34,6 @@ import com.appshroom.leanpocket.api.retrofit.RetroLeanKitCallback;
 import com.appshroom.leanpocket.dto.Card;
 import com.appshroom.leanpocket.dto.Comment;
 import com.appshroom.leanpocket.helpers.Consts;
-import com.appshroom.leanpocket.helpers.IabHelper;
-import com.appshroom.leanpocket.helpers.IabResult;
-import com.appshroom.leanpocket.helpers.Purchase;
 import com.appshroom.leanpocket.helpers.SecurePreferences;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -74,31 +71,9 @@ public class CommentsFragment extends Fragment {
     SharedPreferences mSharedPreferences;
 
     EditText mCommentsTextInput;
-    IabHelper mBillingHelper;
     private Activity mHostActivity;
     FragmentReceiver mReceiver;
 
-    // Callback for when a purchase is finished
-    IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
-        public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
-
-            if (mBillingHelper == null) return;
-
-            if (result.isFailure()) {
-                return;
-            }
-
-            //Purchase success
-
-            if (purchase.getSku().equals(Consts.SKU_PREMIUM)) {
-                // bought the premium upgrade!
-                // alert("Thank you for upgrading to premium!");
-                mSharedPreferences.edit().putBoolean(Consts.SHARED_PREFS_IS_PREMIUM, true).apply();
-                updateUIForPremium();
-            }
-
-        }
-    };
 
     public static CommentsFragment newInstance(Card card, String boardId) {
 
@@ -119,7 +94,7 @@ public class CommentsFragment extends Fragment {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            updateUIForPremium();
+
         }
     }
 
@@ -127,7 +102,6 @@ public class CommentsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_card_comments, container, false);
-        mBillingHelper = ((CardDetailActivity) getActivity()).getBillingHelper();
 
         mCommentsListWrapper = v.findViewById(R.id.layout_comments_list_wrapper);
 
@@ -157,56 +131,14 @@ public class CommentsFragment extends Fragment {
         sendButton = (ImageButton) v.findViewById(R.id.btn_comment_send);
         sendButton.setOnClickListener(new OnSendButtonClickListener());
 
-        Button upgradeButton = (Button) v.findViewById(R.id.btn_upgrade);
-        upgradeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                String payload = "";
-
-                mBillingHelper.launchPurchaseFlow(getActivity(), Consts.SKU_PREMIUM, Consts.REQUEST_CODE_BILLING,
-                        mPurchaseFinishedListener, payload);
-
-            }
-        });
-
         pd = new ProgressDialog(getActivity());
         pd.setCancelable(true);
         pd.setIndeterminate(true);
 
-        veil = v.findViewById(R.id.layout_lock_veil);
-
-        if (mSharedPreferences.getBoolean(Consts.SHARED_PREFS_IS_PREMIUM, false)) {
-
-            veil.setVisibility(View.GONE);
-        } else {
-            veil.setVisibility(View.VISIBLE);
-            mCommentsList.setEnabled(false);
-            mCommentsTextInput.setEnabled(false);
-            sendButton.setEnabled(false);
-        }
-
-
         return v;
     }
 
-    private void updateUIForPremium() {
 
-        veil.setVisibility(View.GONE);
-        mCommentsList.setEnabled(true);
-        mCommentsTextInput.setEnabled(true);
-        sendButton.setEnabled(true);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        if (mSharedPreferences.getBoolean(Consts.SHARED_PREFS_IS_PREMIUM, false)) {
-
-            updateUIForPremium();
-        }
-    }
 
     @Override
     public void onAttach(Activity activity) {

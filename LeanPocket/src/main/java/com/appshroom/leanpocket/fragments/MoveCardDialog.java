@@ -18,6 +18,7 @@ import com.appshroom.leanpocket.api.retrofit.RetroLeanKitApi;
 import com.appshroom.leanpocket.api.retrofit.RetroLeanKitCallback;
 import com.appshroom.leanpocket.dto.Card;
 import com.appshroom.leanpocket.dto.Lane;
+import com.appshroom.leanpocket.dto.LaneDescription;
 import com.appshroom.leanpocket.helpers.Consts;
 import com.emilsjolander.components.stickylistheaders.StickyListHeadersListView;
 import com.google.gson.JsonObject;
@@ -47,7 +48,7 @@ public class MoveCardDialog extends DialogFragment {
 
     OnMoveCardDialogChoiceListener mChoiceListener;
     RetroLeanKitApi mRetroLeanKitApi;
-    Lane mSelectedLane;
+    LaneDescription mSelectedLane;
     int mPosition;
     ProgressDialog pd;
 
@@ -70,7 +71,7 @@ public class MoveCardDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        List<Lane> lanes = getArguments().getParcelableArrayList(Consts.MOVE_CARD_DIALOG_ARGS_LANES);
+        List<LaneDescription> lanes = getArguments().getParcelableArrayList(Consts.MOVE_CARD_DIALOG_ARGS_LANES);
 
 
         View customStickyView = ((Activity) mChoiceListener).getLayoutInflater().inflate(R.layout.move_to_dialog_sticky_list, null);
@@ -82,7 +83,7 @@ public class MoveCardDialog extends DialogFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                mSelectedLane = (Lane) parent.getItemAtPosition(position);
+                mSelectedLane = (LaneDescription) parent.getItemAtPosition(position);
                 moveCard();
 
             }
@@ -133,7 +134,7 @@ public class MoveCardDialog extends DialogFragment {
     }
 
 
-    public static MoveCardDialog newInstance(String boardId, Card card, ArrayList<Lane> lanes) {
+    public static MoveCardDialog newInstance(String boardId, Card card, ArrayList<LaneDescription> lanes) {
 
         MoveCardDialog frag = new MoveCardDialog();
         Bundle args = new Bundle();

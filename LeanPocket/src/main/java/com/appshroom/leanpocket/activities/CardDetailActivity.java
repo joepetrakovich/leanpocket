@@ -17,19 +17,13 @@ import android.view.MenuItem;
 
 import com.appshroom.leanpocket.R;
 import com.appshroom.leanpocket.dto.BoardSettings;
-import com.appshroom.leanpocket.dto.BoardUser;
 import com.appshroom.leanpocket.dto.Card;
-import com.appshroom.leanpocket.dto.CardType;
-import com.appshroom.leanpocket.dto.ClassOfService;
 import com.appshroom.leanpocket.dto.Lane;
+import com.appshroom.leanpocket.dto.LaneDescription;
 import com.appshroom.leanpocket.fragments.CommentsFragment;
 import com.appshroom.leanpocket.fragments.ConfirmDeleteCardDialog;
 import com.appshroom.leanpocket.fragments.DetailsFragment;
 import com.appshroom.leanpocket.helpers.Consts;
-import com.appshroom.leanpocket.helpers.IabHelper;
-import com.appshroom.leanpocket.helpers.IabResult;
-import com.appshroom.leanpocket.helpers.Inventory;
-import com.appshroom.leanpocket.helpers.Purchase;
 import com.appshroom.leanpocket.helpers.SecurePreferences;
 
 import java.util.ArrayList;
@@ -59,9 +53,8 @@ public class CardDetailActivity extends FragmentActivity
     String mBoardId;
     BoardSettings mBoardSettings;
 
-    List<Lane> mLanes;
+    ArrayList<LaneDescription> mLanes;
 
-    IabHelper mBillingHelper;
     ConfirmDeleteCardDialog mDeleteDialog;
     SharedPreferences mSharedPreferences;
 
@@ -72,7 +65,6 @@ public class CardDetailActivity extends FragmentActivity
 
         mSharedPreferences = new SecurePreferences(this);
 
-        manageInAppBilling();
 
         Intent intent = getIntent();
 
@@ -148,35 +140,13 @@ public class CardDetailActivity extends FragmentActivity
         return true;
     }
 
-    public IabHelper getBillingHelper() {
-        return mBillingHelper;
-    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
 
-        if (mBillingHelper != null) {
-            mBillingHelper.dispose();
-            mBillingHelper = null;
-        }
     }
 
-    private void manageInAppBilling() {
-
-        mBillingHelper = new IabHelper(this, mSharedPreferences.getString(Consts.SHARED_PREFS_K, ""));
-
-        // Start setup. This is asynchronous and the specified listener
-        // will be called once setup completes.
-
-        mBillingHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
-            public void onIabSetupFinished(IabResult result) {
-
-
-            }
-        });
-
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -244,18 +214,13 @@ public class CardDetailActivity extends FragmentActivity
         editCardIntent.putExtra(Consts.BOARD_ID_EXTRA, mBoardId);
         editCardIntent.putExtra(Consts.EXISTING_CARD_EXTRA, mCard);
         editCardIntent.putExtra(Consts.BOARD_SETTINGS_EXTRA, mBoardSettings);
-        editCardIntent.putParcelableArrayListExtra(Consts.ALL_CHILD_LANES_EXTRA, new ArrayList<Lane>(mLanes));
+        editCardIntent.putParcelableArrayListExtra(Consts.ALL_CHILD_LANES_EXTRA, mLanes);
 
         startActivityForResult(editCardIntent, Consts.REQUEST_CODE_EDIT_EXISTING);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        if (!mBillingHelper.handleActivityResult(requestCode, resultCode, data)) {
-            // not handled, so handle it ourselves (here's where you'd
-            // perform any handling of activity results not related to in-app
-            // billing..
 
 
             switch (requestCode) {
@@ -270,53 +235,10 @@ public class CardDetailActivity extends FragmentActivity
 
                     break;
 
-                case Consts.REQUEST_CODE_BILLING:
-                    //A billing dialog was exited after a rotation
-                    checkForPremiumPurchase();
-                    break;
 
             }
-
-        }
     }
 
-    private void checkForPremiumPurchase() {
-
-        mBillingHelper.queryInventoryAsync(mGotInventoryListener);
-
-    }
-
-    // Listener that's called when we finish querying the items and subscriptions we own
-    IabHelper.QueryInventoryFinishedListener mGotInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
-        public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
-
-            if (mBillingHelper == null) return;
-
-            if (result.isFailure()) {
-
-                return;
-            }
-
-            /*
-             * Check for items we own. Notice that for each purchase, we check
-             * the developer payload to see if it's correct! See
-             * verifyDeveloperPayload().
-             */
-
-            // Do we have the premium upgrade?
-            Purchase premiumPurchase = inventory.getPurchase(Consts.SKU_PREMIUM);
-            boolean mIsPremium = (premiumPurchase != null);
-
-            mSharedPreferences.edit().putBoolean(Consts.SHARED_PREFS_IS_PREMIUM, mIsPremium).apply();
-
-            if (mIsPremium) {
-
-                Intent purchaseFoundIntent = new Intent(Consts.INTENT_FILTER_PREM_PURCHASE);
-                sendBroadcast(purchaseFoundIntent);
-            }
-
-        }
-    };
 
     public void showDeleteCardsDialog(List<Card> cardsToBeDeleted) {
 

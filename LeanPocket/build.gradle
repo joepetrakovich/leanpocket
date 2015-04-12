@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.12.+'
+        classpath 'com.android.tools.build:gradle:1.1.0'
     }
 }
 apply plugin: 'android'
@@ -35,7 +35,6 @@ dependencies {
     compile('de.keyboardsurfer.android.widget:crouton:1.8.1') {
         exclude group: 'com.google.android'
     }
-    compile files('libs/GoogleAdMobAdsSdk-6.4.1.jar')
     compile files('libs/com.haarman.listviewanimations-2.4.0.jar')
 }
 
@@ -51,7 +50,7 @@ android {
 
     buildTypes {
         release {
-            runProguard true
+            minifyEnabled true
             proguardFile file('proguard-android.txt')
             signingConfig signingConfigs.releaseConfig
         }
