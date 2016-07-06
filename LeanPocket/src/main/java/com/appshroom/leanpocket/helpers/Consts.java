@@ -53,7 +53,7 @@ public final class Consts {
     public static final String LANE_LIST_EXTRAS = "LANE_LIST_EXTRAS";
 
     public static final String HTTPS_URL_PREFIX = "https://";
-    public static final String API_URL_SUFFIX = ".leankitkanban.com/Kanban/Api/";
+    public static final String API_URL_SUFFIX = ".leankit.com/Kanban/Api/";
     public static final String LEANKIT_LOGIN_SEARCH_URL_PREFIX = "https://login.leankit.com/Account/Membership";
 
     public static final String PATH_TO_BLOCKED_ICON_AFTER_HOST = ".leankitkanban.com/Content/Images/Icons/Library/blocked.png";
@@ -79,7 +79,7 @@ public final class Consts {
     public static final String TITLE_ARGS = "titles";
     public static final String CONTENT_ARGS = "contents";
     public static final String DIALOG_TITLE_ARG = "title";
-    public static final String HELP_PAGE_URL = "http://www.appshroom.com/leanpocket/help.html";
+    public static final String HELP_PAGE_URL = "http://www.joepetrakovich.com/leanpocket/help.html";
     public static final String SKU_PREMIUM = "prem100";
     public static final String INTENT_FILTER_PREM_PURCHASE = "premium_purchase";
     public static final String COLOR_FIELD_CLASS_OF_SERVICE = "ClassOfService";
