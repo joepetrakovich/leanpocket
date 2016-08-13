@@ -766,7 +766,7 @@ public class MainActivity extends Activity
         mEmptyView.setText(getString(R.string.empty_card_list));
 
         mLanesHeaderSpinner.setVisibility(View.VISIBLE);
-        mLanesHeaderSpinner.setAlpha(1);
+      //  mLanesHeaderSpinner.setAlpha(1f);
         mLanesHeaderSpinnerAdapter.clear();
         mLanesHeaderSpinnerAdapter.addAll(lanes);
         mLanesHeaderSpinnerAdapter.notifyDataSetChanged();
@@ -1067,23 +1067,9 @@ public class MainActivity extends Activity
 
         if (mProgressLoading.getVisibility() != View.VISIBLE) {
 
-            mProgressLoading.setAlpha(0);
             mProgressLoading.setVisibility(View.VISIBLE);
+            mLanesHeaderSpinner.setVisibility(View.INVISIBLE);
 
-            mProgressLoading.animate()
-                    .alpha(1f)
-                    .setDuration(mLongAnimationDuration)
-                    .setListener(null);
-
-            mLanesHeaderSpinner.animate()
-                    .alpha(0f)
-                    .setDuration(mLongAnimationDuration)
-                    .setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            mLanesHeaderSpinner.setVisibility(View.GONE);
-                        }
-                    });
 
             mProgressLoadingDisplayed = true;
 
@@ -1094,25 +1080,10 @@ public class MainActivity extends Activity
 
     private void hideLoadingProgress() {
 
-        if (mActiveBoard != null) {
 
-            mLanesHeaderSpinner.setVisibility(View.VISIBLE);
+        mLanesHeaderSpinner.setVisibility(View.VISIBLE);
+        mProgressLoading.setVisibility(View.GONE);
 
-            mLanesHeaderSpinner.animate()
-                    .alpha(1f)
-                    .setDuration(mLongAnimationDuration)
-                    .setListener(null);
-        }
-
-        mProgressLoading.animate()
-                .alpha(0f)
-                .setDuration(mLongAnimationDuration)
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        mProgressLoading.setVisibility(View.GONE);
-                    }
-                });
 
         mProgressLoadingDisplayed = false;
 
