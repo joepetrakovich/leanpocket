@@ -39,7 +39,7 @@ import retrofit.converter.GsonConverter;
         // Your usual ACRA configuration
         mode = ReportingInteractionMode.DIALOG,
         resDialogText = R.string.crash_dialog_text,
-        resDialogIcon = R.drawable.ic_launcher,
+        resDialogIcon = R.mipmap.ic_launcher,
         resDialogTitle = R.string.crash_dialog_title,
         resDialogOkToast = R.string.crash_dialog_ok_toast
 
