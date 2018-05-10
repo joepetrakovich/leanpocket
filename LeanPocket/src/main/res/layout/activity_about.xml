@@ -94,5 +94,17 @@
             android:onClick="onOpenSourceLicensesClick"
             android:textStyle="bold" />
 
+        <TextView
+            android:background="@drawable/about_link_selector"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/privacy_policy"
+            android:clickable="true"
+            android:textAppearance="@android:style/TextAppearance.Small"
+            android:id="@+id/btn_privacy_policy"
+            android:padding="8dp"
+            android:onClick="onPrivacyPolicyClick"
+            android:textStyle="bold" />
+
     </LinearLayout>
 </ScrollView>

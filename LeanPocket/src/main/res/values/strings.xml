@@ -309,6 +309,7 @@
     <string name="rate_application"><u>Rate application</u></string>
     <string name="app_slogan">LeanPocket \u2014 Your kanban board, in your pocket.</string>
     <string name="open_source_licenses"><u>Open source licenses</u></string>
+    <string name="privacy_policy"><u>Privacy policy</u></string>
     <string name="close">Close</string>
     <string name="open_source_licenses_dialog_title">Licenses</string>
     <string name="action_upgrade">Upgrade/Remove ads</string>
