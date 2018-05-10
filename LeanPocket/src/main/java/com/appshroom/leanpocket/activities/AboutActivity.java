@@ -1,7 +1,9 @@
 package com.appshroom.leanpocket.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
@@ -60,6 +62,13 @@ public class AboutActivity extends Activity {
                 getResources().getStringArray(R.array.open_source_license_titles), getResources().getStringArray(R.array.open_source_licenses));
 
         openSourceInfoDialogFragment.show(getFragmentManager(), "openSource");
+    }
+
+    public void onPrivacyPolicyClick(View v) {
+
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://joe.ptrkv.ch/things/leanpocket-privacy-policy/"));
+        startActivity(browserIntent);
+
     }
 
     /**
