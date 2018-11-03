@@ -7,7 +7,12 @@
         android:orderInCategory="97"
         android:showAsAction="ifRoom" />
 
-
+    <item
+        android:id="@+id/action_set_starting_lane"
+        android:title="@string/action_set_starting_lane"
+        android:icon="@drawable/ic_action_add"
+        android:orderInCategory="97"
+        android:showAsAction="never" />
     <item
         android:id="@+id/action_single_column_view"
         android:title="@string/action_single_column_view"

@@ -7,8 +7,6 @@ import android.accounts.AccountManagerFuture;
 import android.accounts.AuthenticatorException;
 import android.accounts.OnAccountsUpdateListener;
 import android.accounts.OperationCanceledException;
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
@@ -53,15 +51,20 @@ import com.appshroom.leanpocket.fragments.MoveCardDialog;
 import com.appshroom.leanpocket.helpers.Consts;
 import com.appshroom.leanpocket.helpers.SecurePreferences;
 import com.emilsjolander.components.stickylistheaders.StickyListHeadersListView;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.haarman.listviewanimations.swinginadapters.prepared.SwingBottomInAnimationAdapter;
 
 import org.apache.http.HttpStatus;
 import org.codechimp.apprater.AppRater;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.LifecycleCallback;
@@ -115,6 +118,8 @@ public class MainActivity extends Activity
     private String mLastUsedAccount;
     private List<Card> mSelectedCards;
     private boolean mSingleColumnMode;
+    private Map<String, String> mDefaultLaneMap;
+    private Gson gson;
 
     private boolean mAnimateCards;
 
@@ -132,6 +137,7 @@ public class MainActivity extends Activity
     private LeanKitWorkerFragment mLeanKitWorker;
     private ProgressDialog pd;
     private ActionMode mCAB;
+    private Menu mMenu;
 
     private int mLongAnimationDuration;
 
@@ -227,11 +233,20 @@ public class MainActivity extends Activity
         mLastUsedAccount = mSharedPreferences.getString(Consts.SHARED_PREFS_LAST_USED_ACCOUNT, "");
         mSingleColumnMode = mSharedPreferences.getBoolean(Consts.SHARED_PREFS_SINGLE_COL_MODE, false);
 
+        String serializedDefaultLaneMap = mSharedPreferences.getString(Consts.SHARED_PREFS_DEFAULT_LANE_MAP, "");
+        gson = new Gson();
+
+        if (serializedDefaultLaneMap != ""){
+            Type stringStringMap = new TypeToken<Map<String, String>>(){}.getType();
+            mDefaultLaneMap = gson.fromJson(serializedDefaultLaneMap, stringStringMap);
+        } else {
+            mDefaultLaneMap = new HashMap<String, String>();
+        }
+
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         mAnimateCards = settings.getBoolean(Consts.SHARED_PREFS_ANIMATE_CARDS, true);
         mAutoLoadLastBoard = settings.getBoolean(Consts.SHARED_PREFS_AUTO_LOAD, true);
         mShowArchivedBoards = settings.getBoolean(Consts.SHARED_PREFS_SHOW_ARCHIVED_BOARDS, false);
-
 
     }
 
@@ -253,6 +268,8 @@ public class MainActivity extends Activity
                     mActiveLaneSpinnerSelection = position;
 
                     Lane selectedLane = (Lane) parent.getSelectedItem();
+
+                    SetDefaultLaneMenuItemTitle(selectedLane);
 
                     mCardListAdapter.clear();
                     mCardListAdapter.addAll(selectedLane.getCards());
@@ -417,6 +434,21 @@ public class MainActivity extends Activity
         initProgressLoading();
         initErrorCroutonLayout();
 
+    }
+
+    private void SetDefaultLaneMenuItemTitle(Lane selectedLane) {
+        MenuItem setStartingLaneMenuItem = mMenu.findItem(R.id.action_set_starting_lane);
+
+        if (mActiveBoard != null) {
+
+            String key = mActiveBoard.getId();
+
+            if (mDefaultLaneMap.containsKey(key) && mDefaultLaneMap.get(key).equals(selectedLane.getId())) {
+                setStartingLaneMenuItem.setTitle("Remove default starting lane");
+            } else {
+                setStartingLaneMenuItem.setTitle("Use current lane as starting lane");
+            }
+        }
     }
 
     private void setCABTitle(int numSelected) {
@@ -715,6 +747,17 @@ public class MainActivity extends Activity
         invalidateOptionsMenu();
     }
 
+    private String getDefaultLaneId() {
+
+        if (mDefaultLaneMap != null){
+            if (mDefaultLaneMap.containsKey(mActiveBoard.getId())){
+                return mDefaultLaneMap.get(mActiveBoard.getId());
+            }
+        }
+
+        return "";
+    }
+
     private void activateBoardInNavDrawer() {
 
         for (GetBoardsBoard board : mAvailableGetBoardsBoards) {
@@ -771,9 +814,25 @@ public class MainActivity extends Activity
         mLanesHeaderSpinnerAdapter.addAll(lanes);
         mLanesHeaderSpinnerAdapter.notifyDataSetChanged();
 
+        String defaultLaneId = getDefaultLaneId();
+
+        if (defaultLaneId != "") {
+            for (int i = 0; i < lanes.size(); i++) {
+
+                if (lanes.get(i).getId().equals(defaultLaneId)) {
+                    mActiveLaneSpinnerSelection = i;
+                    break;
+                }
+            }
+        }
+
         mLanesHeaderSpinner.setSelection(mActiveLaneSpinnerSelection, false);
 
-        setVisibleCardsToAdapter( ((Lane) mLanesHeaderSpinner.getSelectedItem()).getCards() );
+        Lane selectedLane = (Lane) mLanesHeaderSpinner.getSelectedItem();
+
+        SetDefaultLaneMenuItemTitle(selectedLane);
+
+        setVisibleCardsToAdapter( selectedLane.getCards() );
 
     }
 
@@ -1441,6 +1500,9 @@ public class MainActivity extends Activity
         menu.findItem(R.id.action_filter_default).setVisible(mIsFiltered && !drawerOpen && mActiveBoard!=null);
         menu.findItem(R.id.action_filter_assigned_to_me).setVisible( !mIsFiltered && !drawerOpen && mActiveBoard!=null && !(mBacklogSection.isActive() || mArchiveSection.isActive())  );
 
+        MenuItem setStartingLaneMenuItem = menu.findItem(R.id.action_set_starting_lane);
+        setStartingLaneMenuItem.setVisible( !mIsFiltered && !drawerOpen && mActiveBoard!=null && !(mBacklogSection.isActive() || mArchiveSection.isActive())  );
+
         menu.findItem(R.id.action_new_card).setVisible(!drawerOpen && mActiveBoard!=null);
         menu.findItem(R.id.action_refresh).setVisible(!drawerOpen && mActiveBoard!=null);
 
@@ -1451,6 +1513,7 @@ public class MainActivity extends Activity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+        mMenu = menu;
         return true;
     }
 
@@ -1467,6 +1530,10 @@ public class MainActivity extends Activity
 
             case R.id.action_new_card:
                 beginNewCard();
+                return true;
+
+            case R.id.action_set_starting_lane:
+                setOrClearActiveLaneAsStartingLane();
                 return true;
 
             case R.id.action_single_column_view:
@@ -1516,7 +1583,28 @@ public class MainActivity extends Activity
         mFilterTitle.setVisibility(View.VISIBLE);
         mEmptyView.setText(getString(R.string.no_assigned_cards));
 
+    }
 
+    private void setOrClearActiveLaneAsStartingLane(){
+
+        Lane activeLane = (Lane) mLanesHeaderSpinner.getItemAtPosition(mActiveLaneSpinnerSelection);
+
+        if (activeLane != null){
+
+            String key = mActiveBoard.getId();
+            String value = activeLane.getId();
+
+            if (mDefaultLaneMap.containsKey(key) && mDefaultLaneMap.get(key).equals(value)){
+                mDefaultLaneMap.put(key, "");
+            } else {
+                mDefaultLaneMap.put(mActiveBoard.getId(), activeLane.getId());
+            }
+
+            String serializedDefaultLaneMap = gson.toJson(mDefaultLaneMap);
+            mSharedPreferences.edit().putString(Consts.SHARED_PREFS_DEFAULT_LANE_MAP, serializedDefaultLaneMap).apply();
+
+            SetDefaultLaneMenuItemTitle(activeLane);
+        }
     }
 
 

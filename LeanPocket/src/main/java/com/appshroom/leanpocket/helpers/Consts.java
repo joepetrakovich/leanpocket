@@ -37,6 +37,8 @@ public final class Consts {
     public static final String SHARED_PREFS_LAST_USED_ACCOUNT = "last_used_account";
     public static final String SHARED_PREFS_LAST_USED_BOARD_ID = "last_used_board_id";
 
+    public static final String SHARED_PREFS_DEFAULT_LANE_MAP = "default_lane_map";
+
     public static final String SHARED_PREFS_ANIMATE_CARDS = "animate_cards_key";
     public static final String SHARED_PREFS_KEEP_FORMAT = "keep_format_key";
     public static final String SHARED_PREFS_CARD_POSITION = "card_position_key";
