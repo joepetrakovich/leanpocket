@@ -38,7 +38,6 @@ import com.appshroom.leanpocket.helpers.SecurePreferences;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
-import org.acra.ACRA;
 import org.apache.http.HttpStatus;
 
 import java.util.ArrayList;
@@ -178,10 +177,6 @@ public class CommentsFragment extends Fragment {
     private void refreshCommentList() {
 
         showProgress();
-
-        ACRA.getErrorReporter().putCustomData("mBoardId during refreshCommentsList", mBoardId);
-        ACRA.getErrorReporter().putCustomData("mCard during refreshCommentsList", new Gson().toJson(mCard));
-        ACRA.getErrorReporter().putCustomData("mRetroLeanKitApi during refreshCommentsList", mRetroLeanKitApi==null ? "isNull" : "is not null");
 
         mRetroLeanKitApi.getComments(mBoardId, mCard.getId(), new RetroLeanKitCallback<List<Comment>>() {
 

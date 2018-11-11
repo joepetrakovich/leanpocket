@@ -2,41 +2,48 @@ buildscript {
     repositories {
         mavenCentral()
         jcenter()
+        maven {
+            url 'https://maven.google.com/'
+            name 'Google'
+        }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.2'
+        classpath 'com.android.tools.build:gradle:3.2.1'
     }
 }
-apply plugin: 'android'
+apply plugin: 'com.android.application'
 
 repositories {
-    mavenCentral()
+    jcenter()
+    maven {
+        url 'https://maven.google.com/'
+        name 'Google'
+    }
 }
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion '24.0.1'
-
+    compileSdkVersion 26
+    buildToolsVersion '28.0.3'
+    useLibrary 'org.apache.http.legacy'
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 19
+        targetSdkVersion 26
     }
 }
 
 dependencies {
-    compile 'com.google.code.gson:gson:2.2.4'
-    compile 'com.nineoldandroids:library:2.4.0'
-    compile 'com.android.support:support-v4:19.0.+'
-    compile 'com.github.codechimp-org.apprater:library:1.0.+'
-    compile 'ch.acra:acra:4.5.0'
-    compile 'com.squareup.okhttp:okhttp:2.0.0'
-    compile 'com.squareup.okhttp:okhttp-urlconnection:2.0.0'
-    compile 'com.squareup.retrofit:retrofit:1.6.1'
-    compile 'com.squareup.picasso:picasso:2.3.2'
-    compile('de.keyboardsurfer.android.widget:crouton:1.8.1') {
+    api 'com.google.code.gson:gson:2.2.4'
+    api 'com.nineoldandroids:library:2.4.0'
+    api 'com.android.support:support-v4:26.1.0'
+    api 'com.github.codechimp-org.apprater:library:1.0.+'
+    api 'com.squareup.okhttp:okhttp:2.0.0'
+    api 'com.squareup.okhttp:okhttp-urlconnection:2.0.0'
+    api 'com.squareup.retrofit:retrofit:1.6.1'
+    api 'com.squareup.picasso:picasso:2.3.2'
+    api('de.keyboardsurfer.android.widget:crouton:1.8.1') {
         exclude group: 'com.google.android'
     }
-    compile files('libs/com.haarman.listviewanimations-2.4.0.jar')
+    api files('libs/com.haarman.listviewanimations-2.4.0.jar')
 }
 
 android {
