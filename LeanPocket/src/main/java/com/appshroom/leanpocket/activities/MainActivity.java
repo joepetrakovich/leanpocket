@@ -269,7 +269,7 @@ public class MainActivity extends Activity
 
                     Lane selectedLane = (Lane) parent.getSelectedItem();
 
-                    SetDefaultLaneMenuItemTitle(selectedLane);
+                    invalidateOptionsMenu();
 
                     mCardListAdapter.clear();
                     mCardListAdapter.addAll(selectedLane.getCards());
@@ -437,6 +437,11 @@ public class MainActivity extends Activity
     }
 
     private void SetDefaultLaneMenuItemTitle(Lane selectedLane) {
+
+        if (mMenu == null){
+
+        }
+
         MenuItem setStartingLaneMenuItem = mMenu.findItem(R.id.action_set_starting_lane);
 
         if (mActiveBoard != null) {
@@ -829,8 +834,6 @@ public class MainActivity extends Activity
         mLanesHeaderSpinner.setSelection(mActiveLaneSpinnerSelection, false);
 
         Lane selectedLane = (Lane) mLanesHeaderSpinner.getSelectedItem();
-
-        SetDefaultLaneMenuItemTitle(selectedLane);
 
         setVisibleCardsToAdapter( selectedLane.getCards() );
 
@@ -1501,7 +1504,17 @@ public class MainActivity extends Activity
         menu.findItem(R.id.action_filter_assigned_to_me).setVisible( !mIsFiltered && !drawerOpen && mActiveBoard!=null && !(mBacklogSection.isActive() || mArchiveSection.isActive())  );
 
         MenuItem setStartingLaneMenuItem = menu.findItem(R.id.action_set_starting_lane);
-        setStartingLaneMenuItem.setVisible( !mIsFiltered && !drawerOpen && mActiveBoard!=null && !(mBacklogSection.isActive() || mArchiveSection.isActive())  );
+
+        if (!mIsFiltered && !drawerOpen && mActiveBoard!=null && !(mBacklogSection.isActive() || mArchiveSection.isActive())){
+
+            setStartingLaneMenuItem.setVisible(true);
+
+            Lane selectedLane = (Lane) mLanesHeaderSpinner.getSelectedItem();
+            SetDefaultLaneMenuItemTitle(selectedLane);
+
+        } else {
+           setStartingLaneMenuItem.setVisible(false);
+        }
 
         menu.findItem(R.id.action_new_card).setVisible(!drawerOpen && mActiveBoard!=null);
         menu.findItem(R.id.action_refresh).setVisible(!drawerOpen && mActiveBoard!=null);
@@ -1603,7 +1616,7 @@ public class MainActivity extends Activity
             String serializedDefaultLaneMap = gson.toJson(mDefaultLaneMap);
             mSharedPreferences.edit().putString(Consts.SHARED_PREFS_DEFAULT_LANE_MAP, serializedDefaultLaneMap).apply();
 
-            SetDefaultLaneMenuItemTitle(activeLane);
+            invalidateOptionsMenu();
         }
     }
 
