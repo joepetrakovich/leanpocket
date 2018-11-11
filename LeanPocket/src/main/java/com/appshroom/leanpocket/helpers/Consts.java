@@ -81,8 +81,7 @@ public final class Consts {
     public static final String TITLE_ARGS = "titles";
     public static final String CONTENT_ARGS = "contents";
     public static final String DIALOG_TITLE_ARG = "title";
-    public static final String HELP_PAGE_URL = "http://www.joepetrakovich.com/leanpocket/help.html";
-    public static final String SKU_PREMIUM = "prem100";
+    public static final String HELP_PAGE_URL = "https://joe.ptrkv.ch/things/leanpocket-help.html";
     public static final String INTENT_FILTER_PREM_PURCHASE = "premium_purchase";
     public static final String COLOR_FIELD_CLASS_OF_SERVICE = "ClassOfService";
     public static final String COLOR_FIELD_CARD_TYPE = "CardType";

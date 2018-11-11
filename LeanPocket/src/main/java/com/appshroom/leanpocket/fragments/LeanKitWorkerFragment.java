@@ -32,7 +32,6 @@ import com.appshroom.leanpocket.helpers.SecurePreferences;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
-import org.acra.ACRA;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -454,17 +453,6 @@ public class LeanKitWorkerFragment extends Fragment {
             Board board = params[0].board;
             String userName = params[0].userName;
 
-            ACRA.getErrorReporter().putCustomData("board", gson.toJson(board));
-
-
-            //Temp
-
-            //   String bd = readTxt();
-
-            //  board = gson.fromJson(bd, Board.class);
-
-            //End Temp
-
             BoardHelpers.treeifyBoard(board);
 
             BoardHelpers.applyContextualLaneNames("", board.getTreeifiedLanes());
@@ -651,8 +639,6 @@ public class LeanKitWorkerFragment extends Fragment {
         protected List<Lane> doInBackground(LeanKitTreeifiedLane... params) {
 
             LeanKitTreeifiedLane archive = params[0];
-
-            ACRA.getErrorReporter().putCustomData("archive", gson.toJson(archive));
 
             BoardHelpers.applyContextualLaneNamesToArchive("", Arrays.asList(archive));
 

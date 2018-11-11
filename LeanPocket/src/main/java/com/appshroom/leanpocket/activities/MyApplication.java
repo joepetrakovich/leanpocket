@@ -1,49 +1,21 @@
 package com.appshroom.leanpocket.activities;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.util.Base64;
 
-import com.appshroom.leanpocket.R;
 import com.appshroom.leanpocket.api.retrofit.RetroLeanKitApi;
 import com.appshroom.leanpocket.helpers.Consts;
 import com.appshroom.leanpocket.helpers.SecurePreferences;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.GsonBuilder;
 
-import org.acra.ACRA;
-import org.acra.ReportingInteractionMode;
-import org.acra.annotation.ReportsCrashes;
-
-import java.util.Arrays;
-import java.util.List;
 
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 import retrofit.converter.GsonConverter;
 
 
-/**
- * Created by jpetrakovich on 8/9/13.
- */
-
-@ReportsCrashes(
-        formKey = "",
-        formUri = "https://appshroom.cloudant.com/acra-leanpocket/_design/acra-storage/_update/report",
-        reportType = org.acra.sender.HttpSender.Type.JSON,
-        httpMethod = org.acra.sender.HttpSender.Method.PUT,
-        formUriBasicAuthLogin = "andayousevilectichadvine",
-        formUriBasicAuthPassword = "bLaAsNjNvT4NburLrPXR1uJn",
-        // Your usual ACRA configuration
-        mode = ReportingInteractionMode.DIALOG,
-        resDialogText = R.string.crash_dialog_text,
-        resDialogIcon = R.mipmap.ic_launcher,
-        resDialogTitle = R.string.crash_dialog_title,
-        resDialogOkToast = R.string.crash_dialog_ok_toast
-
-)
 public class MyApplication extends Application {
 
 
@@ -55,8 +27,6 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
-        ACRA.init(this);
 
     }
 
