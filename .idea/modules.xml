@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/LeanPocket/LeanPocket.iml" filepath="$PROJECT_DIR$/LeanPocket/LeanPocket.iml" />
-      <module fileurl="file://$PROJECT_DIR$/leanpocket.iml" filepath="$PROJECT_DIR$/leanpocket.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LeanPocket/LeanPocket.iml" filepath="$PROJECT_DIR$/LeanPocket/LeanPocket.iml" group="leanpocket/LeanPocket" />
+      <module fileurl="file://$PROJECT_DIR$/leanpocket.iml" filepath="$PROJECT_DIR$/leanpocket.iml" group="leanpocket" />
     </modules>
   </component>
 </project>

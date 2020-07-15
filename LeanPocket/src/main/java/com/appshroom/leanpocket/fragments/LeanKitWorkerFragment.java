@@ -7,13 +7,13 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Parcel;
-import android.os.Parcelable;
 
 import com.appshroom.leanpocket.R;
 import com.appshroom.leanpocket.activities.MyApplication;
 import com.appshroom.leanpocket.adapters.BoardSection;
 import com.appshroom.leanpocket.api.retrofit.RetroLeanKitApi;
+import com.appshroom.leanpocket.api.retrofit.RetroLeanKitApiV2;
+import com.appshroom.leanpocket.api.retrofit.RetroLeanKitApiV2Callback;
 import com.appshroom.leanpocket.api.retrofit.RetroLeanKitCallback;
 import com.appshroom.leanpocket.dto.Board;
 import com.appshroom.leanpocket.dto.BoardSettings;
@@ -25,13 +25,14 @@ import com.appshroom.leanpocket.dto.DeleteCardsReplyData;
 import com.appshroom.leanpocket.dto.GetBoardsBoard;
 import com.appshroom.leanpocket.dto.Lane;
 import com.appshroom.leanpocket.dto.LeanKitTreeifiedLane;
+import com.appshroom.leanpocket.dto.v2.ListBoardsBoard;
+import com.appshroom.leanpocket.dto.v2.ListBoardsResponse;
 import com.appshroom.leanpocket.helpers.BoardHelpers;
 import com.appshroom.leanpocket.helpers.Consts;
 import com.appshroom.leanpocket.helpers.GravatarHelpers;
 import com.appshroom.leanpocket.helpers.SecurePreferences;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -51,7 +52,7 @@ public class LeanKitWorkerFragment extends Fragment {
 
     public interface LeanKitWorkerListener {
 
-        public void onBoardsRetrieved(List<GetBoardsBoard> boards);
+        public void onBoardsRetrieved(List<ListBoardsBoard> boards);
 
         public void onGetBoardsRetrofitError(RetrofitError error);
 
@@ -79,10 +80,11 @@ public class LeanKitWorkerFragment extends Fragment {
 
     LeanKitWorkerListener mLeanKitWorkerListener;
     RetroLeanKitApi mRetroLeanKitApi;
+    RetroLeanKitApiV2 mRetroLeanKitApiV2;
 
     //retained activity objects
 
-    List<GetBoardsBoard> mLastRetrievedBoards;
+    List<ListBoardsBoard> mLastRetrievedBoards;
     List<Lane> mLastRetrievedArchive;
     Board mLastActiveBoard;
     int mLastActiveLaneSpinnerSelection;
@@ -233,11 +235,11 @@ public class LeanKitWorkerFragment extends Fragment {
     }
 
 
-    public List<GetBoardsBoard> getLastRetrievedBoards() {
+    public List<ListBoardsBoard> getLastRetrievedBoards() {
         return mLastRetrievedBoards;
     }
 
-    public void setLastRetrievedBoards(List<GetBoardsBoard> mLastRetrievedBoards) {
+    public void setLastRetrievedBoards(List<ListBoardsBoard> mLastRetrievedBoards) {
         this.mLastRetrievedBoards = mLastRetrievedBoards;
     }
 
@@ -344,18 +346,17 @@ public class LeanKitWorkerFragment extends Fragment {
         MyApplication mApp = ((MyApplication) getActivity().getApplication());
 
         mRetroLeanKitApi = mApp.getRetroLeanKitApiInstance();
+        mRetroLeanKitApiV2 = mApp.getRetroLeanKitApiV2Instance();
 
-        mRetroLeanKitApi.getBoards(new RetroLeanKitCallback<List<GetBoardsBoard>>() {
-
+        mRetroLeanKitApiV2.listBoards(new RetroLeanKitApiV2Callback<ListBoardsResponse>() {
             @Override
-            public void onSuccess(int replyCode, String replyText, List<List<GetBoardsBoard>> replyData) {
-
-                mLastRetrievedBoards = replyData.get(0);
+            public void onSuccess(int replyCode, String replyText, List<ListBoardsResponse> replyData) {
+                mLastRetrievedBoards = replyData.get(0).getBoards();
                 mLeanKitWorkerListener.onBoardsRetrieved(mLastRetrievedBoards);
             }
 
             @Override
-            public void onLeanKitException(int replyCode, String replyText, List<List<GetBoardsBoard>> replyData) {
+            public void onLeanKitException(int replyCode, String replyText, List<ListBoardsResponse> replyData) {
                 mLeanKitWorkerListener.onGetBoardsLeanKitException(replyCode, replyText);
             }
 
@@ -365,11 +366,10 @@ public class LeanKitWorkerFragment extends Fragment {
             }
 
             @Override
-            public void failure(RetrofitError retrofitError) {
-                mLeanKitWorkerListener.onGetBoardsRetrofitError(retrofitError);
+            public void failure(RetrofitError error) {
+                mLeanKitWorkerListener.onGetBoardsRetrofitError(error);
             }
         });
-
     }
 
     public void getBoard(final String boardId) {

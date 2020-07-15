@@ -43,8 +43,8 @@ import com.appshroom.leanpocket.adapters.DrawerListItem;
 import com.appshroom.leanpocket.adapters.LanesWithCardAmountsSpinnerAdapter;
 import com.appshroom.leanpocket.dto.Board;
 import com.appshroom.leanpocket.dto.Card;
-import com.appshroom.leanpocket.dto.GetBoardsBoard;
 import com.appshroom.leanpocket.dto.Lane;
+import com.appshroom.leanpocket.dto.v2.ListBoardsBoard;
 import com.appshroom.leanpocket.fragments.ConfirmDeleteCardDialog;
 import com.appshroom.leanpocket.fragments.LeanKitWorkerFragment;
 import com.appshroom.leanpocket.fragments.MoveCardDialog;
@@ -113,7 +113,7 @@ public class MainActivity extends Activity
 
     private String mLastUsedBoardId;
     private String mLastUsedBoardAccount;
-    private List<GetBoardsBoard> mAvailableGetBoardsBoards;
+    private List<ListBoardsBoard> mAvailableGetBoardsBoards;
     private String mActiveAccountAuthToken;
     private String mLastUsedAccount;
     private List<Card> mSelectedCards;
@@ -548,7 +548,7 @@ public class MainActivity extends Activity
                 switch (selectedItem.getType()) {
 
                     case BOARD:
-                        handleBoardClick((GetBoardsBoard) selectedItem);
+                        handleBoardClick((ListBoardsBoard) selectedItem);
                         break;
 
                     case SECTION:
@@ -765,7 +765,7 @@ public class MainActivity extends Activity
 
     private void activateBoardInNavDrawer() {
 
-        for (GetBoardsBoard board : mAvailableGetBoardsBoards) {
+        for (ListBoardsBoard board : mAvailableGetBoardsBoards) {
 
             if (mActiveBoard.getId().equals(board.getId())) {
 
@@ -858,7 +858,7 @@ public class MainActivity extends Activity
         }
     }
 
-    private void handleBoardClick(GetBoardsBoard getBoardsBoard) {
+    private void handleBoardClick(ListBoardsBoard getBoardsBoard) {
 
         String boardId = getBoardsBoard.getId();
 
@@ -1702,13 +1702,13 @@ public class MainActivity extends Activity
     }
 
     @Override
-    public void onBoardsRetrieved(List<GetBoardsBoard> boards) {
+    public void onBoardsRetrieved(List<ListBoardsBoard> boards) {
 
-        mAvailableGetBoardsBoards = new ArrayList<GetBoardsBoard>();
+        mAvailableGetBoardsBoards = new ArrayList<ListBoardsBoard>();
 
         if (!mShowArchivedBoards){
 
-            for (GetBoardsBoard board : boards){
+            for (ListBoardsBoard board : boards){
 
                 if ( !board.isArchived() ){
                     mAvailableGetBoardsBoards.add(board);

@@ -2,7 +2,6 @@ package com.appshroom.leanpocket.helpers;
 
 import com.appshroom.leanpocket.dto.AssignedUser;
 import com.appshroom.leanpocket.dto.Board;
-import com.appshroom.leanpocket.dto.BoardUser;
 import com.appshroom.leanpocket.dto.Card;
 import com.appshroom.leanpocket.dto.Identifier;
 import com.appshroom.leanpocket.dto.Lane;

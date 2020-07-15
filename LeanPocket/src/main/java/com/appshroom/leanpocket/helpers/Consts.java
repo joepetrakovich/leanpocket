@@ -55,7 +55,8 @@ public final class Consts {
     public static final String LANE_LIST_EXTRAS = "LANE_LIST_EXTRAS";
 
     public static final String HTTPS_URL_PREFIX = "https://";
-    public static final String API_URL_SUFFIX = ".leankit.com/Kanban/Api/";
+    public static final String API_V1_URL_SUFFIX = ".leankit.com/Kanban/Api/";
+    public static final String API_V2_URL_SUFFIX = ".leankit.com/io/";
     public static final String LEANKIT_LOGIN_SEARCH_URL_PREFIX = "https://login.leankit.com/Account/Membership";
 
     public static final String PATH_TO_BLOCKED_ICON_AFTER_HOST = ".leankitkanban.com/Content/Images/Icons/Library/blocked.png";

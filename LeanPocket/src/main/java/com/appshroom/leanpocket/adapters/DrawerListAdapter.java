@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.appshroom.leanpocket.R;
-import com.appshroom.leanpocket.dto.GetBoardsBoard;
+import com.appshroom.leanpocket.dto.v2.ListBoardsBoard;
 import com.emilsjolander.components.stickylistheaders.StickyListHeadersAdapter;
 
 import java.util.List;
@@ -126,14 +126,14 @@ public class DrawerListAdapter extends ArrayAdapter<DrawerListItem> implements S
 
         } else {
 
-            buildBoardItem(holder, (GetBoardsBoard) item);
+            buildBoardItem(holder, (ListBoardsBoard) item);
         }
 
         return convertView;
 
     }
 
-    private void buildBoardItem(ViewHolder holder, GetBoardsBoard board) {
+    private void buildBoardItem(ViewHolder holder, ListBoardsBoard board) {
 
         holder.icon.setVisibility(View.GONE);
 
