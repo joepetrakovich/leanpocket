@@ -32,11 +32,7 @@ public class BoardHelpers {
 
         for (Lane lane : lanes) {
 
-            String laneState = lane.getLaneState();
-
-            //only regular lanes or child lanes have cards.
-
-            if (laneState.equals(Consts.LANE_STATE.PARENT) || laneState.equals(Consts.LANE_STATE.CHILD_PARENT)) {
+            if (lane.getChildLanes() != null && lane.getChildLanes().size() > 0) {
 
                 continue;
             }
@@ -68,19 +64,19 @@ public class BoardHelpers {
 
         //Treeify the backlog
 
-        List<Lane> flattenedBacklog = new ArrayList<Lane>(board.getBacklog());
-
-        Lane backlogTopLane = getLaneById(board.getBacklogTopLevelLaneId(), flattenedBacklog);
-
-        board.setTreeifiedBacklog(treeifyLane(backlogTopLane, flattenedBacklog));
+//        List<Lane> flattenedBacklog = new ArrayList<Lane>(board.getBacklog());
+//
+//        Lane backlogTopLane = getLaneById(board.getBacklogTopLevelLaneId(), flattenedBacklog);
+//
+//        board.setTreeifiedBacklog(treeifyLane(backlogTopLane, flattenedBacklog));
 
         //Treeify the archive
-
-        List<Lane> flattenedArchive = new ArrayList<Lane>(board.getArchive());
-
-        Lane archiveTopLane = getLaneById(board.getArchiveTopLevelLaneId(), flattenedArchive);
-
-        board.setTreeifiedArchive(treeifyLane(archiveTopLane, flattenedArchive));
+//
+//        List<Lane> flattenedArchive = new ArrayList<Lane>(board.getArchive());
+//
+//        Lane archiveTopLane = getLaneById(board.getArchiveTopLevelLaneId(), flattenedArchive);
+//
+//        board.setTreeifiedArchive(treeifyLane(archiveTopLane, flattenedArchive));
 
 
     }
@@ -97,9 +93,7 @@ public class BoardHelpers {
 
         for (Lane lane : availableLanes) {
 
-            String state = lane.getLaneState();
-
-            if (state.equals(Consts.LANE_STATE.LANE) || state.equals(Consts.LANE_STATE.CHILD)) {
+            if (lane.getChildLanes() == null || lane.getChildLanes().size() == 0) {
 
                 cardHoldingLanes.add(lane);
             }
@@ -121,9 +115,7 @@ public class BoardHelpers {
 
             LeanKitTreeifiedLane lane = unexploredLanes.pop();
 
-            String laneState = lane.getLane().getLaneState();
-
-            if (laneState.equals(Consts.LANE_STATE.LANE) || laneState.equals(Consts.LANE_STATE.CHILD)) {
+            if (lane.getChildLanes() == null || lane.getChildLanes().size() == 0) {
 
                 cardHoldableLanes.add(lane.getLane());
             } else {
@@ -151,9 +143,8 @@ public class BoardHelpers {
             while (unexploredLanes.size() > 0) {
 
                 Lane lane = unexploredLanes.pop();
-                String laneState = lane.getLaneState();
 
-                if (laneState.equals(Consts.LANE_STATE.LANE) || laneState.equals(Consts.LANE_STATE.CHILD)) {
+                if (lane.getChildLanes() == null || lane.getChildLanes().size() == 0) {
 
                     cardHoldableLanes.add(lane);
                 } else {
@@ -175,9 +166,9 @@ public class BoardHelpers {
 
             for (LeanKitTreeifiedLane lane : siblingLanes) {
 
-                String contextualName = parentName + lane.getLane().getTitle();
+                String contextualName = parentName + lane.getLane().getName();
 
-                lane.getLane().setTitle(contextualName);
+                lane.getLane().setName(contextualName);
 
                 applyContextualLaneNamesToArchive(contextualName + " - ", lane.getChildLanes());
 
@@ -191,9 +182,9 @@ public class BoardHelpers {
 
             for (Lane lane : siblingLanes) {
 
-                String contextualName = parentName + lane.getTitle();
+                String contextualName = parentName + lane.getName();
 
-                lane.setTitle(contextualName);
+                lane.setName(contextualName);
 
                 applyContextualLaneNames(contextualName + " - ", lane.getChildLanes());
 
@@ -255,21 +246,26 @@ public class BoardHelpers {
 
     private static Lane treeifyLane(Lane lane, List<Lane> flattenedLanes) {
 
-        String laneState = lane.getLaneState();
+        List<String> childLaneIds = getChildLaneIds(lane.getId(), flattenedLanes);
 
-        if (laneState.equals(Consts.LANE_STATE.CHILD) || laneState.equals(Consts.LANE_STATE.LANE)) {
-
-            //this is where I would gather cards...
-
-            return lane;
-        }
-
-        lane.setChildLanes(getLanesByIds(lane.getChildLaneIds(), flattenedLanes));
+        lane.setChildLanes(getLanesByIds(childLaneIds, flattenedLanes));
 
         treeifyLanes(lane.getChildLanes(), flattenedLanes);
 
         return lane;
 
+    }
+
+    private static List<String> getChildLaneIds(String parentLaneId, List<Lane> availableLanes) {
+        List<String> childLaneIds = new ArrayList<>();
+
+        for (Lane lane : availableLanes) {
+            if (lane.getParentLaneId() != null && lane.getParentLaneId() == parentLaneId) {
+                childLaneIds.add(lane.getId());
+            }
+        }
+
+        return childLaneIds;
     }
 
     private static List<Lane> treeifyLanes(List<Lane> siblingLanes, List<Lane> flattenedLanes) {

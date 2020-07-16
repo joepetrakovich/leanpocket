@@ -20,16 +20,15 @@ public class Lane implements Parcelable {
     private boolean isActive;
 
     private String id;
-    private String title;
+    private String name;
     private String classType;
     private String type;
     private String activityId;
     private String activityName;
-    private String laneState;
     private String parentLaneId;
     private String orientation;
     private BoardSection.BoardSectionType boardSectionType;
-    private List<Card> cards;
+    private List<Card> cards = new ArrayList<>();
 
     private List<String> childLaneIds;
 
@@ -39,7 +38,7 @@ public class Lane implements Parcelable {
 
     @Override
     public String toString() {
-        return title;
+        return name;
     }
 
     public static final Creator<Lane> CREATOR = new Creator<Lane>() {
@@ -63,12 +62,11 @@ public class Lane implements Parcelable {
         isActive = p.readInt() == 1;
 
         id = p.readString();
-        title = p.readString();
+        name = p.readString();
         classType = p.readString();
         type = p.readString();
         activityId = p.readString();
         activityName = p.readString();
-        laneState = p.readString();
         parentLaneId = p.readString();
         orientation = p.readString();
 
@@ -112,12 +110,11 @@ public class Lane implements Parcelable {
         dest.writeInt(isActive ? 1 : 0);
 
         dest.writeString(id);
-        dest.writeString(title);
+        dest.writeString(name);
         dest.writeString(classType);
         dest.writeString(type);
         dest.writeString(activityId);
         dest.writeString(activityName);
-        dest.writeString(laneState);
         dest.writeString(parentLaneId);
         dest.writeString(orientation);
 
@@ -184,12 +181,12 @@ public class Lane implements Parcelable {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getClassType() {
@@ -222,14 +219,6 @@ public class Lane implements Parcelable {
 
     public void setActivityName(String activityName) {
         this.activityName = activityName;
-    }
-
-    public String getLaneState() {
-        return laneState;
-    }
-
-    public void setLaneState(String laneState) {
-        this.laneState = laneState;
     }
 
     public String getParentLaneId() {

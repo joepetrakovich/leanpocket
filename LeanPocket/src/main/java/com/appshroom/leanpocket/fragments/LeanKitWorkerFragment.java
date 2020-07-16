@@ -22,7 +22,6 @@ import com.appshroom.leanpocket.dto.Card;
 import com.appshroom.leanpocket.dto.CardType;
 import com.appshroom.leanpocket.dto.ClassOfService;
 import com.appshroom.leanpocket.dto.DeleteCardsReplyData;
-import com.appshroom.leanpocket.dto.GetBoardsBoard;
 import com.appshroom.leanpocket.dto.Lane;
 import com.appshroom.leanpocket.dto.LeanKitTreeifiedLane;
 import com.appshroom.leanpocket.dto.v2.ListBoardsBoard;
@@ -374,19 +373,15 @@ public class LeanKitWorkerFragment extends Fragment {
 
     public void getBoard(final String boardId) {
 
-        mRetroLeanKitApi.getBoard(boardId, new RetroLeanKitCallback<Board>() {
-
+        mRetroLeanKitApiV2.getBoardDetails(boardId, new RetroLeanKitApiV2Callback<Board>() {
             @Override
             public void onSuccess(int replyCode, String replyText, List<Board> replyData) {
-
                 Context c = getActivity();
 
                 if (c != null) {
                     String userName = new SecurePreferences(getActivity()).getString(Consts.SHARED_PREFS_USER_NAME, "");
 
-                    BoardData bd = new BoardData(replyData.get(0), userName);
-
-                    new StructureBoardTask().execute(bd);
+                    new StructureBoardTask().execute(new BoardData(replyData.get(0), userName));
                 }
             }
 
@@ -401,11 +396,10 @@ public class LeanKitWorkerFragment extends Fragment {
             }
 
             @Override
-            public void failure(RetrofitError retrofitError) {
-                mLeanKitWorkerListener.onGetBoardRetrofitError(retrofitError);
+            public void failure(RetrofitError error) {
+                mLeanKitWorkerListener.onGetBoardRetrofitError(error);
             }
         });
-
     }
 
     public void getArchive(String boardId) {
@@ -456,27 +450,27 @@ public class LeanKitWorkerFragment extends Fragment {
             BoardHelpers.treeifyBoard(board);
 
             BoardHelpers.applyContextualLaneNames("", board.getTreeifiedLanes());
-            BoardHelpers.applyContextualLaneNames("", Arrays.asList(board.getTreeifiedBacklog()));
-            BoardHelpers.applyContextualLaneNames("", Arrays.asList(board.getTreeifiedArchive()));
+//            BoardHelpers.applyContextualLaneNames("", Arrays.asList(board.getTreeifiedBacklog()));
+//            BoardHelpers.applyContextualLaneNames("", Arrays.asList(board.getTreeifiedArchive()));
 
             List<Lane> orderedInFlightChildLanes = BoardHelpers.getCardHoldableLanesInOrder(board.getTreeifiedLanes());
-            List<Lane> orderedBacklogChildLanes = BoardHelpers.getCardHoldableLanesInOrder(Arrays.asList(board.getTreeifiedBacklog()));
-            List<Lane> orderedArchiveChildLanes = BoardHelpers.getCardHoldableLanesInOrder(Arrays.asList(board.getTreeifiedArchive()));
+//            List<Lane> orderedBacklogChildLanes = BoardHelpers.getCardHoldableLanesInOrder(Arrays.asList(board.getTreeifiedBacklog()));
+//            List<Lane> orderedArchiveChildLanes = BoardHelpers.getCardHoldableLanesInOrder(Arrays.asList(board.getTreeifiedArchive()));
 
             setLaneBoardSectionTypes(orderedInFlightChildLanes, BoardSection.BoardSectionType.INFLIGHT);
-            setLaneBoardSectionTypes(orderedBacklogChildLanes, BoardSection.BoardSectionType.BACKLOG);
-            setLaneBoardSectionTypes(orderedArchiveChildLanes, BoardSection.BoardSectionType.ARCHIVE);
+//            setLaneBoardSectionTypes(orderedBacklogChildLanes, BoardSection.BoardSectionType.BACKLOG);
+//            setLaneBoardSectionTypes(orderedArchiveChildLanes, BoardSection.BoardSectionType.ARCHIVE);
 
             ArrayList<Lane> allCardHoldableLanes = new ArrayList<Lane>();
             allCardHoldableLanes.addAll(orderedInFlightChildLanes);
-            allCardHoldableLanes.addAll(orderedBacklogChildLanes);
-            allCardHoldableLanes.addAll(orderedArchiveChildLanes);
+//            allCardHoldableLanes.addAll(orderedBacklogChildLanes);
+//            allCardHoldableLanes.addAll(orderedArchiveChildLanes);
 
             board.setAllOrderedChildLanes(allCardHoldableLanes);
             board.setAllChildLaneNames(allCardHoldableLanes);
             board.setOrderedInFlightChildLanes(orderedInFlightChildLanes);
-            board.setOrderedBacklogChildLanes(orderedBacklogChildLanes);
-            board.setOrderedArchiveChildLanes(orderedArchiveChildLanes);
+//            board.setOrderedBacklogChildLanes(orderedBacklogChildLanes);
+//            board.setOrderedArchiveChildLanes(orderedArchiveChildLanes);
 
             board.setCardsAssignedToAppUser(
                     BoardHelpers.getCardsAssignedToUser( userName
@@ -490,13 +484,13 @@ public class LeanKitWorkerFragment extends Fragment {
 
             HashMap<Integer, Integer> accentColorMap = generateCardAccentColors(colorMap);
 
-            HashMap<String, String> idToGravatarUrlMap = generateGravatarURLs(board.getBoardUsers());
+            HashMap<String, String> idToGravatarUrlMap = generateGravatarURLs(board.getUsers());
 
             board.setCardColorMap(colorMap);
             board.setCardAccentColorMap(accentColorMap);
             board.setUserGravatarUrlMap(idToGravatarUrlMap);
 
-            board.setDateFormat(getDateFormat(board.getBoardUsers()));
+            board.setDateFormat(getDateFormat(board.getUsers()));
 
             board.setSettings( getBoardSettings(board) );
 
@@ -517,7 +511,7 @@ public class LeanKitWorkerFragment extends Fragment {
 
         settings.setCardTypes( board.getCardTypes() );
         settings.setClassOfServices( board.getClassesOfService() );
-        settings.setBoardUsers( board.getBoardUsers() );
+        settings.setBoardUsers( board.getUsers() );
 
         settings.setDateFormat( board.getDateFormat() );
         settings.setCardIdPrefix( board.getPrefix() );
@@ -579,7 +573,6 @@ public class LeanKitWorkerFragment extends Fragment {
         return colorSet;
     }
 
-
     private HashMap<Integer, Integer> generateCardAccentColors(HashMap<String, Integer> colorSet) {
 
         HashMap<Integer, Integer> accentColorSet = new HashMap<Integer, Integer>();
@@ -613,7 +606,6 @@ public class LeanKitWorkerFragment extends Fragment {
 
         return idToGravatarUrlMap;
     }
-
 
     private void removeGhostCards(List<Lane> archiveLanes) {
 

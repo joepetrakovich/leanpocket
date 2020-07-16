@@ -27,7 +27,7 @@ public class Board {
 
     private List<OrganizationActivity> organizationActivities;
 
-    private List<BoardUser> boardUsers;
+    private List<BoardUser> users;
 
     private List<ClassOfService> classesOfService;
 
@@ -207,12 +207,12 @@ public class Board {
         this.organizationActivities = organizationActivities;
     }
 
-    public List<BoardUser> getBoardUsers() {
-        return boardUsers;
+    public List<BoardUser> getUsers() {
+        return users;
     }
 
-    public void setBoardUsers(List<BoardUser> boardUsers) {
-        this.boardUsers = boardUsers;
+    public void setUsers(List<BoardUser> users) {
+        this.users = users;
     }
 
     public List<ClassOfService> getClassesOfService() {
@@ -264,6 +264,14 @@ public class Board {
     }
 
     public List<String> getTopLevelLaneIds() {
+        List<String> topLevelLaneIds = new ArrayList<>();
+
+        for (Lane lane : lanes) {
+            if (lane.getParentLaneId() == null) {
+                topLevelLaneIds.add(lane.getId());
+            }
+        }
+
         return topLevelLaneIds;
     }
 
@@ -448,7 +456,7 @@ public class Board {
 
         for (Lane laneHeavy: allOrderedChildLanes){
             LaneDescription laneLite = new LaneDescription();
-            laneLite.setName(laneHeavy.getTitle());
+            laneLite.setName(laneHeavy.getName());
             laneLite.setId(laneHeavy.getId());
             laneLite.setBoardSectionType(laneHeavy.getBoardSectionType());
             allNames.add(laneLite);
