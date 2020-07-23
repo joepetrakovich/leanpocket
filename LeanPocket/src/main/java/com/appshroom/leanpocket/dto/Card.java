@@ -13,7 +13,7 @@ import java.util.List;
 public class Card implements Parcelable {
 
     private int index;
-    private int priority;
+    private String priority;
     private int size;
 
     private boolean active;
@@ -22,7 +22,6 @@ public class Card implements Parcelable {
     private String dueDate;
 
     private String id;
-    private String laneId;
     private String title;
     private String description;
     private String typeId;
@@ -30,7 +29,7 @@ public class Card implements Parcelable {
     private String typeIconPath;
     private String typeColorHex;
     private String color;
-    private String tags;
+    private List<String> tags;
     private String version;
     private String assignedUserId;
     private String assignedUserName;
@@ -65,6 +64,8 @@ public class Card implements Parcelable {
     private int taskBoardTotalCards;
     private String currentContext;
     private String parentCardId;
+    private Lane lane;
+
 
 
     public static final Creator<Card> CREATOR = new Creator<Card>() {
@@ -83,7 +84,7 @@ public class Card implements Parcelable {
     public Card(Parcel p) {
 
         index = p.readInt();
-        priority = p.readInt();
+        priority = p.readString();
         size = p.readInt();
 
         active = p.readInt() == 1;
@@ -91,7 +92,6 @@ public class Card implements Parcelable {
 
         dueDate = p.readString();
         id = p.readString();
-        laneId = p.readString();
         title = p.readString();
         description = p.readString();
         typeId = p.readString();
@@ -99,7 +99,8 @@ public class Card implements Parcelable {
         typeIconPath = p.readString();
         typeColorHex = p.readString();
         color = p.readString();
-        tags = p.readString();
+        tags = new ArrayList<String>();
+        p.readStringList(tags);
         version = p.readString();
         assignedUserId = p.readString();
         assignedUserName = p.readString();
@@ -116,6 +117,8 @@ public class Card implements Parcelable {
         dueDateText = p.readString();
         userWipOverrideComment = p.readString();
         systemType = p.readString();
+
+        lane = p.readParcelable(Lane.class.getClassLoader());
 
         type = p.readParcelable(CardType.class.getClassLoader());
 
@@ -149,7 +152,7 @@ public class Card implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
 
         dest.writeInt(index);
-        dest.writeInt(priority);
+        dest.writeString(priority);
         dest.writeInt(size);
 
         dest.writeInt(active ? 1 : 0);
@@ -157,7 +160,6 @@ public class Card implements Parcelable {
 
         dest.writeString(dueDate);
         dest.writeString(id);
-        dest.writeString(laneId);
         dest.writeString(title);
         dest.writeString(description);
         dest.writeString(typeId);
@@ -165,7 +167,7 @@ public class Card implements Parcelable {
         dest.writeString(typeIconPath);
         dest.writeString(typeColorHex);
         dest.writeString(color);
-        dest.writeString(tags);
+        dest.writeStringList(tags);
         dest.writeString(version);
         dest.writeString(assignedUserId);
         dest.writeString(assignedUserName);
@@ -184,6 +186,7 @@ public class Card implements Parcelable {
         dest.writeString(systemType);
 
         dest.writeParcelable(type, flags);
+        dest.writeParcelable(lane, flags);
 
         dest.writeTypedList(assignedUsers);
 
@@ -227,7 +230,7 @@ public class Card implements Parcelable {
         return index;
     }
 
-    public int getPriority() {
+    public String getPriority() {
         return priority;
     }
 
@@ -252,7 +255,7 @@ public class Card implements Parcelable {
     }
 
     public String getLaneId() {
-        return laneId;
+        return lane.getId();
     }
 
     public String getTitle() {
@@ -339,7 +342,7 @@ public class Card implements Parcelable {
         return type;
     }
 
-    public String getTags() {
+    public List<String> getTags() {
         return tags;
     }
 
@@ -351,7 +354,7 @@ public class Card implements Parcelable {
         this.index = index;
     }
 
-    public void setPriority(int priority) {
+    public void setPriority(String priority) {
         this.priority = priority;
     }
 
@@ -373,10 +376,6 @@ public class Card implements Parcelable {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public void setLaneId(String laneId) {
-        this.laneId = laneId;
     }
 
     public void setTitle(String title) {
@@ -403,7 +402,7 @@ public class Card implements Parcelable {
         this.color = color;
     }
 
-    public void setTags(String tags) {
+    public void setTags(List<String> tags) {
         this.tags = tags;
     }
 

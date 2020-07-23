@@ -207,6 +207,23 @@ public class BoardHelpers {
 
     }
 
+    public static void setCardsOnLanes(List<Card> allCards, List<Lane> lanes) {
+        for (Lane lane: lanes) {
+            lane.setCards( getCardsForLane(lane.getId(), allCards) );
+        }
+    }
+
+    private static List<Card> getCardsForLane(String laneId, List<Card> allCards) {
+        List<Card> cardsForLane = new ArrayList<Card>();
+
+        for (Card card : allCards) {
+            if (card.getLaneId().equals(laneId)){
+                cardsForLane.add(card);
+            }
+        }
+
+        return cardsForLane;
+    }
 
     public static List<Card> getCardsAssignedToUser(String userName, List<Card> cards){
 

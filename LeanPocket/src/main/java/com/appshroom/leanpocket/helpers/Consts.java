@@ -94,10 +94,10 @@ public final class Consts {
 
     public final class PRIORITY {
 
-        public static final int LOW = 0;
-        public static final int NORMAL = 1;
-        public static final int HIGH = 2;
-        public static final int CRITICAL = 3;
+        public static final String LOW = "low";
+        public static final String NORMAL = "normal";
+        public static final String HIGH = "high";
+        public static final String CRITICAL = "critical";
     }
 
     public final class REPLY_CODE {

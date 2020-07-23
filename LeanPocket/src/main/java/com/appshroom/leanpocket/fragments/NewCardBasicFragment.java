@@ -355,13 +355,13 @@ public class NewCardBasicFragment extends Fragment {
             etDescription.setText(Html.fromHtml(mExistingCard.getDescription()).toString());
 
         }
-
-        int priority = mExistingCard.getPriority();
-
-        if (priority > -1 && priority < 4) { //TODO: preventative measures until we dynamically build priorities
-
-            mSpinnerPriorities.setSelection(priority);
-        }
+//TODO for v2 apis
+//        String priority = mExistingCard.getPriority();
+//
+//        if (priority > -1 && priority < 4) { //TODO: preventative measures until we dynamically build priorities
+//
+//            mSpinnerPriorities.setSelection(priority);
+//        }
 
         if (TextUtils.isEmpty(mExistingCard.getDueDate().trim()) == false) {
 
@@ -398,7 +398,7 @@ public class NewCardBasicFragment extends Fragment {
             etSize.setText(Integer.toString(size));
         }
 
-        etTags.setText(mExistingCard.getTags());
+        etTags.setText(mExistingCard.getTags().toString());
 
         mLaneSectionHeader.setVisibility(View.GONE);
         mSpinnerLanes.setVisibility(View.GONE);
@@ -587,8 +587,8 @@ public class NewCardBasicFragment extends Fragment {
             data.setDescription(Html.toHtml(etDescription.getText()));
 
         }
-
-        data.setPriority(mSpinnerPriorities.getSelectedItemPosition());
+//TODO for v2 APIs
+//        data.setPriority(mSpinnerPriorities.getSelectedItemPosition());
         data.setDueDate(mDueDateView.getText().toString());
 
         data.setCardTypeId(((CardType) mSpinnerCardTypes.getSelectedItem()).getId());
@@ -602,6 +602,7 @@ public class NewCardBasicFragment extends Fragment {
             data.setSize(Integer.parseInt(size));
         }
 
+        //TODO: test tags, are they entered with spaces or commas?
         data.setTags(etTags.getText().toString().trim());
 
         data.setExternalCardId( etExternalCardId.getText().toString() );

@@ -1,5 +1,6 @@
 package com.appshroom.leanpocket.dto;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -20,7 +21,7 @@ public class CardFieldData {
     private List<BoardUser> assignedUsers;
 
     private int size;
-    private int priority;
+    private String priority;
 
     public String getExternalCardId() {
         return externalCardId;
@@ -40,6 +41,10 @@ public class CardFieldData {
 
     public String getTags() {
         return tags;
+    }
+
+    public List<String> getTagsAsList() {
+         return Arrays.asList(tags.split("\\s*,\\s*"));
     }
 
     public void setTags(String tags) {
@@ -120,11 +125,11 @@ public class CardFieldData {
         this.size = size;
     }
 
-    public int getPriority() {
+    public String getPriority() {
         return priority;
     }
 
-    public void setPriority(int priority) {
+    public void setPriority(String priority) {
         this.priority = priority;
     }
 

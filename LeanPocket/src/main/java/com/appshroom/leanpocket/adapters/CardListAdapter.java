@@ -185,11 +185,11 @@ public class CardListAdapter extends ArrayAdapter<Card> {
 
     private void configureIcons(Card card, ViewHolder holder) {
 
-        int priority = card.getPriority();
+        String priority = card.getPriority();
 
         //No priority icon for normal priority
 
-        if (priority != Consts.PRIORITY.NORMAL) {
+        if (!priority.equals(Consts.PRIORITY.NORMAL)) {
 
             holder.bottomIcon.setVisibility(View.VISIBLE);
 
@@ -200,12 +200,12 @@ public class CardListAdapter extends ArrayAdapter<Card> {
                     holder.bottomIcon.setImageDrawable(holder.priorityLowDrawable);
                     break;
 
-                case 2:
+                case Consts.PRIORITY.HIGH:
 
                     holder.bottomIcon.setImageDrawable(holder.priorityHighDrawable);
                     break;
 
-                case 3:
+                case Consts.PRIORITY.CRITICAL:
 
                     holder.bottomIcon.setImageDrawable(holder.priorityCriticalDrawable);
                     break;

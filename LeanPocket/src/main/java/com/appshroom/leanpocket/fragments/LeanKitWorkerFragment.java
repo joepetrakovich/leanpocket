@@ -26,6 +26,7 @@ import com.appshroom.leanpocket.dto.Lane;
 import com.appshroom.leanpocket.dto.LeanKitTreeifiedLane;
 import com.appshroom.leanpocket.dto.v2.ListBoardsBoard;
 import com.appshroom.leanpocket.dto.v2.ListBoardsResponse;
+import com.appshroom.leanpocket.dto.v2.ListCardsResponse;
 import com.appshroom.leanpocket.helpers.BoardHelpers;
 import com.appshroom.leanpocket.helpers.Consts;
 import com.appshroom.leanpocket.helpers.GravatarHelpers;
@@ -402,6 +403,39 @@ public class LeanKitWorkerFragment extends Fragment {
         });
     }
 
+    public void getCards(final Board board) {
+
+        mRetroLeanKitApiV2.listCards(board.getCommaSeparatedAllOrderedChildLaneIds(), new RetroLeanKitApiV2Callback<ListCardsResponse>() {
+            @Override
+            public void onSuccess(int replyCode, String replyText, List<ListCardsResponse> replyData) {
+
+                List<Card> cards = replyData.get(0).getCards();
+
+                //TODO: migrating to v2 leankit API has made maintaining all these different lists of lanes pointless.
+                //so we ought to get rid of them.
+
+                BoardHelpers.setCardsOnLanes(cards, board.getOrderedInFlightChildLanes());
+
+                mLeanKitWorkerListener.onBoardReadyForUse(board);
+            }
+
+            @Override
+            public void onLeanKitException(int replyCode, String replyText, List<ListCardsResponse> replyData) {
+                mLeanKitWorkerListener.onGetBoardLeanKitException(replyCode, replyText);
+            }
+
+            @Override
+            public void onWIPOverrideCommentRequired() {
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                mLeanKitWorkerListener.onGetBoardRetrofitError(error);
+            }
+        });
+    }
+
     public void getArchive(String boardId) {
 
         mRetroLeanKitApi.archive(boardId, new RetroLeanKitCallback<List<LeanKitTreeifiedLane>>() {
@@ -472,11 +506,19 @@ public class LeanKitWorkerFragment extends Fragment {
 //            board.setOrderedBacklogChildLanes(orderedBacklogChildLanes);
 //            board.setOrderedArchiveChildLanes(orderedArchiveChildLanes);
 
-            board.setCardsAssignedToAppUser(
-                    BoardHelpers.getCardsAssignedToUser( userName
-                          , BoardHelpers.getAllCards( board.getOrderedInFlightChildLanes()))
-            );
+            //TODO: cards now come in a different API call so continue structuring in that response
+            //and call boardReadyForUse after that...
+            //same with board users...
+            //I could use RxJava and call them at the same time but may be overkill.
+            //I could still call them at the same time and just have them synchronize in a basic way
+            //with a flag.
 
+//            board.setCardsAssignedToAppUser(
+//                    BoardHelpers.getCardsAssignedToUser( userName
+//                          , BoardHelpers.getAllCards( board.getOrderedInFlightChildLanes()))
+//            );
+
+            //TODO: make sure I test class of service on a board that has them.
             ClassOfService defaultCOS = new ClassOfService("None");
             board.getClassesOfService().add(0, defaultCOS);
 
@@ -484,6 +526,7 @@ public class LeanKitWorkerFragment extends Fragment {
 
             HashMap<Integer, Integer> accentColorMap = generateCardAccentColors(colorMap);
 
+            //TODO: users is a separate API call, emailaddress is given instead of gravatar.
             HashMap<String, String> idToGravatarUrlMap = generateGravatarURLs(board.getUsers());
 
             board.setCardColorMap(colorMap);
@@ -501,7 +544,8 @@ public class LeanKitWorkerFragment extends Fragment {
         @Override
         protected void onPostExecute(Board board) {
 
-            mLeanKitWorkerListener.onBoardReadyForUse(board);
+            getCards(board);
+            //mLeanKitWorkerListener.onBoardReadyForUse(board);
         }
     }
 

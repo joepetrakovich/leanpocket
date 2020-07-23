@@ -293,13 +293,14 @@ public class NewCardActivity extends Activity implements SharedPreferences.OnSha
 
         cardToFill.setSize(basicSettings.getSize());
 
-        cardToFill.setTags(basicSettings.getTags());
+        cardToFill.setTags(basicSettings.getTagsAsList());
 
         cardToFill.setExternalCardID( basicSettings.getExternalCardId() );
 
         if (mMode == MODE.NEW_CARD) { //edit doesn't support moving lanes.
 
-            cardToFill.setLaneId(basicSettings.getLaneId());
+            //TODO: move card is prob an API call..
+            // cardToFill.setLaneId(basicSettings.getLaneId());
         }
 
         List<String> assignedUserIds = new ArrayList<String>();

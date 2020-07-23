@@ -25,6 +25,8 @@ import com.appshroom.leanpocket.helpers.Consts;
 import com.appshroom.leanpocket.helpers.GravatarHelpers;
 import com.squareup.picasso.Picasso;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.Arrays;
 
 /**
@@ -142,14 +144,14 @@ public class DetailsFragment extends Fragment {
     private void createTags(View v) {
         View tagsLayout = v.findViewById(R.id.layout_tags);
 
-        if (TextUtils.isEmpty(mCard.getTags().trim())) {
+        if (mCard.getTags() == null || mCard.getTags().size() == 0) {
 
             tagsLayout.setVisibility(View.GONE);
         } else {
 
             TextView tvTags = (TextView) tagsLayout.findViewById(R.id.tv_card_detail_tags);
 
-            String tags = mCard.getTags().replaceAll(",", ", ");
+            String tags = StringUtils.join(mCard.getTags(), ", ");
 
             tvTags.setText(tags); //TODO: eventually put these in chips
         }
@@ -215,7 +217,7 @@ public class DetailsFragment extends Fragment {
                 break;
 
             default:
-                priorityText = Integer.toString(mCard.getPriority());
+                priorityText = mCard.getPriority();
                 priorityTextColor = getResources().getColor(android.R.color.black);
 
         }
