@@ -118,9 +118,8 @@ public class Card implements Parcelable {
         userWipOverrideComment = p.readString();
         systemType = p.readString();
 
-        lane = p.readParcelable(Lane.class.getClassLoader());
-
         type = p.readParcelable(CardType.class.getClassLoader());
+        lane = p.readParcelable(Lane.class.getClassLoader());
 
         assignedUsers = new ArrayList<AssignedUser>();
         p.readTypedList(assignedUsers, AssignedUser.CREATOR);

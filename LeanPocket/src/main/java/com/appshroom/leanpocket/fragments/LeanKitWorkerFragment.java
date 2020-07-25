@@ -405,7 +405,7 @@ public class LeanKitWorkerFragment extends Fragment {
 
     public void getCards(final Board board) {
 
-        mRetroLeanKitApiV2.listCards(board.getCommaSeparatedAllOrderedChildLaneIds(), new RetroLeanKitApiV2Callback<ListCardsResponse>() {
+        mRetroLeanKitApiV2.listCards(board.getCommaSeparatedAllOrderedChildLaneIds(), 999999999, new RetroLeanKitApiV2Callback<ListCardsResponse>() {
             @Override
             public void onSuccess(int replyCode, String replyText, List<ListCardsResponse> replyData) {
 

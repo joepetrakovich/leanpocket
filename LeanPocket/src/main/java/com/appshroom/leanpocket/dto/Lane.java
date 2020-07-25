@@ -27,7 +27,7 @@ public class Lane implements Parcelable {
     private String activityName;
     private String parentLaneId;
     private String orientation;
-    private BoardSection.BoardSectionType boardSectionType;
+    private BoardSection.BoardSectionType boardSectionType = BoardSection.BoardSectionType.INFLIGHT;
     private List<Card> cards = new ArrayList<>();
 
     private List<String> childLaneIds;

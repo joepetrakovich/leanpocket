@@ -232,7 +232,7 @@ public class DetailsFragment extends Fragment {
         TextView descHeader = (TextView) v.findViewById(R.id.detail_desc_section_header);
         TextView desc = (TextView) v.findViewById(R.id.tv_card_detail_desc);
 
-        if (TextUtils.isEmpty(mCard.getDescription().trim())) {
+        if (TextUtils.isEmpty(mCard.getDescription())) {
 
             descHeader.setVisibility(View.GONE);
             desc.setVisibility(View.GONE);
