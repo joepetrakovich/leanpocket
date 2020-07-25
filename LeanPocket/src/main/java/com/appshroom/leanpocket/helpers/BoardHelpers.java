@@ -271,7 +271,7 @@ public class BoardHelpers {
         List<String> childLaneIds = new ArrayList<>();
 
         for (Lane lane : availableLanes) {
-            if (lane.getParentLaneId() != null && lane.getParentLaneId() == parentLaneId) {
+            if (lane.getParentLaneId() != null && lane.getParentLaneId().equals(parentLaneId)) {
                 childLaneIds.add(lane.getId());
             }
         }

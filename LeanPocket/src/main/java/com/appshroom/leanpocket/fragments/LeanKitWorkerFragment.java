@@ -403,9 +403,9 @@ public class LeanKitWorkerFragment extends Fragment {
         });
     }
 
-    public void getCards(final Board board) {
+    public void getCardsForBacklogAndActiveLanes(final Board board) {
 
-        mRetroLeanKitApiV2.listCards(board.getCommaSeparatedAllOrderedChildLaneIds(), 999999999, new RetroLeanKitApiV2Callback<ListCardsResponse>() {
+        mRetroLeanKitApiV2.listCards("backlog,active", 999999999, new RetroLeanKitApiV2Callback<ListCardsResponse>() {
             @Override
             public void onSuccess(int replyCode, String replyText, List<ListCardsResponse> replyData) {
 
@@ -414,6 +414,7 @@ public class LeanKitWorkerFragment extends Fragment {
                 //TODO: migrating to v2 leankit API has made maintaining all these different lists of lanes pointless.
                 //so we ought to get rid of them.
 
+                BoardHelpers.setCardsOnLanes(cards, board.getOrderedBacklogChildLanes());
                 BoardHelpers.setCardsOnLanes(cards, board.getOrderedInFlightChildLanes());
 
                 mLeanKitWorkerListener.onBoardReadyForUse(board);
@@ -540,7 +541,7 @@ public class LeanKitWorkerFragment extends Fragment {
         @Override
         protected void onPostExecute(Board board) {
 
-            getCards(board);
+            getCardsForBacklogAndActiveLanes(board);
             //mLeanKitWorkerListener.onBoardReadyForUse(board);
         }
     }

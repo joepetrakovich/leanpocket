@@ -431,20 +431,6 @@ public class Board {
         this.allOrderedChildLanes = allOrderedChildLanes;
     }
 
-    public String getCommaSeparatedAllOrderedChildLaneIds() {
-        StringBuilder csvBuilder = new StringBuilder();
-        String SEPARATOR = ",";
-
-        for (Lane lane : this.allOrderedChildLanes) {
-            csvBuilder.append(lane.getId());
-            csvBuilder.append(SEPARATOR);
-        }
-
-        String csv = csvBuilder.toString();
-
-        return csv.substring(0, csv.length() - SEPARATOR.length());
-    }
-
     public ArrayList<LaneDescription> getAllChildLaneNames(){
         return allChildLaneNames;
     }
