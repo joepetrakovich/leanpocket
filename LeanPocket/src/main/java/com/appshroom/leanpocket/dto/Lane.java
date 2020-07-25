@@ -21,13 +21,12 @@ public class Lane implements Parcelable {
 
     private String id;
     private String name;
-    private String classType;
+    private String laneClassType;
     private String type;
     private String activityId;
     private String activityName;
     private String parentLaneId;
     private String orientation;
-    private BoardSection.BoardSectionType boardSectionType = BoardSection.BoardSectionType.INFLIGHT;
     private List<Card> cards = new ArrayList<>();
 
     private List<String> childLaneIds;
@@ -63,22 +62,12 @@ public class Lane implements Parcelable {
 
         id = p.readString();
         name = p.readString();
-        classType = p.readString();
+        laneClassType = p.readString();
         type = p.readString();
         activityId = p.readString();
         activityName = p.readString();
         parentLaneId = p.readString();
         orientation = p.readString();
-
-        String boardSectionTypeString = p.readString();
-
-        if (boardSectionTypeString.equals("b")) {
-            boardSectionType = BoardSection.BoardSectionType.BACKLOG;
-        } else if (boardSectionTypeString.equals("a")) {
-            boardSectionType = BoardSection.BoardSectionType.ARCHIVE;
-        } else if (boardSectionTypeString.equals("i")) {
-            boardSectionType = BoardSection.BoardSectionType.INFLIGHT;
-        }
 
         cards = new ArrayList<Card>();
         p.readTypedList(cards, Card.CREATOR);
@@ -111,26 +100,12 @@ public class Lane implements Parcelable {
 
         dest.writeString(id);
         dest.writeString(name);
-        dest.writeString(classType);
+        dest.writeString(laneClassType);
         dest.writeString(type);
         dest.writeString(activityId);
         dest.writeString(activityName);
         dest.writeString(parentLaneId);
         dest.writeString(orientation);
-
-        switch (boardSectionType) {
-
-            case ARCHIVE:
-                dest.writeString("a");
-                break;
-            case BACKLOG:
-                dest.writeString("b");
-                break;
-            case INFLIGHT:
-                dest.writeString("i");
-                break;
-        }
-
 
         dest.writeTypedList(cards);
         dest.writeStringList(childLaneIds);
@@ -189,12 +164,12 @@ public class Lane implements Parcelable {
         this.name = name;
     }
 
-    public String getClassType() {
-        return classType;
+    public String getLaneClassType() {
+        return laneClassType;
     }
 
-    public void setClassType(String classType) {
-        this.classType = classType;
+    public void setLaneClassType(String laneClassType) {
+        this.laneClassType = laneClassType;
     }
 
     public String getType() {
@@ -269,11 +244,12 @@ public class Lane implements Parcelable {
         this.childLanes = childLanes;
     }
 
-    public BoardSection.BoardSectionType getBoardSectionType() {
-        return boardSectionType;
-    }
-
-    public void setBoardSectionType(BoardSection.BoardSectionType boardSectionType) {
-        this.boardSectionType = boardSectionType;
+    public BoardSection.BoardSectionType getBoardSectionType(){
+        switch (laneClassType) {
+            case "backlog": return BoardSection.BoardSectionType.BACKLOG;
+            case "archive": return BoardSection.BoardSectionType.ARCHIVE;
+            case "active": return BoardSection.BoardSectionType.INFLIGHT;
+        }
+        return BoardSection.BoardSectionType.INFLIGHT;
     }
 }

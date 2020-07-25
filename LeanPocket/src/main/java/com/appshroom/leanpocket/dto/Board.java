@@ -183,22 +183,6 @@ public class Board {
         this.availableTags = availableTags;
     }
 
-    public String getBacklogTopLevelLaneId() {
-        return backlogTopLevelLaneId;
-    }
-
-    public void setBacklogTopLevelLaneId(String backlogTopLevelLaneId) {
-        this.backlogTopLevelLaneId = backlogTopLevelLaneId;
-    }
-
-    public String getArchiveTopLevelLaneId() {
-        return archiveTopLevelLaneId;
-    }
-
-    public void setArchiveTopLevelLaneId(String archiveTopLevelLaneId) {
-        this.archiveTopLevelLaneId = archiveTopLevelLaneId;
-    }
-
     public List<OrganizationActivity> getOrganizationActivities() {
         return organizationActivities;
     }
@@ -263,11 +247,11 @@ public class Board {
         this.archive = archive;
     }
 
-    public List<String> getTopLevelLaneIds() {
+    public List<String> getTopLevelLaneIds(String laneClassType) {
         List<String> topLevelLaneIds = new ArrayList<>();
 
         for (Lane lane : lanes) {
-            if (lane.getParentLaneId() == null) {
+            if (lane.getParentLaneId() == null && lane.getLaneClassType().equals(laneClassType)) {
                 topLevelLaneIds.add(lane.getId());
             }
         }

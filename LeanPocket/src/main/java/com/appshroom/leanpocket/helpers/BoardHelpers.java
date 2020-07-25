@@ -54,31 +54,25 @@ public class BoardHelpers {
      */
     public static void treeifyBoard(Board board) {
 
-        //Treeify the main board lanes
+        //Treeify the active board lanes
 
         List<Lane> allBoardLanes = new ArrayList<Lane>(board.getLanes());
 
-        List<Lane> topLevelLanes = getLanesByIds(board.getTopLevelLaneIds(), allBoardLanes);
+        List<Lane> topLevelLanes = getLanesByIds(board.getTopLevelLaneIds("active"), allBoardLanes);
 
         board.setTreeifiedLanes(treeifyLanes(topLevelLanes, allBoardLanes));
 
         //Treeify the backlog
 
-//        List<Lane> flattenedBacklog = new ArrayList<Lane>(board.getBacklog());
-//
-//        Lane backlogTopLane = getLaneById(board.getBacklogTopLevelLaneId(), flattenedBacklog);
-//
-//        board.setTreeifiedBacklog(treeifyLane(backlogTopLane, flattenedBacklog));
+        Lane backlogTopLane = getLaneById(board.getTopLevelLaneIds("backlog").get(0), allBoardLanes);
+
+        board.setTreeifiedBacklog(treeifyLane(backlogTopLane, allBoardLanes));
 
         //Treeify the archive
-//
-//        List<Lane> flattenedArchive = new ArrayList<Lane>(board.getArchive());
-//
-//        Lane archiveTopLane = getLaneById(board.getArchiveTopLevelLaneId(), flattenedArchive);
-//
-//        board.setTreeifiedArchive(treeifyLane(archiveTopLane, flattenedArchive));
 
+        Lane archiveTopLane = getLaneById(board.getTopLevelLaneIds("archive").get(0), allBoardLanes);
 
+        board.setTreeifiedArchive(treeifyLane(archiveTopLane, allBoardLanes));
     }
 
     /**

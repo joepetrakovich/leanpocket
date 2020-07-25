@@ -484,27 +484,23 @@ public class LeanKitWorkerFragment extends Fragment {
             BoardHelpers.treeifyBoard(board);
 
             BoardHelpers.applyContextualLaneNames("", board.getTreeifiedLanes());
-//            BoardHelpers.applyContextualLaneNames("", Arrays.asList(board.getTreeifiedBacklog()));
-//            BoardHelpers.applyContextualLaneNames("", Arrays.asList(board.getTreeifiedArchive()));
+            BoardHelpers.applyContextualLaneNames("", Arrays.asList(board.getTreeifiedBacklog()));
+            BoardHelpers.applyContextualLaneNames("", Arrays.asList(board.getTreeifiedArchive()));
 
             List<Lane> orderedInFlightChildLanes = BoardHelpers.getCardHoldableLanesInOrder(board.getTreeifiedLanes());
-//            List<Lane> orderedBacklogChildLanes = BoardHelpers.getCardHoldableLanesInOrder(Arrays.asList(board.getTreeifiedBacklog()));
-//            List<Lane> orderedArchiveChildLanes = BoardHelpers.getCardHoldableLanesInOrder(Arrays.asList(board.getTreeifiedArchive()));
-
-            setLaneBoardSectionTypes(orderedInFlightChildLanes, BoardSection.BoardSectionType.INFLIGHT);
-//            setLaneBoardSectionTypes(orderedBacklogChildLanes, BoardSection.BoardSectionType.BACKLOG);
-//            setLaneBoardSectionTypes(orderedArchiveChildLanes, BoardSection.BoardSectionType.ARCHIVE);
+            List<Lane> orderedBacklogChildLanes = BoardHelpers.getCardHoldableLanesInOrder(Arrays.asList(board.getTreeifiedBacklog()));
+            List<Lane> orderedArchiveChildLanes = BoardHelpers.getCardHoldableLanesInOrder(Arrays.asList(board.getTreeifiedArchive()));
 
             ArrayList<Lane> allCardHoldableLanes = new ArrayList<Lane>();
             allCardHoldableLanes.addAll(orderedInFlightChildLanes);
-//            allCardHoldableLanes.addAll(orderedBacklogChildLanes);
-//            allCardHoldableLanes.addAll(orderedArchiveChildLanes);
+            allCardHoldableLanes.addAll(orderedBacklogChildLanes);
+            allCardHoldableLanes.addAll(orderedArchiveChildLanes);
 
             board.setAllOrderedChildLanes(allCardHoldableLanes);
             board.setAllChildLaneNames(allCardHoldableLanes);
             board.setOrderedInFlightChildLanes(orderedInFlightChildLanes);
-//            board.setOrderedBacklogChildLanes(orderedBacklogChildLanes);
-//            board.setOrderedArchiveChildLanes(orderedArchiveChildLanes);
+            board.setOrderedBacklogChildLanes(orderedBacklogChildLanes);
+            board.setOrderedArchiveChildLanes(orderedArchiveChildLanes);
 
             //TODO: cards now come in a different API call so continue structuring in that response
             //and call boardReadyForUse after that...
@@ -568,15 +564,6 @@ public class LeanKitWorkerFragment extends Fragment {
         settings.setAutoIncrementCardIdEnabled( board.isAutoIncrementCardIdEnabled() );
 
         return settings;
-
-    }
-
-    private void setLaneBoardSectionTypes(List<Lane> lanes, BoardSection.BoardSectionType type) {
-
-        for (Lane lane : lanes) {
-
-            lane.setBoardSectionType(type);
-        }
 
     }
 
@@ -679,7 +666,6 @@ public class LeanKitWorkerFragment extends Fragment {
             BoardHelpers.applyContextualLaneNamesToArchive("", Arrays.asList(archive));
 
             List<Lane> orderedArchiveChildLanes = BoardHelpers.getCardHoldableLanesInOrderFromArchive(archive);
-            setLaneBoardSectionTypes(orderedArchiveChildLanes, BoardSection.BoardSectionType.ARCHIVE);
             removeGhostCards(orderedArchiveChildLanes);
 
             return orderedArchiveChildLanes;
