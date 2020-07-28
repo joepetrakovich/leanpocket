@@ -1,15 +1,21 @@
 package com.appshroom.leanpocket.api.retrofit;
 
+import android.telecom.Call;
+
 import com.appshroom.leanpocket.dto.Board;
 import com.appshroom.leanpocket.dto.v2.ListBoardUsersResponse;
 import com.appshroom.leanpocket.dto.v2.ListBoardsResponse;
 import com.appshroom.leanpocket.dto.v2.ListCardsResponse;
+import com.appshroom.leanpocket.dto.v2.MoveCardRequest;
+import com.google.gson.JsonObject;
 
 import java.util.List;
 
 import retrofit.Callback;
+import retrofit.http.Body;
 import retrofit.http.EncodedQuery;
 import retrofit.http.GET;
+import retrofit.http.POST;
 import retrofit.http.Path;
 import retrofit.http.Query;
 
@@ -32,4 +38,7 @@ public interface RetroLeanKitApiV2 {
 
     @GET("/user/me/card")
     void getCardsAssignedToRequestingUser(Callback<ListCardsResponse> cb);
+
+    @POST("/card/move")
+    void moveCards(@Body MoveCardRequest moveCardRequest, Callback<Void> cb);
 }

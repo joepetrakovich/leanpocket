@@ -15,10 +15,14 @@ import com.appshroom.leanpocket.R;
 import com.appshroom.leanpocket.activities.MyApplication;
 import com.appshroom.leanpocket.adapters.MoveToLaneAdapter;
 import com.appshroom.leanpocket.api.retrofit.RetroLeanKitApi;
+import com.appshroom.leanpocket.api.retrofit.RetroLeanKitApiV2;
+import com.appshroom.leanpocket.api.retrofit.RetroLeanKitApiV2Callback;
 import com.appshroom.leanpocket.api.retrofit.RetroLeanKitCallback;
 import com.appshroom.leanpocket.dto.Card;
 import com.appshroom.leanpocket.dto.Lane;
 import com.appshroom.leanpocket.dto.LaneDescription;
+import com.appshroom.leanpocket.dto.v2.CardDestination;
+import com.appshroom.leanpocket.dto.v2.MoveCardRequest;
 import com.appshroom.leanpocket.helpers.Consts;
 import com.emilsjolander.components.stickylistheaders.StickyListHeadersListView;
 import com.google.gson.JsonObject;
@@ -48,6 +52,7 @@ public class MoveCardDialog extends DialogFragment {
 
     OnMoveCardDialogChoiceListener mChoiceListener;
     RetroLeanKitApi mRetroLeanKitApi;
+    RetroLeanKitApiV2 mRetroLeanKitApiV2;
     LaneDescription mSelectedLane;
     int mPosition;
     ProgressDialog pd;
@@ -131,6 +136,7 @@ public class MoveCardDialog extends DialogFragment {
         MyApplication mApp = (MyApplication) ((Activity) mChoiceListener).getApplication();
 
         mRetroLeanKitApi = mApp.getRetroLeanKitApiInstance();
+        mRetroLeanKitApiV2 = mApp.getRetroLeanKitApiV2Instance();
     }
 
 
@@ -158,9 +164,13 @@ public class MoveCardDialog extends DialogFragment {
         String boardId = getArguments().getString(Consts.MOVE_CARD_DIALOG_ARGS_BOARD_ID);
         Card cardToMove = getArguments().getParcelable(Consts.MOVE_CARD_DIALOG_ARGS_CARD);
 
-        mRetroLeanKitApi.moveCard(boardId, cardToMove.getId(), mSelectedLane.getId(), mPosition, new RetroLeanKitCallback<JsonObject>() {
+        MoveCardRequest request = new MoveCardRequest();
+        request.AddCardToMove(cardToMove.getId());
+        request.setCardDestination(mSelectedLane.getId(), mPosition);
+
+        mRetroLeanKitApiV2.moveCards(request, new RetroLeanKitApiV2Callback<Void>() {
             @Override
-            public void onSuccess(int replyCode, String replyText, List<JsonObject> replyData) {
+            public void onSuccess(int replyCode, String replyText, List<Void> replyData) {
 
                 mChoiceListener.onMoveCardDialogMoveSuccess(((Activity) mChoiceListener).getString(R.string.move_card_success));
                 dismiss();
@@ -168,7 +178,7 @@ public class MoveCardDialog extends DialogFragment {
             }
 
             @Override
-            public void onLeanKitException(int replyCode, String replyText, List<JsonObject> replyData) {
+            public void onLeanKitException(int replyCode, String replyText, List<Void> replyData) {
 
                 mChoiceListener.onMoveCardDialogLeanKitException(replyCode, replyText);
                 dismiss();
@@ -190,7 +200,6 @@ public class MoveCardDialog extends DialogFragment {
 
             }
         });
-
     }
 
     private void showProgressDialog() {
