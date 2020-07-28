@@ -22,7 +22,10 @@ public interface RetroLeanKitApiV2 {
     void getBoardDetails(@Path("boardId") String boardId, Callback<Board> cb);
 
     @GET("/card")
-    void listCards(@EncodedQuery("lane_class_types") String commaSeparatedLaneClassTypes, @Query("limit") int limit, Callback<ListCardsResponse> cb);
+    void listCards(@Query("board") String boardId,
+                   @EncodedQuery("lane_class_types") String commaSeparatedLaneClassTypes,
+                   @Query("limit") int limit,
+                   Callback<ListCardsResponse> cb);
 
     @GET("/board/{boardId}/user")
     void listBoardUsers(@Path("boardId") String boardId, Callback<ListBoardUsersResponse> cb);

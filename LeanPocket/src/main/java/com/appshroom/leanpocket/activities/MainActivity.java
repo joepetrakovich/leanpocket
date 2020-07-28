@@ -958,7 +958,7 @@ public class MainActivity extends Activity
         if (selectedSection.getSectionType() == BoardSection.BoardSectionType.ARCHIVE && mActiveBoard.archiveNotLoaded()) {
 
             showLoadingProgress();
-            mLeanKitWorker.getArchive(mActiveBoard.getId());
+            mLeanKitWorker.getArchive(mActiveBoard);
 
         } else {
 

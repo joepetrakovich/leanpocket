@@ -405,7 +405,7 @@ public class LeanKitWorkerFragment extends Fragment {
 
     public void getCardsForBacklogAndActiveLanes(final Board board) {
 
-        mRetroLeanKitApiV2.listCards("backlog,active", 999999999, new RetroLeanKitApiV2Callback<ListCardsResponse>() {
+        mRetroLeanKitApiV2.listCards(board.getId(),"backlog,active", 999999999, new RetroLeanKitApiV2Callback<ListCardsResponse>() {
             @Override
             public void onSuccess(int replyCode, String replyText, List<ListCardsResponse> replyData) {
 
@@ -437,17 +437,26 @@ public class LeanKitWorkerFragment extends Fragment {
         });
     }
 
-    public void getArchive(String boardId) {
+    public class ArchiveData {
+        public Board board;
+        public List<Card> cards;
+    }
 
-        mRetroLeanKitApi.archive(boardId, new RetroLeanKitCallback<List<LeanKitTreeifiedLane>>() {
+    public void getArchive(final Board board) {
+
+        mRetroLeanKitApiV2.listCards(board.getId(), "archive", 9999999, new RetroLeanKitApiV2Callback<ListCardsResponse>() {
             @Override
-            public void onSuccess(int replyCode, String replyText, List<List<LeanKitTreeifiedLane>> replyData) {
+            public void onSuccess(int replyCode, String replyText, List<ListCardsResponse> replyData) {
 
-                new PrepareArchiveTask().execute(replyData.get(0).get(0));
+                ArchiveData ad = new ArchiveData();
+                ad.board = board;
+                ad.cards = replyData.get(0).getCards();
+
+                new PrepareArchiveTask().execute(ad);
             }
 
             @Override
-            public void onLeanKitException(int replyCode, String replyText, List<List<LeanKitTreeifiedLane>> replyData) {
+            public void onLeanKitException(int replyCode, String replyText, List<ListCardsResponse> replyData) {
                 mLeanKitWorkerListener.onGetArchiveLeanKitException(replyCode, replyText);
             }
 
@@ -457,8 +466,8 @@ public class LeanKitWorkerFragment extends Fragment {
             }
 
             @Override
-            public void failure(RetrofitError retrofitError) {
-                mLeanKitWorkerListener.onGetArchiveRetrofitError(retrofitError);
+            public void failure(RetrofitError error) {
+                mLeanKitWorkerListener.onGetArchiveRetrofitError(error);
             }
         });
     }
@@ -656,20 +665,16 @@ public class LeanKitWorkerFragment extends Fragment {
         }
     }
 
-    private class PrepareArchiveTask extends AsyncTask<LeanKitTreeifiedLane, Void, List<Lane>> {
-
+    private class PrepareArchiveTask extends AsyncTask<ArchiveData, Void, List<Lane>> {
 
         @Override
-        protected List<Lane> doInBackground(LeanKitTreeifiedLane... params) {
+        protected List<Lane> doInBackground(ArchiveData... params) {
 
-            LeanKitTreeifiedLane archive = params[0];
+            ArchiveData archiveData = params[0];
 
-            BoardHelpers.applyContextualLaneNamesToArchive("", Arrays.asList(archive));
+            BoardHelpers.setCardsOnLanes(archiveData.cards, archiveData.board.getOrderedArchiveChildLanes());
 
-            List<Lane> orderedArchiveChildLanes = BoardHelpers.getCardHoldableLanesInOrderFromArchive(archive);
-            removeGhostCards(orderedArchiveChildLanes);
-
-            return orderedArchiveChildLanes;
+            return archiveData.board.getOrderedArchiveChildLanes();
 
         }
 
