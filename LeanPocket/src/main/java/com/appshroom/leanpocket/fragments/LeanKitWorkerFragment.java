@@ -277,7 +277,6 @@ public class LeanKitWorkerFragment extends Fragment {
 
     public void deleteCards(List<String> ids, String boardId) {
 
-
         mRetroLeanKitApi.deleteCards(ids, boardId, new RetroLeanKitCallback<DeleteCardsReplyData>() {
             @Override
             public void onSuccess(int replyCode, String replyText, List<DeleteCardsReplyData> replyData) {
@@ -308,34 +307,22 @@ public class LeanKitWorkerFragment extends Fragment {
 
     }
 
-    public void deleteCard(String id, String boardId) {
+    public void deleteCard(String id) {
 
-        mRetroLeanKitApi.deleteCard(boardId, id, new RetroLeanKitCallback<JsonObject>() {
+        mRetroLeanKitApiV2.deleteCard(id, new RetroLeanKitApiV2Callback<Void>() {
             @Override
-            public void onSuccess(int replyCode, String replyText, List<JsonObject> replyData) {
-
+            public void onSuccess(int replyCode, String replyText, List<Void> replyData) {
                 mLeanKitWorkerListener.onDeleteSuccess(getString(R.string.delete_single_success));
-
-
             }
 
             @Override
-            public void onLeanKitException(int replyCode, String replyText, List<JsonObject> replyData) {
-
+            public void onLeanKitException(int replyCode, String replyText, List<Void> replyData) {
                 mLeanKitWorkerListener.onDeleteLeanKitException(replyCode, replyText);
-
-            }
-
-            @Override
-            public void onWIPOverrideCommentRequired() {
-
             }
 
             @Override
             public void failure(RetrofitError retrofitError) {
-
                 mLeanKitWorkerListener.onDeleteRetrofitError(retrofitError);
-
             }
         });
 
@@ -358,11 +345,6 @@ public class LeanKitWorkerFragment extends Fragment {
             @Override
             public void onLeanKitException(int replyCode, String replyText, List<ListBoardsResponse> replyData) {
                 mLeanKitWorkerListener.onGetBoardsLeanKitException(replyCode, replyText);
-            }
-
-            @Override
-            public void onWIPOverrideCommentRequired() {
-
             }
 
             @Override
@@ -389,11 +371,6 @@ public class LeanKitWorkerFragment extends Fragment {
             @Override
             public void onLeanKitException(int replyCode, String replyText, List<Board> replyData) {
                 mLeanKitWorkerListener.onGetBoardLeanKitException(replyCode, replyText);
-            }
-
-            @Override
-            public void onWIPOverrideCommentRequired() {
-
             }
 
             @Override
@@ -426,11 +403,6 @@ public class LeanKitWorkerFragment extends Fragment {
             }
 
             @Override
-            public void onWIPOverrideCommentRequired() {
-
-            }
-
-            @Override
             public void failure(RetrofitError error) {
                 mLeanKitWorkerListener.onGetBoardRetrofitError(error);
             }
@@ -458,11 +430,6 @@ public class LeanKitWorkerFragment extends Fragment {
             @Override
             public void onLeanKitException(int replyCode, String replyText, List<ListCardsResponse> replyData) {
                 mLeanKitWorkerListener.onGetArchiveLeanKitException(replyCode, replyText);
-            }
-
-            @Override
-            public void onWIPOverrideCommentRequired() {
-
             }
 
             @Override

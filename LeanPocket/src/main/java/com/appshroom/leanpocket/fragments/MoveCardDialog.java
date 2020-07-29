@@ -186,14 +186,6 @@ public class MoveCardDialog extends DialogFragment {
             }
 
             @Override
-            public void onWIPOverrideCommentRequired() {
-
-                mChoiceListener.onMoveCardDialogLeanKitException(99, ((Activity) mChoiceListener).getString(R.string.wip_not_supported));
-                dismiss();
-
-            }
-
-            @Override
             public void failure(RetrofitError retrofitError) {
                 mChoiceListener.onMoveCardDialogRetrofitError(retrofitError);
                 dismiss();

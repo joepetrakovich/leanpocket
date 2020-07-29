@@ -1210,7 +1210,7 @@ public class MainActivity extends Activity
 
         showProgressDialog(true);
 
-        mLeanKitWorker.deleteCard(id, mActiveBoard.getId());
+        mLeanKitWorker.deleteCard(id);
 
     }
 

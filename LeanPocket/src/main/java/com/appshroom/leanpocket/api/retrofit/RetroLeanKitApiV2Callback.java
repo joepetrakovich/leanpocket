@@ -1,7 +1,5 @@
 package com.appshroom.leanpocket.api.retrofit;
 
-import com.appshroom.leanpocket.helpers.Consts;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,29 +16,15 @@ public abstract class RetroLeanKitApiV2Callback<T> implements Callback<T> {
         List<T> replyData = new ArrayList<T>();
         replyData.add(tLeanKitResponse);
 
-        switch (replyCode) {
-
-            case Consts.REPLY_CODE.DATA_DELETE_SUCCESS:
-            case Consts.REPLY_CODE.DATA_INSERT_SUCCESS:
-            case Consts.REPLY_CODE.DATA_RETRIEVAL_SUCCESS:
-            case Consts.REPLY_CODE.DATA_UPDATE_SUCCESS:
-                onSuccess(replyCode, replyText, replyData);
-                break;
-
-            case Consts.REPLY_CODE.WIP_OVERRIDE_COMMENT_REQUIRED:
-                onWIPOverrideCommentRequired();
-
-            default:
-                onLeanKitException(replyCode, replyText, replyData);
-
+        if (replyCode >= 200 && replyCode < 300) {
+            onSuccess(replyCode, replyText, replyData);
+        } else {
+            onLeanKitException(replyCode, replyText, replyData);
         }
-
     }
 
     public abstract void onSuccess(int replyCode, String replyText, List<T> replyData);
 
     public abstract void onLeanKitException(int replyCode, String replyText, List<T> replyData);
-
-    public abstract void onWIPOverrideCommentRequired();
 
 }
