@@ -30,9 +30,13 @@ import com.appshroom.leanpocket.activities.CardDetailActivity;
 import com.appshroom.leanpocket.activities.MyApplication;
 import com.appshroom.leanpocket.adapters.CardCommentsAdapter;
 import com.appshroom.leanpocket.api.retrofit.RetroLeanKitApi;
+import com.appshroom.leanpocket.api.retrofit.RetroLeanKitApiV2;
+import com.appshroom.leanpocket.api.retrofit.RetroLeanKitApiV2Callback;
 import com.appshroom.leanpocket.api.retrofit.RetroLeanKitCallback;
 import com.appshroom.leanpocket.dto.Card;
 import com.appshroom.leanpocket.dto.Comment;
+import com.appshroom.leanpocket.dto.v2.SaveCommentRequest;
+import com.appshroom.leanpocket.dto.v2.SaveCommentResponse;
 import com.appshroom.leanpocket.helpers.Consts;
 import com.appshroom.leanpocket.helpers.SecurePreferences;
 import com.google.gson.Gson;
@@ -61,6 +65,7 @@ public class CommentsFragment extends Fragment {
     View veil;
     ImageButton sendButton;
     RetroLeanKitApi mRetroLeanKitApi;
+    RetroLeanKitApiV2 mRetroLeanKitApiV2;
     ProgressDialog pd;
     View mCommentsListWrapper;
     TextView mEmptyCommentsText;
@@ -168,9 +173,8 @@ public class CommentsFragment extends Fragment {
         mBoardId = getArguments().getString("boardId");
         mSharedPreferences = new SecurePreferences(getActivity());
 
-
         mRetroLeanKitApi = ((MyApplication) getActivity().getApplication()).getRetroLeanKitApiInstance();
-
+        mRetroLeanKitApiV2 = ((MyApplication) getActivity().getApplication()).getRetroLeanKitApiV2Instance();
     }
 
 
@@ -280,44 +284,33 @@ public class CommentsFragment extends Fragment {
 
                 showProgressDialog(getString(R.string.sending_comment));
 
-                Comment commentWrapper = new Comment();
-                commentWrapper.setText(Html.toHtml(mCommentsTextInput.getText()));
+                SaveCommentRequest request = new SaveCommentRequest();
+                request.text = Html.toHtml(mCommentsTextInput.getText());
 
-                mRetroLeanKitApi.saveComment(commentWrapper, mBoardId, mCard.getId(), new RetroLeanKitCallback<JsonObject>() {
+                mRetroLeanKitApiV2.saveComment(mCard.getId(), request, new RetroLeanKitApiV2Callback<SaveCommentResponse>() {
                     @Override
-                    public void onSuccess(int replyCode, String replyText, List<JsonObject> replyData) {
-
+                    public void onSuccess(int replyCode, String replyText, List<SaveCommentResponse> replyData) {
                         dismissProgressDialog();
                         dismissSoftKeybeard();
                         mCommentsTextInput.setText("");
                         refreshCommentList();
-
                     }
 
                     @Override
-                    public void onLeanKitException(int replyCode, String replyText, List<JsonObject> replyData) {
-
+                    public void onLeanKitException(int replyCode, String replyText, List<SaveCommentResponse> replyData) {
                         dismissProgressDialog();
                         dismissSoftKeybeard();
                         Crouton.makeText(getActivity(), replyText, Style.ALERT).show();
                     }
 
                     @Override
-                    public void onWIPOverrideCommentRequired() {
-
-                    }
-
-                    @Override
-                    public void failure(RetrofitError retrofitError) {
-
+                    public void failure(RetrofitError error) {
                         dismissProgressDialog();
                         dismissSoftKeybeard();
-                        handleRetrofitError(retrofitError, mHostActivity.getString(R.string.no_network_signal_save_comment));
+                        handleRetrofitError(error, mHostActivity.getString(R.string.no_network_signal_save_comment));
                     }
                 });
-
             }
-
         }
     }
 

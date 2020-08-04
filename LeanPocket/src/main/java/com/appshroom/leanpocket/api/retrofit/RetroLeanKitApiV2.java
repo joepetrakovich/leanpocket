@@ -6,6 +6,8 @@ import com.appshroom.leanpocket.dto.v2.ListBoardUsersResponse;
 import com.appshroom.leanpocket.dto.v2.ListBoardsResponse;
 import com.appshroom.leanpocket.dto.v2.ListCardsResponse;
 import com.appshroom.leanpocket.dto.v2.MoveCardRequest;
+import com.appshroom.leanpocket.dto.v2.SaveCommentRequest;
+import com.appshroom.leanpocket.dto.v2.SaveCommentResponse;
 
 import retrofit.Callback;
 import retrofit.http.Body;
@@ -41,4 +43,9 @@ public interface RetroLeanKitApiV2 {
 
     @DELETE("/card/{cardId}")
     void deleteCard(@Path("cardId") String cardId, Callback<Void> cb);
+
+    @POST("/card/{cardId}/comment")
+    void saveComment(@Path("cardId") String cardId,
+                     @Body SaveCommentRequest saveCommentRequest,
+                     Callback<SaveCommentResponse> cb);
 }
