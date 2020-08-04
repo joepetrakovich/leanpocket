@@ -19,14 +19,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.appshroom.leanpocket.R;
-import com.appshroom.leanpocket.activities.CardDetailActivity;
 import com.appshroom.leanpocket.activities.MyApplication;
 import com.appshroom.leanpocket.adapters.CardCommentsAdapter;
 import com.appshroom.leanpocket.api.retrofit.RetroLeanKitApi;
@@ -34,13 +32,11 @@ import com.appshroom.leanpocket.api.retrofit.RetroLeanKitApiV2;
 import com.appshroom.leanpocket.api.retrofit.RetroLeanKitApiV2Callback;
 import com.appshroom.leanpocket.api.retrofit.RetroLeanKitCallback;
 import com.appshroom.leanpocket.dto.Card;
-import com.appshroom.leanpocket.dto.Comment;
+import com.appshroom.leanpocket.dto.v2.ListCommentsResponse;
 import com.appshroom.leanpocket.dto.v2.SaveCommentRequest;
-import com.appshroom.leanpocket.dto.v2.SaveCommentResponse;
+import com.appshroom.leanpocket.dto.v2.Comment;
 import com.appshroom.leanpocket.helpers.Consts;
 import com.appshroom.leanpocket.helpers.SecurePreferences;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
 import org.apache.http.HttpStatus;
 
@@ -182,26 +178,22 @@ public class CommentsFragment extends Fragment {
 
         showProgress();
 
-        mRetroLeanKitApi.getComments(mBoardId, mCard.getId(), new RetroLeanKitCallback<List<Comment>>() {
-
+        mRetroLeanKitApiV2.listComments(mCard.getId(), new RetroLeanKitApiV2Callback<ListCommentsResponse>() {
             @Override
-            public void onSuccess(int replyCode, String replyText, List<List<Comment>> replyData) {
-
+            public void onSuccess(int replyCode, String replyText, List<ListCommentsResponse> replyData) {
                 commentsText = mHostActivity.getString(R.string.no_comments_yet);
                 mEmptyCommentsText.setText(commentsText);
 
-                mComments = replyData.get(0);
+                mComments = replyData.get(0).comments;
                 mCommentsAdapter.clear();
                 mCommentsAdapter.addAll(mComments);
                 mCommentsAdapter.notifyDataSetChanged();
 
                 hideProgress();
-
             }
 
             @Override
-            public void onLeanKitException(int replyCode, String replyText, List<List<Comment>> replyData) {
-
+            public void onLeanKitException(int replyCode, String replyText, List<ListCommentsResponse> replyData) {
                 hideProgress();
 
                 commentsText = mHostActivity.getString(R.string.comments_failed_to_load);
@@ -210,21 +202,13 @@ public class CommentsFragment extends Fragment {
             }
 
             @Override
-            public void onWIPOverrideCommentRequired() {
-
-            }
-
-            @Override
-            public void failure(RetrofitError retrofitError) {
-
+            public void failure(RetrofitError error) {
                 hideProgress();
                 commentsText = mHostActivity.getString(R.string.comments_failed_to_load);
                 mEmptyCommentsText.setText(commentsText);
-                handleRetrofitError(retrofitError, mHostActivity.getString(R.string.no_network_signal_comments));
-
+                handleRetrofitError(error, mHostActivity.getString(R.string.no_network_signal_comments));
             }
         });
-
     }
 
     private void showProgress() {
@@ -287,9 +271,9 @@ public class CommentsFragment extends Fragment {
                 SaveCommentRequest request = new SaveCommentRequest();
                 request.text = Html.toHtml(mCommentsTextInput.getText());
 
-                mRetroLeanKitApiV2.saveComment(mCard.getId(), request, new RetroLeanKitApiV2Callback<SaveCommentResponse>() {
+                mRetroLeanKitApiV2.saveComment(mCard.getId(), request, new RetroLeanKitApiV2Callback<Comment>() {
                     @Override
-                    public void onSuccess(int replyCode, String replyText, List<SaveCommentResponse> replyData) {
+                    public void onSuccess(int replyCode, String replyText, List<Comment> replyData) {
                         dismissProgressDialog();
                         dismissSoftKeybeard();
                         mCommentsTextInput.setText("");
@@ -297,7 +281,7 @@ public class CommentsFragment extends Fragment {
                     }
 
                     @Override
-                    public void onLeanKitException(int replyCode, String replyText, List<SaveCommentResponse> replyData) {
+                    public void onLeanKitException(int replyCode, String replyText, List<Comment> replyData) {
                         dismissProgressDialog();
                         dismissSoftKeybeard();
                         Crouton.makeText(getActivity(), replyText, Style.ALERT).show();

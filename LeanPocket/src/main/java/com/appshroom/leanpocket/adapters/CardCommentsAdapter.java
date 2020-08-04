@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.appshroom.leanpocket.R;
-import com.appshroom.leanpocket.dto.Comment;
+import com.appshroom.leanpocket.dto.v2.Comment;
 import com.appshroom.leanpocket.helpers.GravatarHelpers;
 import com.squareup.picasso.Picasso;
 
@@ -55,16 +55,15 @@ public class CardCommentsAdapter extends ArrayAdapter<Comment> {
 
         Comment comment = getItem(position);
 
-        holder.userName.setText(comment.getPostedByFullName());
-        holder.commentDateTime.setText(comment.getPostDate());
-        holder.commentText.setText(Html.fromHtml(comment.getText().trim()));
+        holder.userName.setText(comment.createdBy.fullName);
+        holder.commentDateTime.setText(comment.createdOn.toString());
+        holder.commentText.setText(Html.fromHtml(comment.text.trim()));
 
-        String gravLink = GravatarHelpers.buildGravatarUrl(comment.getPostedByGravatarLink(),
-                getContext().getResources().getInteger(R.integer.gravatar_assigned_user_list_size));
-
+        String avatarUrlWithoutSize = comment.createdBy.avatar.split("\\?")[0];
+        String avatarUrl = avatarUrlWithoutSize + "?s=" + getContext().getResources().getInteger(R.integer.gravatar_assigned_user_list_size);
 
         Picasso.with(getContext())
-                .load(gravLink)
+                .load(avatarUrl)
                 .placeholder(R.drawable.mysterymans)
                 .into(holder.gravatar);
 

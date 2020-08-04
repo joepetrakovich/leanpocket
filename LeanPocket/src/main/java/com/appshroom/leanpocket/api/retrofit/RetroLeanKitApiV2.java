@@ -5,9 +5,10 @@ import com.appshroom.leanpocket.dto.Board;
 import com.appshroom.leanpocket.dto.v2.ListBoardUsersResponse;
 import com.appshroom.leanpocket.dto.v2.ListBoardsResponse;
 import com.appshroom.leanpocket.dto.v2.ListCardsResponse;
+import com.appshroom.leanpocket.dto.v2.ListCommentsResponse;
 import com.appshroom.leanpocket.dto.v2.MoveCardRequest;
 import com.appshroom.leanpocket.dto.v2.SaveCommentRequest;
-import com.appshroom.leanpocket.dto.v2.SaveCommentResponse;
+import com.appshroom.leanpocket.dto.v2.Comment;
 
 import retrofit.Callback;
 import retrofit.http.Body;
@@ -32,20 +33,17 @@ public interface RetroLeanKitApiV2 {
                    @Query("limit") int limit,
                    Callback<ListCardsResponse> cb);
 
-    @GET("/board/{boardId}/user")
-    void listBoardUsers(@Path("boardId") String boardId, Callback<ListBoardUsersResponse> cb);
-
-    @GET("/user/me/card")
-    void getCardsAssignedToRequestingUser(Callback<ListCardsResponse> cb);
-
     @POST("/card/move")
     void moveCards(@Body MoveCardRequest moveCardRequest, Callback<Void> cb);
 
     @DELETE("/card/{cardId}")
     void deleteCard(@Path("cardId") String cardId, Callback<Void> cb);
 
+    @GET("/card/{cardId}/comment")
+    void listComments(@Path("cardId") String cardId, Callback<ListCommentsResponse> cb);
+
     @POST("/card/{cardId}/comment")
     void saveComment(@Path("cardId") String cardId,
                      @Body SaveCommentRequest saveCommentRequest,
-                     Callback<SaveCommentResponse> cb);
+                     Callback<Comment> cb);
 }

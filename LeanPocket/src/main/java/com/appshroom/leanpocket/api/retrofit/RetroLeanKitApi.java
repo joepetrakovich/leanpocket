@@ -40,23 +40,9 @@ public interface RetroLeanKitApi {
                      @Path("boardId") String boardId,
                      Callback<LeanKitResponse<DeleteCardsReplyData>> cb);
 
-
-    @GET("/Board/{boardId}/Backlog")
-    void backlog(@Path("boardId") String boardId,
-                 Callback<LeanKitResponse<List<Lane>>> cb);
-
-    @GET("/Board/{boardId}/Archive")
-    void archive(@Path("boardId") String boardId,
-                 Callback<LeanKitResponse<List<LeanKitTreeifiedLane>>> cb);
-
     @GET("/Card/History/{boardId}/{cardId}")
     void getCardHistory(@Path("boardId") String boardId,
                         @Path("cardId") String cardId,
                         Callback<LeanKitResponse<List<CardHistory>>> cb);
-
-    @GET("/Card/GetComments/{boardId}/{cardId}")
-    void getComments(@Path("boardId") String boardId,
-                     @Path("cardId") String cardId,
-                     Callback<LeanKitResponse<List<Comment>>> cb);
 
 }
