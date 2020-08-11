@@ -1202,7 +1202,7 @@ public class MainActivity extends Activity
 
         showProgressDialog(false);
 
-        mLeanKitWorker.deleteCards(ids, mActiveBoard.getId());
+        mLeanKitWorker.deleteCards(ids);
 
     }
 
@@ -1870,7 +1870,7 @@ public class MainActivity extends Activity
     public void onDeleteDialogConfirm() {
 
         deleteCards();
-        dismissContextualActionBar(); //rememeber the mSelected card stuff
+        dismissContextualActionBar(); //remember the mSelected card stuff
     }
 
     @Override

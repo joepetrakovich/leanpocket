@@ -14,16 +14,14 @@ import com.appshroom.leanpocket.adapters.BoardSection;
 import com.appshroom.leanpocket.api.retrofit.RetroLeanKitApi;
 import com.appshroom.leanpocket.api.retrofit.RetroLeanKitApiV2;
 import com.appshroom.leanpocket.api.retrofit.RetroLeanKitApiV2Callback;
-import com.appshroom.leanpocket.api.retrofit.RetroLeanKitCallback;
 import com.appshroom.leanpocket.dto.Board;
 import com.appshroom.leanpocket.dto.BoardSettings;
 import com.appshroom.leanpocket.dto.BoardUser;
 import com.appshroom.leanpocket.dto.Card;
 import com.appshroom.leanpocket.dto.CardType;
 import com.appshroom.leanpocket.dto.ClassOfService;
-import com.appshroom.leanpocket.dto.DeleteCardsReplyData;
 import com.appshroom.leanpocket.dto.Lane;
-import com.appshroom.leanpocket.dto.LeanKitTreeifiedLane;
+import com.appshroom.leanpocket.dto.v2.DeleteCardsRequest;
 import com.appshroom.leanpocket.dto.v2.ListBoardsBoard;
 import com.appshroom.leanpocket.dto.v2.ListBoardsResponse;
 import com.appshroom.leanpocket.dto.v2.ListCardsResponse;
@@ -32,7 +30,6 @@ import com.appshroom.leanpocket.helpers.Consts;
 import com.appshroom.leanpocket.helpers.GravatarHelpers;
 import com.appshroom.leanpocket.helpers.SecurePreferences;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -275,36 +272,28 @@ public class LeanKitWorkerFragment extends Fragment {
         this.mLastActiveAccountAuthToken = mLastActiveAccountAuthToken;
     }
 
-    public void deleteCards(List<String> ids, String boardId) {
+    public void deleteCards(List<String> ids) {
 
-        mRetroLeanKitApi.deleteCards(ids, boardId, new RetroLeanKitCallback<DeleteCardsReplyData>() {
+        DeleteCardsRequest request = new DeleteCardsRequest();
+        request.cardIds = ids;
+
+        mRetroLeanKitApiV2.deleteCards(request, new RetroLeanKitApiV2Callback<Void>() {
+
             @Override
-            public void onSuccess(int replyCode, String replyText, List<DeleteCardsReplyData> replyData) {
-
+            public void onSuccess(int replyCode, String replyText, List<Void> replyData) {
                 mLeanKitWorkerListener.onDeleteSuccess(getString(R.string.delete_success));
-
-
             }
 
             @Override
-            public void onLeanKitException(int replyCode, String replyText, List<DeleteCardsReplyData> replyData) {
-
+            public void onLeanKitException(int replyCode, String replyText, List<Void> replyData) {
                 mLeanKitWorkerListener.onDeleteLeanKitException(replyCode, replyText);
-
             }
 
             @Override
-            public void onWIPOverrideCommentRequired() {
-
-            }
-
-            @Override
-            public void failure(RetrofitError retrofitError) {
-
-                mLeanKitWorkerListener.onDeleteRetrofitError(retrofitError);
+            public void failure(RetrofitError error) {
+                mLeanKitWorkerListener.onDeleteRetrofitError(error);
             }
         });
-
     }
 
     public void deleteCard(String id) {
