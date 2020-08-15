@@ -297,7 +297,7 @@
     <string name="delete_single_success">The card was deleted successfully.</string>
     <string name="auto_load_board_setting_title">Remember board choice</string>
     <string name="send_feedback">Send feedback</string>
-    <string name="mail_feedback_email">info@appshroom.com</string>
+    <string name="mail_feedback_email">jpetrakovich@gmail.com</string>
     <string name="mail_feedback_subject">Feedback for LeanPocket</string>
     <string name="mail_feedback_message"></string>
     <string name="title_send_feedback">Send feedback from</string>
