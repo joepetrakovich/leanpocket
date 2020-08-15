@@ -341,16 +341,16 @@ public class NewCardActivity extends Activity implements SharedPreferences.OnSha
         request.customId = basicSettings.getExternalCardId(); //is this supposed to be external link label instead?
         request.index = mPosition;
 
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
+        SimpleDateFormat dateParser = new SimpleDateFormat("MM/dd/yyyy");
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
 
         try {
-
-            java.util.Date d = format.parse(basicSettings.getDueDate());
-            format.applyPattern( mBoardSettings.getDateFormat() );
-            request.plannedFinish = format.format(d);
+            java.util.Date d = dateParser.parse(basicSettings.getDueDate());
+            request.plannedFinish = dateFormatter.format(d);
 
         } catch (ParseException ex) {
-            //TODO: what to do?
+            //for now just fail silently...
+            String h = ex.getMessage();
         }
 
         request.tags = basicSettings.getTagsAsList();

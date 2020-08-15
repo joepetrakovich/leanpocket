@@ -714,7 +714,7 @@ public class NewCardBasicFragment extends Fragment {
         }
     }
 
-    public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+    public static class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
         private NewCardBasicFragment mFragment;
 
