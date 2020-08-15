@@ -2,6 +2,8 @@ package com.appshroom.leanpocket.api.retrofit;
 
 import com.appshroom.leanpocket.dto.Board;
 import com.appshroom.leanpocket.dto.v2.Comment;
+import com.appshroom.leanpocket.dto.v2.CreateCardRequest;
+import com.appshroom.leanpocket.dto.v2.CreateCardResponse;
 import com.appshroom.leanpocket.dto.v2.DeleteCardsRequest;
 import com.appshroom.leanpocket.dto.v2.ListBoardsResponse;
 import com.appshroom.leanpocket.dto.v2.ListCardsResponse;
@@ -48,4 +50,7 @@ public interface RetroLeanKitApiV2 {
     void saveComment(@Path("cardId") String cardId,
                      @Body SaveCommentRequest saveCommentRequest,
                      Callback<Comment> cb);
+
+    @POST("/card/")
+    void createCard(@Body CreateCardRequest createCardRequest, Callback<CreateCardResponse> cb);
 }

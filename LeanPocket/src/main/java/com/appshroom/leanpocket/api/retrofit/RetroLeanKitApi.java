@@ -1,6 +1,5 @@
 package com.appshroom.leanpocket.api.retrofit;
 
-import com.appshroom.leanpocket.dto.AddCardReplyData;
 import com.appshroom.leanpocket.dto.Card;
 import com.appshroom.leanpocket.dto.LeanKitResponse;
 import com.appshroom.leanpocket.dto.UpdateCardReplyData;
@@ -11,13 +10,6 @@ import retrofit.http.POST;
 import retrofit.http.Path;
 
 public interface RetroLeanKitApi {
-
-    @POST("/Board/{boardId}/AddCard/Lane/{laneId}/Position/{position}")
-    void addCard(@Body Card card,
-                 @Path("boardId") String boardId,
-                 @Path("laneId") String laneId,
-                 @Path("position") int position,
-                 Callback<LeanKitResponse<AddCardReplyData>> cb);
 
     @POST("/Board/{boardId}/UpdateCard")
     void updateCard(@Body Card card,

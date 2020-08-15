@@ -16,6 +16,8 @@ import android.view.ViewGroup;
 
 import com.appshroom.leanpocket.R;
 import com.appshroom.leanpocket.api.retrofit.RetroLeanKitApi;
+import com.appshroom.leanpocket.api.retrofit.RetroLeanKitApiV2;
+import com.appshroom.leanpocket.api.retrofit.RetroLeanKitApiV2Callback;
 import com.appshroom.leanpocket.api.retrofit.RetroLeanKitCallback;
 import com.appshroom.leanpocket.dto.AddCardReplyData;
 import com.appshroom.leanpocket.dto.BoardSettings;
@@ -25,6 +27,8 @@ import com.appshroom.leanpocket.dto.CardFieldData;
 import com.appshroom.leanpocket.dto.Lane;
 import com.appshroom.leanpocket.dto.LaneDescription;
 import com.appshroom.leanpocket.dto.UpdateCardReplyData;
+import com.appshroom.leanpocket.dto.v2.CreateCardRequest;
+import com.appshroom.leanpocket.dto.v2.CreateCardResponse;
 import com.appshroom.leanpocket.fragments.NewCardBasicFragment;
 import com.appshroom.leanpocket.helpers.Consts;
 
@@ -40,6 +44,7 @@ import retrofit.RetrofitError;
 public class NewCardActivity extends Activity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     RetroLeanKitApi mRetroLeanKitApi;
+    RetroLeanKitApiV2 mRetroLeanKitApiV2;
     String mBoardId;
     ArrayList<LaneDescription> mLanes;
     Card mExistingCard;
@@ -61,6 +66,7 @@ public class NewCardActivity extends Activity implements SharedPreferences.OnSha
 
         MyApplication app = (MyApplication) getApplication();
         mRetroLeanKitApi = app.getRetroLeanKitApiInstance();
+        mRetroLeanKitApiV2 = app.getRetroLeanKitApiV2Instance();
 
         Intent srcIntent = getIntent();
 
@@ -166,42 +172,30 @@ public class NewCardActivity extends Activity implements SharedPreferences.OnSha
 
             if (mMode == MODE.NEW_CARD) {
 
-                Card card = retrieveAllCardSettings(new Card());
+                CreateCardRequest request = buildCreateCardRequest();
 
                 showProgressDialog();
 
-                if (card != null) {
-                    mRetroLeanKitApi.addCard(card, mBoardId, card.getLaneId(), mPosition, new RetroLeanKitCallback<AddCardReplyData>() {
-                        @Override
-                        public void onSuccess(int replyCode, String replyText, List<AddCardReplyData> replyData) {
+                mRetroLeanKitApiV2.createCard(request, new RetroLeanKitApiV2Callback<CreateCardResponse>() {
+                    @Override
+                    public void onSuccess(int replyCode, String replyText, List<CreateCardResponse> replyData) {
+                        setResult(RESULT_OK);
+                        finish();
+                    }
 
-                            setResult(RESULT_OK);
-                            finish();
-                        }
+                    @Override
+                    public void onLeanKitException(int replyCode, String replyText, List<CreateCardResponse> replyData) {
+                        Crouton.makeText(getActivity(), replyText, Style.ALERT).show();
+                        dismissProgressDialog();
+                    }
 
-                        @Override
-                        public void onLeanKitException(int replyCode, String replyText, List<AddCardReplyData> replyData) {
+                    @Override
+                    public void failure(RetrofitError error) {
+                        Crouton.makeText(getActivity(), getResources().getString(R.string.cant_create_card), Style.ALERT).show();
+                        dismissProgressDialog();
+                    }
+                });
 
-                            Crouton.makeText(getActivity(), replyText, Style.ALERT).show();
-                            dismissProgressDialog();
-                        }
-
-                        @Override
-                        public void onWIPOverrideCommentRequired() {
-
-                            Crouton.makeText(getActivity(), getString(R.string.wip_not_supported), Style.ALERT).show();
-                            dismissProgressDialog();
-                        }
-
-                        @Override
-                        public void failure(RetrofitError retrofitError) {
-
-                            Crouton.makeText(getActivity(), getResources().getString(R.string.cant_create_card), Style.ALERT).show();
-                            dismissProgressDialog();
-
-                        }
-                    });
-                }
             } else {
 
                 mExistingCard = retrieveAllCardSettings(mExistingCard);
@@ -297,12 +291,6 @@ public class NewCardActivity extends Activity implements SharedPreferences.OnSha
 
         cardToFill.setExternalCardID( basicSettings.getExternalCardId() );
 
-        if (mMode == MODE.NEW_CARD) { //edit doesn't support moving lanes.
-
-            //TODO: move card is prob an API call..
-            // cardToFill.setLaneId(basicSettings.getLaneId());
-        }
-
         List<String> assignedUserIds = new ArrayList<String>();
 
         for (BoardUser assignedUser : basicSettings.getAssignedUsers()) {
@@ -328,6 +316,47 @@ public class NewCardActivity extends Activity implements SharedPreferences.OnSha
         return cardToFill;
     }
 
+    private CreateCardRequest buildCreateCardRequest() {
+        NewCardBasicFragment newOrEditCardFragment = (NewCardBasicFragment) getFragmentManager().findFragmentById(R.id.new_card_fragment);
+        CardFieldData basicSettings = newOrEditCardFragment.getFieldData();
+
+        CreateCardRequest request = new CreateCardRequest();
+        request.boardId = mBoardId;
+        request.title = basicSettings.getTitle();
+        request.typeId = basicSettings.getCardTypeId();
+        request.assignedUserIds = new ArrayList<String>();
+
+        for (BoardUser assignedUser : basicSettings.getAssignedUsers()) {
+            request.assignedUserIds.add(assignedUser.getId());
+        }
+        request.description = basicSettings.getDescription();
+        request.size = basicSettings.getSize();
+        request.laneId = basicSettings.getLaneId();
+
+        if (basicSettings.isBlocked()) {
+            request.blockReason = basicSettings.getBlockedReason();
+        }
+
+        request.priority = basicSettings.getPriority();
+        request.customId = basicSettings.getExternalCardId(); //is this supposed to be external link label instead?
+        request.index = mPosition;
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
+
+        try {
+
+            java.util.Date d = format.parse(basicSettings.getDueDate());
+            format.applyPattern( mBoardSettings.getDateFormat() );
+            request.plannedFinish = format.format(d);
+
+        } catch (ParseException ex) {
+            //TODO: what to do?
+        }
+
+        request.tags = basicSettings.getTagsAsList();
+
+        return request;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
